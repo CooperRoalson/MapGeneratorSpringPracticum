@@ -17,13 +17,12 @@ Tile::Tile(double elevation, double temp, double humidity) {
 }
 
 sf::Color Tile::getColor() {
-    double val = attributes.get("elevation")/2.; // Range [0,1]
-    
+    double val = attributes.get("elevation"); // Range [0,1]
     //val = (3. - val * 2.) * val*val; // Alternate color mapping (smoothstep)
     
     val *= 255;
     
-    return sf::Color(val,val,val);
+    return sf::Color(val, val, val);
 }
 
 int Tile::getBiome() {

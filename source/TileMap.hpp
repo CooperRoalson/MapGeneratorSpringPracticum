@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include "Tile.hpp"
+#include "PerlinNoise.hpp"
 
 
 struct GenerationSettings {
@@ -36,6 +37,8 @@ class TileMap {
         GenerationSettings settings;
     
         unsigned int randomInitialSeed();
+        PerlinNoiseGenerator** getGeneratorList(unsigned int seed);
+        void updateTileAttributes(int x, int y, std::string attr, PerlinNoiseGenerator** gens, double attrScale);
         
 };
 

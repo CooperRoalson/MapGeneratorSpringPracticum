@@ -28,8 +28,10 @@ int main(int argc, char const** argv)
     
     GenerationSettings gs = {100, 100, // Map size
                             10, // Noise size
-                            1, // Levels of noise detail
-                            2};
+                            3, // Levels of noise detail
+                            2 // Detail size reduction per level
+                            };
+    
     TileMap tileMap(gs);
     
     DisplayManager dm(800, 600, // Window size
