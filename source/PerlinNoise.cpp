@@ -22,7 +22,7 @@ PerlinNoiseGenerator::PerlinNoiseGenerator(int width, int height) : PerlinNoiseG
 PerlinNoiseGenerator::PerlinNoiseGenerator(unsigned int _seed, int width, int height) {
     
     dimensions = Vec2D<int>(width, height);
-    std::cout << std::to_string(width) << "," << std::to_string(height) << std::endl;
+
     seed = _seed;
     
     generateGradients();
