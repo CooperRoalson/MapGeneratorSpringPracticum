@@ -62,7 +62,7 @@ int main(int argc, char const** argv)
             
             else if (event.type == sf::Event::MouseWheelScrolled) {
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
-                    dm.changeSize(event.mouseWheelScroll.delta);
+                    dm.changeTileSize(event.mouseWheelScroll.delta);
                 }
             }
             else if (event.type == sf::Event::KeyPressed) {
@@ -107,7 +107,7 @@ int main(int argc, char const** argv)
                     int newX = event.mouseMove.x;
                     int newY = event.mouseMove.y;
                     
-                    dm.moveCamera((recentDragX-newX)/dm.getTileSize(), (recentDragY-newY)/dm.getTileSize());
+                    dm.moveCamera(((recentDragX-newX)/dm.getTileSize()) * ((double)(ds.screenWidth)/dm.getWindowWidth()), ((recentDragY-newY)/dm.getTileSize()) * ((double)(ds.screenHeight)/dm.getWindowHeight()));
                     
                     recentDragX = newX;
                     recentDragY = newY;

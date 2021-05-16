@@ -79,7 +79,15 @@ bool DisplayManager::pollEvent(sf::Event &event) {
     return window.pollEvent(event);
 }
 
-void DisplayManager::changeSize(double delta) {
+unsigned int DisplayManager::getWindowWidth() {
+    return window.getSize().x;
+}
+unsigned int DisplayManager::getWindowHeight() {
+    return window.getSize().y;
+}
+
+
+void DisplayManager::changeTileSize(double delta) {
     double centerX = xOffset + displaySettings.screenWidth/(2.*tileSize);
     double centerY = yOffset + displaySettings.screenHeight/(2.*tileSize);
     

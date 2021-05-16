@@ -29,8 +29,11 @@ public:
     void close();
     bool isOpen();
     bool pollEvent(sf::Event &event);
+    unsigned int getWindowWidth();
+    unsigned int getWindowHeight();
     
-    void changeSize(double delta);
+    
+    void changeTileSize(double delta);
     void moveCamera(double x, double y);
     
     double getTileSize() {return tileSize;}
