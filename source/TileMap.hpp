@@ -12,15 +12,15 @@
 #include "PerlinNoise.hpp"
 
 
-struct GenerationSettings {
-    int width;
-    int height;
-    int largestOctave; // How big  one perlin cell is in the biggest octave
-    int perlinOctaves;
-    float octaveScale;
-};
-
 class TileMap {
+    public:
+        struct GenerationSettings {
+            int width;
+            int height;
+            int largestOctave; // How big  one perlin cell is in the biggest octave
+            int perlinOctaves;
+            float octaveScale;
+        };
     
     public:
         TileMap(GenerationSettings settings);

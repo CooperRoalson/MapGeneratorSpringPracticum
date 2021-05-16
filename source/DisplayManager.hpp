@@ -12,17 +12,31 @@
 #include <SFML/Graphics.hpp>
 
 class DisplayManager {
+
+public:
+    
+    struct DisplaySettings {
+        int screenWidth, screenHeight;
+        double initialXOffset, initialYOffset, initialTileSize;
+        double minTileSize, maxTileSize;
+    };
     
 public:
-    DisplayManager(int width, int height, double initialTileSize, TileMap* tileMap, std::string resource_dir = "");
+    DisplayManager(DisplaySettings settings, TileMap* tileMap, std::string resource_dir);
     
     void display();
     
     void close();
     bool isOpen();
     bool pollEvent(sf::Event &event);
+    
+    void changeSize(double delta);
+    void moveCamera(double x, double y);
+    
+    double getTileSize() {return tileSize;}
         
 private:
+    DisplayManager::DisplaySettings displaySettings;
     double xOffset, yOffset, tileSize;
     
     sf::RenderWindow window;
