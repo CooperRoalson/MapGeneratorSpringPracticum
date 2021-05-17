@@ -5,10 +5,6 @@
 
 #include "TileMap.hpp"
 
-#include <iostream>
-
-#include <random>
-
 unsigned int TileMap::randomInitialSeed() {
     std::random_device rand;
     return rand();
@@ -24,13 +20,12 @@ TileMap::TileMap(GenerationSettings _settings, unsigned int seed) {
         tileMap[i] = new Tile();
     }
     
-    std::mt19937 seedGen(seed);
-    std::uniform_int_distribution<unsigned int> dist(0, UINT_MAX);
+    std::mt19937 rand(seed);
         
     // Create generators
-    PerlinNoiseGenerator** elevationGenerators = getGeneratorList(dist(seedGen));
-    PerlinNoiseGenerator** temperatureGenerators = getGeneratorList(dist(seedGen));
-    PerlinNoiseGenerator** humidityGenerators = getGeneratorList(dist(seedGen));
+    PerlinNoiseGenerator** elevationGenerators = getGeneratorList(&rand);
+    PerlinNoiseGenerator** temperatureGenerators = getGeneratorList(&rand);
+    PerlinNoiseGenerator** humidityGenerators = getGeneratorList(&rand);
     
     
     double attributeScale = (1 - 1/settings.octaveScale)/(1 - pow(settings.octaveScale,-1*settings.perlinOctaves));
@@ -56,12 +51,12 @@ TileMap::TileMap(GenerationSettings _settings, unsigned int seed) {
     
 }
 
-PerlinNoiseGenerator** TileMap::getGeneratorList(unsigned int seed) {
+PerlinNoiseGenerator** TileMap::getGeneratorList(std::mt19937* rand) {
     PerlinNoiseGenerator** generators = new PerlinNoiseGenerator*[settings.perlinOctaves];
     
     double size = settings.largestOctave;
     for (int i = 0; i < settings.perlinOctaves; i++) {
-        generators[i] = new PerlinNoiseGenerator(seed, ceil(settings.width/size), ceil(settings.height/size));
+        generators[i] = new PerlinNoiseGenerator(rand, ceil(settings.width/size), ceil(settings.height/size));
         size /= settings.octaveScale;
     }
     

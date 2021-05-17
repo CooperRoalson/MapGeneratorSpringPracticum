@@ -5,7 +5,6 @@
 
 #include "PerlinNoise.hpp"
 
-#include <random>
 // below line required for windows
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -21,32 +20,33 @@ unsigned int PerlinNoiseGenerator::randomInitialSeed() {
 
 PerlinNoiseGenerator::PerlinNoiseGenerator(int width, int height) : PerlinNoiseGenerator(randomInitialSeed(), width, height) {}
 
-PerlinNoiseGenerator::PerlinNoiseGenerator(unsigned int _seed, int width, int height) {
+PerlinNoiseGenerator::PerlinNoiseGenerator(unsigned int seed, int width, int height) : PerlinNoiseGenerator(new std::mt19937(seed), width, height, true) {}
+
+PerlinNoiseGenerator::PerlinNoiseGenerator(std::mt19937* rand, int width, int height) : PerlinNoiseGenerator(rand, width, height, false) {}
+
+PerlinNoiseGenerator::PerlinNoiseGenerator(std::mt19937* rand, int width, int height, bool deleteRandWhenDone) {
     
     dimensions = Vec2D<int>(width, height);
-
-    seed = _seed;
     
-    generateGradients();
+    generateGradients(rand);
     
-    
+    if (deleteRandWhenDone) {delete rand;}
 }
 
 PerlinNoiseGenerator::~PerlinNoiseGenerator() {
     delete[] gradients;
 }
 
-void PerlinNoiseGenerator::generateGradients() {
+void PerlinNoiseGenerator::generateGradients(std::mt19937* gen) {
     
     // Set up gradient grid (stored in an array of length width*height)
     gradients = new Vec2D<double>[(dimensions.x+1)*(dimensions.y+1)];
     
-    std::mt19937 rand(seed);
     std::uniform_real_distribution<double> dist(0, 2*M_PI);
     
     // Initialize grid to vectors of length 1
     for (int i = 0; i < (dimensions.x+1)*(dimensions.y+1); i++) {
-        double angle = dist(rand);
+        double angle = dist(*gen);
         gradients[i].x = cos(angle);
         gradients[i].y = sin(angle);
     }

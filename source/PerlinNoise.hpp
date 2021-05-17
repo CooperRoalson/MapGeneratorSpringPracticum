@@ -6,6 +6,8 @@
 #ifndef PerlinNoise_hpp
 #define PerlinNoise_hpp
 
+#include <random>
+
 class PerlinNoiseGenerator {
     
     template <class numClass> struct Vec2D {
@@ -27,18 +29,18 @@ class PerlinNoiseGenerator {
         
         PerlinNoiseGenerator(int width, int height);
         PerlinNoiseGenerator(unsigned int seed, int width, int height);
+        PerlinNoiseGenerator(std::mt19937* generator, int width, int height);
         ~PerlinNoiseGenerator();
         
         double noise(double x, double y);
         
     private:
+        PerlinNoiseGenerator(std::mt19937* generator, int width, int height, bool deleteRandWhenDone); // For constructor from seed
         
         Vec2D<int> dimensions;
-        
-        unsigned int seed;
-        
+                
         Vec2D<double> *gradients;
-        void generateGradients();
+        void generateGradients(std::mt19937* gen);
         
         double gridDotProduct(Vec2D<double> point, Vec2D<int> grid);
         

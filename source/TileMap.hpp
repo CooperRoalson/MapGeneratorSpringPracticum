@@ -7,6 +7,7 @@
 #define TileMap_hpp
 
 #include <iostream>
+#include <random>
 
 #include "Tile.hpp"
 #include "PerlinNoise.hpp"
@@ -37,7 +38,7 @@ class TileMap {
         GenerationSettings settings;
     
         unsigned int randomInitialSeed();
-        PerlinNoiseGenerator** getGeneratorList(unsigned int seed);
+        PerlinNoiseGenerator** getGeneratorList(std::mt19937* rand);
         void updateTileAttributes(int x, int y, std::string attr, PerlinNoiseGenerator** gens, double attrScale);
         
 };
