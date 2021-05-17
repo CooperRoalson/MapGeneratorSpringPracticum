@@ -23,7 +23,7 @@ int main(int argc, char const** argv)
       USE_WORKING_DIR specifies whether to use the working directory
       ALT_RESOURCE_FOLDER specifies the location. "" uses the exe's location
     */
-    std::string path = USE_WORKING_DIR ? ExePath::getWorkingDir() + "/resources/" : ALT_RESOURCE_FOLDER;
+    std::string path = USE_WORKING_DIR ? ExePath::mergePaths(ExePath::getWorkingDir(), "resources/") : ALT_RESOURCE_FOLDER;
     
     
     TileMap::GenerationSettings gs = {100, 100, // Map size

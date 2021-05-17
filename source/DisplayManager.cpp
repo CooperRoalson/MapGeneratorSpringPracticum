@@ -18,7 +18,7 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* _tileMap, std:
         
     resourceDir = _resource_dir;
     if (resourceDir == "") {
-        resourceDir = ExePath::getExecutableDir() + "/" + "resources/";
+        resourceDir = ExePath::mergePaths(ExePath::getExecutableDir(), "resources/");
     }
     
     std::cout << "Using resource directory: " << resourceDir << "\n";
@@ -32,18 +32,22 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* _tileMap, std:
         
 }
 
+std::string DisplayManager::getResourcePath(std::string resource) {
+    return ExePath::mergePaths(resourceDir,resource);
+}
+
 void DisplayManager::loadFont() {
-    if (!font.loadFromFile(resourceDir + "font.ttf"))
+    if (!font.loadFromFile(getResourcePath("font.ttf")))
     {
-        throw std::runtime_error("Resource not found: " + resourceDir + "font.ttf");
+        throw std::runtime_error("Resource not found: " + getResourcePath("font.ttf"));
     }
 }
 
 void DisplayManager::loadIcon() {
     sf::Image icon;
-    if (!icon.loadFromFile(resourceDir + "icon.png"))
+    if (!icon.loadFromFile(getResourcePath("icon.png")))
     {
-        throw std::runtime_error("Resource not found: " + resourceDir + "icon.png");
+        throw std::runtime_error("Resource not found: " + getResourcePath("icon.png"));
     }
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }

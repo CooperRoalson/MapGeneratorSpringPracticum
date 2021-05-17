@@ -55,6 +55,8 @@ private:
     void loadFont();
     void loadIcon();
     
+    std::string getResourcePath(std::string resource);
+    
 };
 
 #endif /* DisplayManager_hpp */
