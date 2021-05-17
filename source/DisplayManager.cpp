@@ -18,7 +18,7 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* _tileMap, std:
         
     resourceDir = _resource_dir;
     if (resourceDir == "") {
-        resourceDir = ExePath::mergePaths(ExePath::getExecutableDir(), "resources/");
+        resourceDir = ExePath::mergePaths(ExePath::getExecutableDir(), "resources");
     }
     
     std::cout << "Using resource directory: " << resourceDir << "\n";
