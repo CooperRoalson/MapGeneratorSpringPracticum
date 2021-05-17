@@ -23,10 +23,29 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* _tileMap, std:
     
     std::cout << "Using resource directory: " << resourceDir << "\n";
         
-        xOffset = settings.initialXOffset;
-        yOffset = settings.initialYOffset;
-        tileSize = settings.initialTileSize;
+    xOffset = settings.initialXOffset;
+    yOffset = settings.initialYOffset;
+    tileSize = settings.initialTileSize;
+    
+    loadFont();
+    loadIcon();
         
+}
+
+void DisplayManager::loadFont() {
+    if (!font.loadFromFile(resourceDir + "font.ttf"))
+    {
+        throw std::runtime_error("Resource not found: " + resourceDir + "font.ttf");
+    }
+}
+
+void DisplayManager::loadIcon() {
+    sf::Image icon;
+    if (!icon.loadFromFile(resourceDir + "icon.png"))
+    {
+        throw std::runtime_error("Resource not found: " + resourceDir + "icon.png");
+    }
+    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
 void DisplayManager::display() {
@@ -37,6 +56,7 @@ void DisplayManager::display() {
 
 void DisplayManager::draw() {
     
+    // ---------------------- Tiles ----------------------
     int tileDisplayWidth = (int)(displaySettings.screenWidth / tileSize) + 2;
     int tileDisplayHeight = (int)(displaySettings.screenHeight / tileSize) + 2;
         
@@ -61,6 +81,27 @@ void DisplayManager::draw() {
             
         }
     }
+    
+    // ---------------------- Coords ----------------------
+    sf::Text coordText;
+    coordText.setFont(font);
+    
+    sf::Vector2<double> coords = getCameraCenter();
+    coordText.setString("(" + std::to_string((int)(coords.x)) + ", " + std::to_string((int)(coords.y)) + ")");
+
+    
+    coordText.setCharacterSize(40); // Pixels, not normal font size
+    coordText.setFillColor(sf::Color(25,25,25)); // Color
+    
+    coordText.setOutlineThickness(2);
+    coordText.setOutlineColor(sf::Color(200,200,200));
+    
+    coordText.setStyle(sf::Text::Bold);
+
+    
+    coordText.setPosition(10, 10);
+    window.draw(coordText);
+    
 }
 
 
@@ -86,15 +127,20 @@ unsigned int DisplayManager::getWindowHeight() {
     return window.getSize().y;
 }
 
-
-void DisplayManager::changeTileSize(double delta) {
+sf::Vector2<double> DisplayManager::getCameraCenter() {
     double centerX = xOffset + displaySettings.screenWidth/(2.*tileSize);
     double centerY = yOffset + displaySettings.screenHeight/(2.*tileSize);
+    return sf::Vector2<double>(centerX, centerY);
+}
+
+
+void DisplayManager::changeTileSize(double delta) {
+    sf::Vector2<double> center = getCameraCenter();
     
     tileSize = std::max(std::min(tileSize + delta, displaySettings.maxTileSize), displaySettings.minTileSize);
     
-    xOffset = centerX - displaySettings.screenWidth/(2*tileSize);
-    yOffset = centerY - displaySettings.screenHeight/(2*tileSize);
+    xOffset = center.x - displaySettings.screenWidth/(2*tileSize);
+    yOffset = center.y - displaySettings.screenHeight/(2*tileSize);
 }
 
 void DisplayManager::moveCamera(double x, double y) {

@@ -36,6 +36,8 @@ public:
     void changeTileSize(double delta);
     void moveCamera(double x, double y);
     
+    sf::Vector2<double> getCameraCenter();
+    
     double getTileSize() {return tileSize;}
         
 private:
@@ -43,12 +45,15 @@ private:
     double xOffset, yOffset, tileSize;
     
     sf::RenderWindow window;
+    sf::Font font;
     
     TileMap* tileMap;
     
     std::string resourceDir;
     
     void draw();
+    void loadFont();
+    void loadIcon();
     
 };
 
