@@ -6,6 +6,8 @@
 #include "PerlinNoise.hpp"
 
 #include <random>
+// below line required for windows
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 #include <stdexcept>
