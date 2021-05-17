@@ -9,6 +9,7 @@
 
 #if defined(_WIN32)
     #include <windows.h>
+    #pragma comment(lib, "Shlwapi.lib")
     #include <Shlwapi.h>
     #include <io.h>
     #include <direct.h>
