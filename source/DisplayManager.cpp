@@ -59,8 +59,11 @@ void DisplayManager::display() {
 }
 
 void DisplayManager::draw() {
-    
-    // ---------------------- Tiles ----------------------
+    drawTiles();
+    drawCoords();
+}
+
+void DisplayManager::drawTiles() {
     int tileDisplayWidth = (int)(displaySettings.screenWidth / tileSize) + 2;
     int tileDisplayHeight = (int)(displaySettings.screenHeight / tileSize) + 2;
         
@@ -73,20 +76,32 @@ void DisplayManager::draw() {
             }
             
             Tile* t = tileMap->getTile(x, y);
+            sf::Vector2f screenPos((x-xOffset)*tileSize, (y-yOffset)*tileSize);
                         
-            sf::RectangleShape rect;
-            rect.setPosition((x-xOffset)*tileSize, (y-yOffset)*tileSize);
-            rect.setSize(sf::Vector2f(tileSize, tileSize));
-            //sf::Color col = t->getColor();
-            //std::cout << std::to_string(col.r) << std::endl;
-            rect.setFillColor(t->getColor());
-            
-            window.draw(rect);
+            drawTile(t, screenPos);
             
         }
     }
+}
+
+void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
     
-    // ---------------------- Coords ----------------------
+    sf::RectangleShape rect;
+    rect.setPosition(screenPos);
+    rect.setSize(sf::Vector2f(tileSize, tileSize));
+    sf::Color color;
+    
+    if (t->hasFeature("mountain")) {
+        color = sf::Color(50, 50, 200);
+    } else {
+        color = t->getColor();
+    }
+    
+    rect.setFillColor(color);
+    window.draw(rect);
+}
+
+void DisplayManager::drawCoords() {
     sf::Text coordText;
     coordText.setFont(font);
     
@@ -105,9 +120,7 @@ void DisplayManager::draw() {
     
     coordText.setPosition(10, 10);
     window.draw(coordText);
-    
 }
-
 
 
 // Functions relayed from sf::RenderWindow

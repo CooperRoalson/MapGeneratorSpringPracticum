@@ -18,13 +18,13 @@ class TileMap {
         struct GenerationSettings {
             int width;
             int height;
-            int largestOctave; // How big one perlin cell is in the biggest octave
+            float largestOctave; // How big one perlin cell is in the biggest octave
             int perlinOctaves;
             float octaveScale;
             
-            int mountainPerlinScale; // How big one perlin cell is for mountains
-            float mountainThreshold; // What's the perlin threshold for generating mountains? [0-1]
-            float mountainChance; // What's the chance of a mountain past that threshold
+            float mountainPerlinScale; // How big one perlin cell is for mountains
+            float mountainThreshold; // What's the perlin threshold for generating mountains? (smaller value = rarer)
+            float mountainChance; // What's the chance of a mountain in a tile within that threshold (smaller value = rarer)
             float mountainMinHeight;
             float mountainMaxHeight;
         };
@@ -53,4 +53,4 @@ class TileMap {
         
 };
 
-#endif TileMap_hpp
+#endif /*TileMap_hpp*/

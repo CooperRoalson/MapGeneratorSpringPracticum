@@ -52,6 +52,10 @@ private:
     std::string resourceDir;
     
     void draw();
+    void drawTiles();
+    void drawTile(Tile* t, sf::Vector2f screenPos);
+    void drawCoords();
+    
     void loadFont();
     void loadIcon();
     

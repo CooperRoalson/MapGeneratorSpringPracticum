@@ -27,13 +27,13 @@ int main(int argc, char const** argv)
     
     
     TileMap::GenerationSettings gs = {100, 100, // Map size
-                                      10, // Noise size
+                                      10., // Noise size
                                       2, // Levels of noise detail
                                       4., // Detail size reduction per level
 
-                                      5, // Mountain range spread
-                                      0.9, // Mountain range cohesion (compactness)
-                                      0.1, // Mountain range density
+                                      15., // Mountain range scatter (distance between ranges)
+                                      0.34, // Mountain range spread (size)
+                                      0.08, // Mountain range density
                                       1.5, // Mountain min height
                                       2.0, // Mountain max height
                                      };
@@ -71,7 +71,8 @@ int main(int argc, char const** argv)
             else if (event.type == sf::Event::MouseWheelScrolled) {
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                     dm.changeTileSize(event.mouseWheelScroll.delta);
-                    cameraSpeed += event.mouseWheelScroll.delta * cameraSpeedModification * -0.1;
+                    
+                    //cameraSpeed += event.mouseWheelScroll.delta * cameraSpeedModification * -0.1;
                 }
             }
             

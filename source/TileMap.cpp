@@ -28,7 +28,7 @@ void TileMap::generateMap(unsigned int seed) {
     std::mt19937 rand(seed);
     
     generateTileAttributes(&rand);
-    //generateMountains(&rand);
+    generateMountains(&rand);
 }
 
 void TileMap::generateTileAttributes(std::mt19937* rand) {
@@ -101,14 +101,23 @@ void TileMap::generateMountains(std::mt19937* rand) {
     std::uniform_real_distribution<double> mtnHeight(settings.mountainMinHeight,settings.mountainMaxHeight);
     
     Tile* t;
+    double perlinVal, randVal;
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
-            if(perlin.noise((double)x/settings.mountainPerlinScale, (double)y/settings.mountainPerlinScale) >= settings.mountainThreshold && mtnDist(rand) < settings.mountainChance) {
+            perlinVal = perlin.noise((double)x/settings.mountainPerlinScale, (double)y/settings.mountainPerlinScale);
+            std::cout << "perlinVal = " << perlinVal << std::endl;
+
+            if(perlinVal < settings.mountainThreshold) {
+                //std::cout << "Perlin cleared for mountain" << std::endl;
+                randVal = mtnDist(*rand);
+                if (randVal < settings.mountainChance) {
+                    //std::cout << "Random chance cleared for mountain" << std::endl;
             
-                t = getTile(x, y);
-                t->addFeature("mountain");
-                t->setAttribute("elevation", mtnHeight(rand));
+                    t = getTile(x, y);
+                    t->addFeature("mountain");
+                    t->setAttribute("elevation", mtnHeight(*rand));
                 
+                }
             }
         }
     }
