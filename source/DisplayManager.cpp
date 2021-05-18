@@ -32,6 +32,10 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* _tileMap, std:
         
 }
 
+void DisplayManager::setTileMap(TileMap* _tileMap) {
+    tileMap = _tileMap;
+}
+
 std::string DisplayManager::getResourcePath(std::string resource) {
     return ExePath::mergePaths(resourceDir,resource);
 }
@@ -64,6 +68,7 @@ void DisplayManager::draw() {
 }
 
 void DisplayManager::drawTiles() {
+
     int tileDisplayWidth = (int)(displaySettings.screenWidth / tileSize) + 2;
     int tileDisplayHeight = (int)(displaySettings.screenHeight / tileSize) + 2;
         
@@ -85,7 +90,6 @@ void DisplayManager::drawTiles() {
 }
 
 void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
-    
     sf::RectangleShape rect;
     rect.setPosition(screenPos);
     rect.setSize(sf::Vector2f(tileSize, tileSize));

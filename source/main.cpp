@@ -38,7 +38,7 @@ int main(int argc, char const** argv)
                                       2.0, // Mountain max height
                                      };
     
-    TileMap tileMap(gs);
+    TileMap* tileMap = new TileMap(gs);
     
     DisplayManager::DisplaySettings ds = {960, 540, // Screen width and height
                                           36.6, 40, // Starting camera  x and y
@@ -46,7 +46,7 @@ int main(int argc, char const** argv)
                                           10, 150 // Min and max tile sizes
                                          };
     
-    DisplayManager dm(ds, &tileMap, path);
+    DisplayManager dm(ds, tileMap, path);
     
     double cameraSpeed = 3;
     double cameraSpeedModification = 0.5; // how much the move speed changes when scrolling. 0 < x < 3 is recommended.
@@ -103,6 +103,14 @@ int main(int argc, char const** argv)
                     recentDragY = newY;
                 }
             }
+            
+            else if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Space) {
+                    delete tileMap;
+                    tileMap = new TileMap(gs);
+                    dm.setTileMap(tileMap);
+                }
+            }
         }
 
         // frame-locked actions
@@ -140,6 +148,8 @@ int main(int argc, char const** argv)
         
         dm.display();
     }
+    
+    delete tileMap;
 
     return 0;
     

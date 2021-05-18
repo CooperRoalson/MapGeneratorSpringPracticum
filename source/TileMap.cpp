@@ -105,7 +105,7 @@ void TileMap::generateMountains(std::mt19937* rand) {
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             perlinVal = perlin.noise((double)x/settings.mountainPerlinScale, (double)y/settings.mountainPerlinScale);
-            std::cout << "perlinVal = " << perlinVal << std::endl;
+            //std::cout << "perlinVal = " << perlinVal << std::endl;
 
             if(perlinVal < settings.mountainThreshold) {
                 //std::cout << "Perlin cleared for mountain" << std::endl;

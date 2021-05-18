@@ -24,6 +24,8 @@ public:
 public:
     DisplayManager(DisplaySettings settings, TileMap* tileMap, std::string resource_dir);
     
+    void setTileMap(TileMap* tileMap);
+    
     void display();
     
     void close();
