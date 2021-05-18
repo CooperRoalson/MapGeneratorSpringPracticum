@@ -31,6 +31,7 @@ template <class E> class LinkedList {
         E del(int i);
     
         int findFirst(E e);
+        bool removeFirst(E e);
         
         int length();
     
@@ -112,6 +113,13 @@ template <class E> int LinkedList<E>::findFirst(E e) {
         currentNode = currentNode->next;
     }
     return -1;
+}
+
+template <class E> bool LinkedList<E>::removeFirst(E e) {
+    int i = findFirst(e);
+    if (i == -1) {return false;}
+    del(i);
+    return true;
 }
 
 template <class E> int LinkedList<E>::length() {
