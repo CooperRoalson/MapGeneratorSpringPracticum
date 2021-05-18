@@ -97,9 +97,19 @@ void TileMap::updateTileAttributes(int x, int y, std::string attr, PerlinNoiseGe
 void TileMap::generateMountains(std::mt19937* rand) {
     PerlinNoiseGenerator perlin(rand, ceil(settings.width/settings.mountainPerlinScale), ceil(settings.height/settings.mountainPerlinScale));
     
+    std::uniform_real_distribution<double> mtnDist(0,1);
+    std::uniform_real_distribution<double> mtnHeight(settings.mountainMinHeight,settings.mountainMaxHeight);
+    
+    Tile* t;
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
-            // if perlin.noise(
+            if(perlin.noise((double)x/settings.mountainPerlinScale, (double)y/settings.mountainPerlinScale) >= settings.mountainThreshold && mtnDist(rand) < settings.mountainChance) {
+            
+                t = getTile(x, y);
+                t->addFeature("mountain");
+                t->setAttribute("elevation", mtnHeight(rand));
+                
+            }
         }
     }
     

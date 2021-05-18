@@ -25,6 +25,8 @@ class TileMap {
             int mountainPerlinScale; // How big one perlin cell is for mountains
             float mountainThreshold; // What's the perlin threshold for generating mountains? [0-1]
             float mountainChance; // What's the chance of a mountain past that threshold
+            float mountainMinHeight;
+            float mountainMaxHeight;
         };
     
     public:
