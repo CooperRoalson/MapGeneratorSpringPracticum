@@ -10,13 +10,13 @@
 #include <iostream>
 #include <string>
 
-DisplayManager::DisplayManager(DisplaySettings settings, TileMap* _tileMap, std::string _resource_dir)
+DisplayManager::DisplayManager(DisplaySettings settings, TileMap* tm, std::string rDir)
     : window(sf::VideoMode(settings.screenWidth, settings.screenHeight), "Map Generator") {
         displaySettings = settings;
         
-        tileMap = _tileMap;
+        tileMap = tm;
         
-    resourceDir = _resource_dir;
+    resourceDir = rDir;
     if (resourceDir == "") {
         resourceDir = ExePath::mergePaths(ExePath::getExecutableDir(), "resources");
     }
@@ -32,8 +32,8 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* _tileMap, std:
         
 }
 
-void DisplayManager::setTileMap(TileMap* _tileMap) {
-    tileMap = _tileMap;
+void DisplayManager::setTileMap(TileMap* tm) {
+    tileMap = tm;
 }
 
 std::string DisplayManager::getResourcePath(std::string resource) {

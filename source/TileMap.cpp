@@ -12,8 +12,8 @@ unsigned int TileMap::randomInitialSeed() {
 
 TileMap::TileMap(GenerationSettings settings) : TileMap(settings, randomInitialSeed()) {}
 
-TileMap::TileMap(GenerationSettings _settings, unsigned int seed) {
-    settings = _settings;
+TileMap::TileMap(GenerationSettings gs, unsigned int seed) {
+    settings = gs;
     tileMap = new Tile*[settings.width*settings.height];
     
     for (int i = 0; i < settings.width*settings.height; i++) {
