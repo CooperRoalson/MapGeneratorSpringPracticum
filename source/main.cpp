@@ -28,8 +28,12 @@ int main(int argc, char const** argv)
     
     TileMap::GenerationSettings gs = {100, 100, // Map size
                                       10, // Noise size
-                                      3, // Levels of noise detail
-                                      2 // Detail size reduction per level
+                                      2, // Levels of noise detail
+                                      4, // Detail size reduction per level
+
+                                      5, // Mountain range spread
+                                      0.9, // Mountain range cohesion (compactness)
+                                      0.1 // Mountain range density
                                      };
     
     TileMap tileMap(gs);

@@ -20,12 +20,22 @@ TileMap::TileMap(GenerationSettings _settings, unsigned int seed) {
         tileMap[i] = new Tile();
     }
     
+    generateMap(seed);
+    
+}
+
+void TileMap::generateMap(unsigned int seed) {
     std::mt19937 rand(seed);
-        
+    
+    generateTileAttributes(&rand);
+    //generateMountains(&rand);
+}
+
+void TileMap::generateTileAttributes(std::mt19937* rand) {
     // Create generators
-    PerlinNoiseGenerator** elevationGenerators = getGeneratorList(&rand);
-    PerlinNoiseGenerator** temperatureGenerators = getGeneratorList(&rand);
-    PerlinNoiseGenerator** humidityGenerators = getGeneratorList(&rand);
+    PerlinNoiseGenerator** elevationGenerators = getGeneratorList(rand);
+    PerlinNoiseGenerator** temperatureGenerators = getGeneratorList(rand);
+    PerlinNoiseGenerator** humidityGenerators = getGeneratorList(rand);
     
     
     double attributeScale = (1 - 1/settings.octaveScale)/(1 - pow(settings.octaveScale,-1*settings.perlinOctaves));
@@ -54,10 +64,10 @@ TileMap::TileMap(GenerationSettings _settings, unsigned int seed) {
 PerlinNoiseGenerator** TileMap::getGeneratorList(std::mt19937* rand) {
     PerlinNoiseGenerator** generators = new PerlinNoiseGenerator*[settings.perlinOctaves];
     
-    double size = settings.largestOctave;
+    double size = 1.0/settings.largestOctave;
     for (int i = 0; i < settings.perlinOctaves; i++) {
-        generators[i] = new PerlinNoiseGenerator(rand, ceil(settings.width/size), ceil(settings.height/size));
-        size /= settings.octaveScale;
+        generators[i] = new PerlinNoiseGenerator(rand, ceil(settings.width*size), ceil(settings.height*size));
+        size *= settings.octaveScale;
     }
     
     return generators;
@@ -72,8 +82,8 @@ void TileMap::updateTileAttributes(int x, int y, std::string attr, PerlinNoiseGe
         t->setAttribute(attr,
             t->getAttribute(attr) +
                 gens[i]->noise(
-                    ((double) x)/(settings.largestOctave*octaveScale),
-                    ((double) y)/(settings.largestOctave*octaveScale)
+                    (double)(x * octaveScale)/settings.largestOctave,
+                    (double)(y * octaveScale)/settings.largestOctave
                 )/octaveScale
         );
         
@@ -84,6 +94,16 @@ void TileMap::updateTileAttributes(int x, int y, std::string attr, PerlinNoiseGe
     t->setAttribute(attr, t->getAttribute(attr) * attrScale); // Range [0,1]
 }
 
+void TileMap::generateMountains(std::mt19937* rand) {
+    PerlinNoiseGenerator perlin(rand, ceil(settings.width/settings.mountainPerlinScale), ceil(settings.height/settings.mountainPerlinScale));
+    
+    for (int x = 0; x < settings.width; x++) {
+        for (int y = 0; y < settings.height; y++) {
+            // if perlin.noise(
+        }
+    }
+    
+}
 
 TileMap::~TileMap() {
     for (int i = 0; i < settings.width*settings.height; i++) {

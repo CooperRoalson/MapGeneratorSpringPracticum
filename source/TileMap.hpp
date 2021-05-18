@@ -18,9 +18,13 @@ class TileMap {
         struct GenerationSettings {
             int width;
             int height;
-            int largestOctave; // How big  one perlin cell is in the biggest octave
+            int largestOctave; // How big one perlin cell is in the biggest octave
             int perlinOctaves;
             float octaveScale;
+            
+            int mountainPerlinScale; // How big one perlin cell is for mountains
+            float mountainThreshold; // What's the perlin threshold for generating mountains? [0-1]
+            float mountainChance; // What's the chance of a mountain past that threshold
         };
     
     public:
@@ -40,6 +44,10 @@ class TileMap {
         unsigned int randomInitialSeed();
         PerlinNoiseGenerator** getGeneratorList(std::mt19937* rand);
         void updateTileAttributes(int x, int y, std::string attr, PerlinNoiseGenerator** gens, double attrScale);
+    
+        void generateMap(unsigned int seed);
+        void generateTileAttributes(std::mt19937* rand);
+        void generateMountains(std::mt19937* rand);
         
 };
 
