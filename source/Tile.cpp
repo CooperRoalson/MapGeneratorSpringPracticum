@@ -36,3 +36,15 @@ double Tile::getAttribute(std::string attr) {
 void Tile::setAttribute(std::string attr, double val) {
     attributes.set(attr, val);
 }
+
+void Tile::addFeature(std::string feat) {
+    features.add(feat);
+}
+
+void Tile::removeFeature(std::string feat) {
+    features.removeFirst(feat);
+}
+
+bool Tile::hasFeature(std::string feat) {
+    return features.findFirst(feat) != -1;
+}

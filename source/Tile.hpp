@@ -31,6 +31,10 @@ class Tile {
     
         double getAttribute(std::string attr);
         void setAttribute(std::string attr, double val);
+        
+        void addFeature(std::string feat);
+        void removeFeature(std::string feat);
+        bool hasFeature(std::string feat);
     
 };
 
