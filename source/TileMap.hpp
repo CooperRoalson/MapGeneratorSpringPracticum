@@ -43,4 +43,4 @@ class TileMap {
         
 };
 
-#endif /* TileMap_hpp */
+#endif TileMap_hpp
