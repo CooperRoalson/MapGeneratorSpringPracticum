@@ -35,11 +35,11 @@ int main(int argc, char const** argv)
                                       4., // Detail size reduction per level
         
                                     // Mountain generation
-                                      15., // Mountain range scatter (distance between ranges)
-                                      0.34, // Mountain range spread (size)
-                                      0.12, // Mountain range density
+                                      50., // Mountain range scatter (distance between ranges)
+                                      0.3, // Mountain range spread (size)
+                                      0.5, // Mountain range density
                                       1.5, // Mountain min height
-                                      2.0, // Mountain max height
+                                      3.0, // Mountain max height
         
                                     // Mountain smoothing
                                       1.4, // Mountain smooth threshold
@@ -49,7 +49,7 @@ int main(int argc, char const** argv)
 
                                     // Oceans
                                       0.5,  // Sea level
-                                      false, // Can mountains generate in oceans
+                                      true, // Can mountains generate in oceans
 
                                     // Default Color
                                       0
