@@ -29,23 +29,27 @@ int main(int argc, char const** argv)
     TileMap::GenerationSettings gs = {
         
                                     // Tile generation
-                                      100, 100, // Map size
-                                      10., // Noise size
-                                      2, // Levels of noise detail
+                                      150, 150, // Map size
+                                      40., // Noise size
+                                      3, // Levels of noise detail
                                       4., // Detail size reduction per level
         
                                     // Mountain generation
-                                      15., // Mountain range scatter (distance between ranges)
+                                      25., // Mountain range scatter (distance between ranges)
                                       0.34, // Mountain range spread (size)
-                                      0.08, // Mountain range density
+                                      0.04, // Mountain range density
                                       1.5, // Mountain min height
-                                      2.0, // Mountain max height
+                                      2.5, // Mountain max height
         
                                     // Mountain smoothing
-                                      0.15, // Mountain smooth threshold
+                                      1.7, // Mountain smooth threshold
                                       15,   // Number of smoothing passes
                                       0.65, // How much to smooth (min and max)
-                                      0.85, // ^ Lower values = more smoothing
+                                      0.80, // ^ Lower values = more smoothing
+
+                                    // Oceans
+                                      0.5,  // Sea level
+                                      false, // Can mountains generate in oceans
 
                                     // Default Color
                                       0

@@ -117,7 +117,7 @@ void TileMap::generateMountains(std::mt19937* rand) {
     PerlinNoiseGenerator perlin(rand, ceil(settings.width/settings.mountainPerlinScale), ceil(settings.height/settings.mountainPerlinScale));
     
     std::uniform_real_distribution<double> mtnDist(0,1);
-    std::uniform_real_distribution<double> mtnHeight(settings.mountainMinHeight,settings.mountainMaxHeight);
+    std::uniform_real_distribution<double> mtnHeight(settings.mountainMinHeight - 1,settings.mountainMaxHeight - 1);
     
     Tile* t;
     double perlinVal, randVal;
@@ -134,8 +134,10 @@ void TileMap::generateMountains(std::mt19937* rand) {
                     //std::cout << "Random chance cleared for mountain" << std::endl;
             
                     t = getTile(x, y);
-                    t->addFeature("mountain");
-                    t->setAttribute("elevation", mtnHeight(*rand));
+                    if (t->getAttribute("elevation") > settings.seaLevel || settings.canMountainsFormInOcean) {
+                        t->addFeature("mountain");
+                        t->setAttribute("elevation", t->getAttribute("elevation") + mtnHeight(*rand));
+                    }
                 }
             }
         }
@@ -157,7 +159,7 @@ void TileMap::smoothMountains(std::mt19937* rand) {
             float max = 0;
 
             // Do not perform modifications on tiles with the mountain or foothill attributes
-            if (!(currentTile->hasFeature("mountain")) && !(currentTile->hasFeature("foothill"))) {
+            if (!(currentTile->hasFeature("mountain"))){// && !(currentTile->hasFeature("foothill"))) {
                 
                 // Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
                 for (int xmod = -1; xmod <= 1; xmod++) {
@@ -178,7 +180,7 @@ void TileMap::smoothMountains(std::mt19937* rand) {
                 }
                 
                 // If a modification is necessary smooth out the tile
-                if (max - min >= settings.mountainSmoothThreshold) {
+                if (max / min >= settings.mountainSmoothThreshold) {
                     currentTile->addFeature("foothill");
                     currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + min);
                 }

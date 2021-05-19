@@ -35,24 +35,29 @@ void Tile::renderColor() {
     switch (colorMode) {
 
         case 0: // Elevation + mountains
-            if (hasFeature("mountain")) {
+            if (elev < gs->seaLevel) {
+                colorCache.r = (int)(50);
+                colorCache.g = (int)(75);
+                colorCache.b = (int)(100 + (elev * 155 / gs->seaLevel));
+            }
+            else if (hasFeature("mountain")) {
                 mountainElev *= 50;
                 colorCache = sf::Color(205 + mountainElev, 205 + mountainElev, 205 + mountainElev);
             }
             else if (hasFeature("foothill")) {
                 if (elev <= 1) {
                     colorCache.r = (int)(100);
-                    colorCache.g = (int)(155*elev + 100);
+                    colorCache.g = (int)(130*elev + 100);
                     colorCache.b = (int)(100);
                 } else {
                     double extraPercent = (elev - 1) / (gs->mountainMaxHeight - 1);
                     colorCache.r = (int)(100 + extraPercent*100);
-                    colorCache.g = (int)(clamp(155 + 100*exp(-10*extraPercent), colorCache.r, 255)); // The clamp is to prevent purples
+                    colorCache.g = (int)(clamp(130 + 100*exp(-10*extraPercent), colorCache.r, 255)); // The clamp is to prevent purples
                     colorCache.b = (int)(100 + extraPercent*100);
                 }
             }
             else {
-                elev *= 155;
+                elev *= 130;
                 colorCache.r = (int)(100);
                 colorCache.g = (int)(elev + 100);
                 colorCache.b = (int)(100);

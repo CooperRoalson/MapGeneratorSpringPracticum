@@ -37,6 +37,10 @@ class TileMap {
             float mountainDistributionLow; // How much to smooth (min and max)
             float mountainDistributionHigh;
 
+          // Ocean settings
+            float seaLevel;
+            bool canMountainsFormInOcean;
+
           // Color Scheme
             int colorMode;
         };
