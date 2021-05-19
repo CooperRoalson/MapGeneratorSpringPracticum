@@ -6,6 +6,7 @@
 #include "DisplayManager.hpp"
 
 #include "exe_path.hpp"
+#include "RoundedRectangleShape.hpp"
 
 #include <iostream>
 #include <string>
@@ -64,6 +65,7 @@ void DisplayManager::display() {
 
 void DisplayManager::draw() {
     drawTiles();
+    if (viewingTile) {drawTileStats();}
     drawCoords();
     drawControls();
     drawDebug();
@@ -111,6 +113,55 @@ void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
     window.draw(rect);
 }
 
+void DisplayManager::drawTileStats() {
+    Tile* viewTile = tileMap->getTile(viewTileCoords.x, viewTileCoords.y);
+    
+    std::string featureText;
+    if (viewTile->hasFeature("mountain")) {
+        featureText = "Mtn";
+    } else if (viewTile->hasFeature("foothill")) {
+        featureText = "Hills";
+    } else {
+        featureText = "";
+    }
+    
+    int offset = 5;
+    int fontSize = 20; // Pixels
+    
+    sf::Vector2f size(10*fontSize, 4*fontSize + 6*offset);
+    sf::RoundedRectangleShape rect(size, 5, 5);
+    rect.setFillColor(sf::Color(100, 100, 150));
+    rect.setPosition(viewTileDisplayCoords);
+    
+    window.draw(rect);
+    
+    sf::Text text;
+    text.setFont(font);
+    text.setCharacterSize(fontSize);
+    text.setFillColor(sf::Color(200, 200, 200));
+    text.setOutlineThickness(2);
+    text.setOutlineColor(sf::Color(25, 25, 25));
+    
+    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    text.setPosition(viewTileDisplayCoords.x + offset, viewTileDisplayCoords.y + offset);
+    text.setString("Tile (" + std::to_string(viewTileCoords.x) + "," + std::to_string(viewTileCoords.y) + ")" + ((featureText != "") ? " - " + featureText : ""));
+    window.draw(text);
+    text.setStyle(sf::Text::Regular);
+        
+    text.move(0, fontSize + offset);
+    text.setString("Elevation: " + std::to_string((int) (100*viewTile->getAttribute("elevation"))));
+    window.draw(text);
+    
+    text.move(0, fontSize + offset);
+    text.setString("Temperature: " + std::to_string((int) (100*viewTile->getAttribute("temperature"))));
+    window.draw(text);
+    
+    text.move(0, fontSize + offset);
+    text.setString("Humidity: " + std::to_string((int) (100*viewTile->getAttribute("humidity"))));
+    window.draw(text);
+    
+}
+
 void DisplayManager::drawCoords() {
     sf::Text coordText;
     coordText.setFont(font);
@@ -137,7 +188,7 @@ void DisplayManager::drawControls() {
     controlText.setFont(font);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click-and-drag to move. Space to regenerate terrain. C/V to change color scheme.");
+        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain.\nC/V to change color scheme.\nClick on tile to view.");
     else
         controlText.setString("H for controls.");
 
@@ -180,7 +231,6 @@ void DisplayManager::drawColorScheme() {
     sf::Text colorSchemeText;
     colorSchemeText.setFont(font);
 
-    sf::Vector2<double> coords = getCameraCenter();
     switch(tileMap->getColorMode()) {
         case 0:
             colorSchemeText.setString("Elevation Linear");
@@ -248,9 +298,38 @@ void DisplayManager::changeTileSize(double delta) {
     
     xOffset = center.x - displaySettings.screenWidth/(2*tileSize);
     yOffset = center.y - displaySettings.screenHeight/(2*tileSize);
+    
+    setWhetherViewingTile(false);
 }
 
 void DisplayManager::moveCamera(double x, double y) {
     xOffset += x;
     yOffset += y;
+    
+    setWhetherViewingTile(false);
+}
+
+void DisplayManager::setViewTile(sf::Vector2i tileCoords, sf::Vector2f screenCoords) {
+    viewTileCoords = tileCoords;
+    viewTileDisplayCoords = screenCoords;
+    setWhetherViewingTile(true);
+}
+
+void DisplayManager::setWhetherViewingTile(bool view) {
+    viewingTile = view;
+}
+
+sf::Vector2i DisplayManager::getTileCoordsFromScreenCoords(int screenX, int screenY) {
+    return sf::Vector2i((int) (xOffset + (double)screenX/tileSize), (int) (yOffset + (double)screenY/tileSize));
+}
+
+void DisplayManager::onClick(int clickX, int clickY) {
+    sf::Vector2i tileCoords = getTileCoordsFromScreenCoords(clickX, clickY);
+    sf::Vector2i oldTileCoords = getTileCoordsFromScreenCoords(viewTileDisplayCoords.x, viewTileDisplayCoords.y);
+    
+    if (!viewingTile || tileCoords != oldTileCoords) {
+        setViewTile(tileCoords, sf::Vector2f(clickX + displaySettings.screenWidth/20, clickY + displaySettings.screenHeight/20));
+    } else {
+        setWhetherViewingTile(false);
+    }
 }

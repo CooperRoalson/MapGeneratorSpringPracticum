@@ -64,10 +64,14 @@ int main(int argc, char const** argv)
     
     double cameraSpeed = 3;
     double FPSUpdateFreq = 0.2; // How often to update the FPS display (in seconds)
+    double maxClickLength = 0.2; // How long a click can be to qualify (in seconds)
     
     bool left = false, right = false, up = false, down = false;
     bool drag = false;
     int recentDragX, recentDragY;
+    
+    sf::Clock clickTime;
+    int clickX, clickY;
     
     sf::Clock clock;
     double currentTime, lastTime = 0;
@@ -100,12 +104,20 @@ int main(int argc, char const** argv)
                     recentDragX = event.mouseButton.x;
                     recentDragY = event.mouseButton.y;
                     drag = true;
+                    
+                    clickX = event.mouseButton.x;
+                    clickY = event.mouseButton.y;
+                    clickTime.restart();
                 }
             }
             else if (event.type == sf::Event::MouseButtonReleased) {
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     drag = false;
+                    
+                    if (event.mouseButton.x - clickX == 0 && event.mouseButton.y - clickY == 0 && clickTime.getElapsedTime().asSeconds() <= maxClickLength) {
+                        dm.onClick(clickX * ((double)(ds.screenWidth)/dm.getWindowWidth()), clickY * ((double)(ds.screenHeight)/dm.getWindowHeight()));
+                    }
                 }
             }
             // Move with mouse. Mouse take priority over WASD.

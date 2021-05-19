@@ -41,8 +41,15 @@ public:
     sf::Vector2<double> getCameraCenter();
     
     double getTileSize() {return tileSize;}
+    
+    void onClick(int clickX, int clickY);
 
     void setFPS(int n) { fps = n; };
+    
+    void setViewTile(sf::Vector2i tileCoords, sf::Vector2f screenCoords);
+    void setWhetherViewingTile(bool view);
+    
+    sf::Vector2i getTileCoordsFromScreenCoords(int screenX, int screenY);
         
 private:
     DisplayManager::DisplaySettings displaySettings;
@@ -53,6 +60,10 @@ private:
 
     int fps;
     
+    bool viewingTile = false;
+    sf::Vector2i viewTileCoords;
+    sf::Vector2f viewTileDisplayCoords;
+    
     TileMap* tileMap;
     
     std::string resourceDir;
@@ -62,6 +73,7 @@ private:
 
     sf::RectangleShape rect;
     void drawTile(Tile* t, sf::Vector2f screenPos);
+    void drawTileStats();
     void drawCoords();
     void drawControls();
     void drawDebug();
