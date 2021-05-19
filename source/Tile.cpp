@@ -4,29 +4,51 @@
 //
 
 #include "Tile.hpp"
+#include "TileMap.hpp"
 
 #include <iostream>
 #include <math.h>
 
-Tile::Tile() : Tile(0., 0., 0.) {}
-
-Tile::Tile(double elevation, double temp, double humidity) {
-    attributes.add("elevation", elevation);
-    attributes.add("temperature", temp);
-    attributes.add("humidity", humidity);
+Tile::Tile(TileMap* parentMap) {
+    tileMap = parentMap;
+    
+    attributes.add("elevation", 0);
+    attributes.add("temperature", 0);
+    attributes.add("humidity", 0);
 }
 
 void Tile::renderColor() {
-    double val = attributes.get("elevation"); // Range [0,1]
-    //val = (3. - val * 2.) * val*val; // Alternate color mapping (smoothstep)
+    TileMap::GenerationSettings* gs = tileMap->getSettings();
+    
+    /*
+    if (hasFeature("mountain")) {
+        colorCache = sf::Color(100, 100, 150);
+        return;
+    } else if (hasFeature("foothill")) {
+        colorCache = sf::Color(100, 100, 100);
+        /*double elev = attributes.get("elevation"); // Range [0,mtnMax]
+        elev /= gs->mountainMaxHeight * gs->mountainDistributionHigh; // Range [0,1]
+        double standard = 1 / gs->mountainMaxHeight; // A normal tile's range would be [0,standard] at this point (used for smooth color blend)
+        
+        colorCache.r = (int)(elev*75) + 100;
+        colorCache.g = ((int)((standard-elev)) + 255); // Plugging in standard should give 255 for blend
+        colorCache.b = (int)(elev*75) + 75;
+        return;
+    }
+    */
+    double elev = attributes.get("elevation"); // Range [0,1]
+    elev *= 155;
 
-    val *= 155;
-
-    //std::cout << val << std::endl;
-
-    colorCache.r = (int)(100);
-    colorCache.g = (int)(val + 100);
-    colorCache.b = (int)(100);
+    if (elev < 155) {
+        colorCache.r = (int)(100);
+        colorCache.g = (int)(elev + 100);
+        colorCache.b = (int)(100);
+    }
+    else {
+        colorCache.r = (int)(255 - elev);
+        colorCache.g = (int)(255 - elev);
+        colorCache.b = (int)(255 - elev);
+    }
 }
 
 sf::Color Tile::getColor() {

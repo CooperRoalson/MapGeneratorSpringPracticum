@@ -16,20 +16,25 @@
 class TileMap {
     public:
         struct GenerationSettings {
+            
+          // Tile generation
             int width;
             int height;
             float largestOctave; // How big one perlin cell is in the biggest octave
             int perlinOctaves;
             float octaveScale;
-            
+        
+          // Mountain generation
             float mountainPerlinScale; // How big one perlin cell is for mountains
             float mountainThreshold; // What's the perlin threshold for generating mountains? (smaller value = rarer)
             float mountainChance; // What's the chance of a mountain in a tile within that threshold (smaller value = rarer)
             float mountainMinHeight;
             float mountainMaxHeight;
+            
+          // Mountain smoothing
             float mountainSmoothThreshold;
             int mountainSmoothPasses;
-            float mountainDistributionLow;
+            float mountainDistributionLow; // How much to smooth (min and max)
             float mountainDistributionHigh;
         };
     
@@ -41,6 +46,7 @@ class TileMap {
         Tile* getTile(int x, int y);
         int getWidth();
         int getHeight();
+        GenerationSettings* getSettings();
     
     private:
         Tile** tileMap;

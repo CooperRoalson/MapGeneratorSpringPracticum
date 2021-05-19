@@ -26,20 +26,27 @@ int main(int argc, char const** argv)
     std::string path = USE_WORKING_DIR ? ExePath::mergePaths(ExePath::getWorkingDir(), "resources") : ALT_RESOURCE_FOLDER;
     
     
-    TileMap::GenerationSettings gs = {100, 100, // Map size
+    TileMap::GenerationSettings gs = {
+        
+                                    // Tile generation
+                                      100, 100, // Map size
                                       10., // Noise size
                                       2, // Levels of noise detail
                                       4., // Detail size reduction per level
-
+        
+                                    // Mountain generation
                                       15., // Mountain range scatter (distance between ranges)
                                       0.34, // Mountain range spread (size)
                                       0.08, // Mountain range density
                                       1.5, // Mountain min height
                                       2.0, // Mountain max height
-                                      0.15, //Mountain smooth threshold
-                                      15,   //Number of smoothing passes
-                                      0.7, //Distribution low end
-                                      0.9  //Distribution high end
+        
+                                    // Mountain smoothing
+                                      0.15, // Mountain smooth threshold
+                                      15,   // Number of smoothing passes
+                                      0.65, // How much to smooth (min and max)
+                                      0.85 // ^ Lower values = more smoothing
+        
                                      };
     
     TileMap* tileMap = new TileMap(gs);
