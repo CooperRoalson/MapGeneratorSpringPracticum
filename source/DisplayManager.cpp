@@ -183,7 +183,7 @@ void DisplayManager::drawColorScheme() {
     sf::Vector2<double> coords = getCameraCenter();
     switch(tileMap->getColorMode()) {
         case 0:
-            colorSchemeText.setString("Elevation Linear");
+            colorSchemeText.setString("Elevation + Mountains");
             break;
         case 1:
             colorSchemeText.setString("Elevation");
