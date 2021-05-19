@@ -126,9 +126,11 @@ void DisplayManager::drawTile(sf::Color highlight, sf::Vector2f screenPos) {
 
 void DisplayManager::drawTileStats() {
     Tile* viewTile = tileMap->getTile(viewTileCoords.x, viewTileCoords.y);
-    
+
     std::string featureText;
-    if (viewTile->hasFeature("mountain")) {
+    if (viewTile->hasFeature("sea")) {
+        featureText = "Sea";
+    } else if (viewTile->hasFeature("mountain")) {
         featureText = "Mountain";
     } else if (viewTile->hasFeature("foothill")) {
         featureText = "Foothills";

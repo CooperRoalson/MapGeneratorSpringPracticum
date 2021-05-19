@@ -124,6 +124,10 @@ bool Tile::hasFeature(std::string feat) {
     return features.findFirst(feat) != -1;
 }
 
+bool Tile::noFeatures() {
+    return features.isEmpty();
+}
+
 double Tile::clamp(double x, double a, double b) {
     return fmin(fmax(x, a), b);
 }

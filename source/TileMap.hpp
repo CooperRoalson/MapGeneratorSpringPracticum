@@ -74,6 +74,7 @@ class TileMap {
         void generateMountains(std::mt19937* rand);
         void smoothMountains(std::mt19937* rand);
         void makeSeaCliffs(std::mt19937* rand);
+        void makeSeaWet();
         
 };
 

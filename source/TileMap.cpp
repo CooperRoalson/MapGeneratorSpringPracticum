@@ -44,6 +44,10 @@ void TileMap::generateMap(unsigned int seed) {
     std::cout << "Generating sea cliffs\n";
     makeSeaCliffs(&rand);
 
+    // DO THIS LAST!!! It makes unmodified sea tiles into sea tiles.
+    std::cout << "Wetting ocean\n";
+    makeSeaWet();
+
 }
 
 void TileMap::rerenderTiles() {
@@ -231,13 +235,34 @@ void TileMap::makeSeaCliffs(std::mt19937* rand) {
                         }
                     }
 
-                    // If a it is a valid sea tile
+                    // If a it is a valid sea tile, and near mountains
                     if (max >= 1 && currentTile->getAttribute("elevation") < settings.seaLevel) {
                         currentTile->addFeature("sea_cliff");
                         currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + max);
                     }
 
                 }
+        }
+    }
+
+    delete[] heightBuffer;
+}
+
+void TileMap::makeSeaWet() {
+    double* heightBuffer = new double[settings.width * settings.height]; //Needed so that modified data does not interfere with currently generating data
+    for (int y = 0; y < settings.height; y++) {
+        for (int x = 0; x < settings.width; x++) {
+            heightBuffer[y * settings.width + x] = getTile(x, y)->getAttribute("elevation");
+        }
+    }
+    for (int x = 0; x < settings.width; x++) {
+        for (int y = 0; y < settings.height; y++) {
+            Tile* currentTile = getTile(x, y);
+
+            if (currentTile->getAttribute("elevation") < settings.seaLevel && currentTile->noFeatures()) {
+                currentTile->addFeature("sea");
+                currentTile->setAttribute("humidity", 1);
+            }
         }
     }
 

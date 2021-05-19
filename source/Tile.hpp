@@ -43,6 +43,7 @@ class Tile {
         void addFeature(std::string feat);
         void removeFeature(std::string feat);
         bool hasFeature(std::string feat);
+        bool noFeatures();
     
 };
 
