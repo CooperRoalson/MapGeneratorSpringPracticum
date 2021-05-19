@@ -4,6 +4,9 @@
 
 This is a map generator project, completed as part of LASA's Advanced Computer Science course.
 
+
+The [SFML Graphics Library](https://www.sfml-dev.org/download.php) is required. Originally compiled using version 2.5.1.
+
 The contributors are:
 
 * Ben Woytek
@@ -12,17 +15,16 @@ The contributors are:
 * Nathan Williams
 * Walter Auby
 
-
 ## Building in Visual Studio
 
 Make all modifications in the `Project -> Properties` window.
 
 ### For All Configurations add the following changes.
 
-Add the entire `SFML-2.5.1\include` directory path to `C/C++ -> General -> Additional Include Directories` and to `Linker -> General -> Additional Library Directories`.
+Add the entire `SFML-2.5.1\include` directory path to `C/C++ -> General -> Additional Include Directories` and the entire `SFML-2.5.1\lib` directory path to `Linker -> General -> Additional Library Directories`.
 
 
-Add `_CRT_SECURE_NO_WARNINGS;SFML_STATIC;` to `C/C++ -> Preprocessor -> Preprocessor Definitions`.
+Add `SFML_STATIC;` to `C/C++ -> Preprocessor -> Preprocessor Definitions`.
 
 ### For the Release configuration add the following changes.
 
