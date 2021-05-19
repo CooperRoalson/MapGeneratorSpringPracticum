@@ -17,7 +17,7 @@ TileMap::TileMap(GenerationSettings gs, unsigned int seed) {
     tileMap = new Tile*[settings.width*settings.height];
     
     for (int i = 0; i < settings.width*settings.height; i++) {
-        tileMap[i] = new Tile();
+        tileMap[i] = new Tile(this);
     }
     
     generateMap(seed);
@@ -25,14 +25,21 @@ TileMap::TileMap(GenerationSettings gs, unsigned int seed) {
 }
 
 void TileMap::generateMap(unsigned int seed) {
+    std::cout << "Generating new map with seed " << std::to_string(seed) << "\n";
     std::mt19937 rand(seed);
     
     generateTileAttributes(&rand);
+    std::cout << "Base tile map generated\n";
+    
     generateMountains(&rand);
+    std::cout << "Mountains generated\n";
+    
+    std::cout << "Smoothing mountains\n";
     for (int i = 0; i < settings.mountainSmoothPasses; i++) {
         smoothMountains(&rand);
-        std::cout << i << " smooth passes completed.\n";
+        std::cout << "> " << i << " smooth passes completed\n";
     }
+    std::cout << "Smoothing complete\n";
 }
 
 void TileMap::generateTileAttributes(std::mt19937* rand) {
@@ -128,10 +135,10 @@ void TileMap::generateMountains(std::mt19937* rand) {
 }
 
 void TileMap::smoothMountains(std::mt19937* rand) {
-    double* tileBuffer = new double[settings.width * settings.height]; //Needed so that modified data does not interfere with currently generating data
+    double* heightBuffer = new double[settings.width * settings.height]; //Needed so that modified data does not interfere with currently generating data
     for (int y = 0; y < settings.height; y++) {
         for (int x = 0; x < settings.width; x++) {
-            tileBuffer[y * settings.width + x] = getTile(x, y)->getAttribute("elevation");
+            heightBuffer[y * settings.width + x] = getTile(x, y)->getAttribute("elevation");
         }
     }
     std::uniform_real_distribution<double> foothillDistribution(settings.mountainDistributionLow, settings.mountainDistributionHigh);
@@ -141,14 +148,16 @@ void TileMap::smoothMountains(std::mt19937* rand) {
             float min = settings.mountainMaxHeight;
             float max = 0;
 
-            //Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
-            if (!(currentTile->hasFeature("mountain")) && !(currentTile->hasFeature("foothill"))) {//Do not perform modifications on tiles with the mountain or foothill attributes
+            // Do not perform modifications on tiles with the mountain or foothill attributes
+            if (!(currentTile->hasFeature("mountain")) && !(currentTile->hasFeature("foothill"))) {
+                
+                // Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
                 for (int xmod = -1; xmod <= 1; xmod++) {
                     for (int ymod = -1; ymod <= 1; ymod++) {
                         int currentx = xmod + x;
                         int currenty = ymod + y;
-                        if (currentx > -1 && currenty > -1 && currentx < settings.width && currenty < settings.height) { //If tile in bounds of map
-                            double tempElevation = tileBuffer[currenty * settings.width + currentx];
+                        if (currentx >= 0 && currenty >= 0 && currentx < settings.width && currenty < settings.height) { //If tile in bounds of map
+                            double tempElevation = heightBuffer[currenty * settings.width + currentx];
                             
                             if (tempElevation > max) {
                                 max = tempElevation;
@@ -160,7 +169,8 @@ void TileMap::smoothMountains(std::mt19937* rand) {
                     }
                 }
                 
-                if (max - min >= settings.mountainSmoothThreshold) { //If a modification is necessary smooth out the tile 
+                // If a modification is necessary smooth out the tile
+                if (max - min >= settings.mountainSmoothThreshold) {
                     currentTile->addFeature("foothill");
                     currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + min);
                 }
@@ -168,6 +178,8 @@ void TileMap::smoothMountains(std::mt19937* rand) {
             }
         }
     }
+    
+    delete[] heightBuffer;
 }
 
 TileMap::~TileMap() {
@@ -187,4 +199,8 @@ int TileMap::getWidth() {
 
 int TileMap::getHeight() {
     return settings.height;
+}
+
+TileMap::GenerationSettings* TileMap::getSettings() {
+    return &settings;
 }

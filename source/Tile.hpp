@@ -10,6 +10,8 @@
 
 #include <SFML/Graphics.hpp>
 
+class TileMap; // "Forward declarations" to break circular dependency
+
 class Tile {
 
     private:
@@ -17,15 +19,16 @@ class Tile {
         LinkedList<std::string> features;
         sf::Color colorCache;
         bool needToRenderColor = true;
-        
+    
+        TileMap* tileMap;
+            
         /*double val;
         Tile::color col;
         sf::Color col2;*/
     
     public:
     
-        Tile();
-        Tile(double elevation, double temp, double humidity);
+        Tile(TileMap* parentMap);
         
         void renderColor();
         sf::Color getColor();
