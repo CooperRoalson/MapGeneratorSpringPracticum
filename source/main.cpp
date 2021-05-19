@@ -71,7 +71,7 @@ int main(int argc, char const** argv)
             else if (event.type == sf::Event::MouseWheelScrolled) {
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                     dm.changeTileSize(event.mouseWheelScroll.delta);
-                    cameraSpeed = 30 / dm.getTileSize();
+                    cameraSpeed = ds.initialTileSize / (dm.getTileSize()*dm.getTileSize());
                 }
             }
             
@@ -103,9 +103,8 @@ int main(int argc, char const** argv)
                 }
             }
             
-            // freaking comment your code, cooper
-            // I don't like having to figure out what this does, and then make a comment
-            // this regenerates the tilemap
+
+            // regenerates the tilemap when space is pressed
             else if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Space) {
                     delete tileMap;
@@ -142,10 +141,10 @@ int main(int argc, char const** argv)
             right = false;
         }
         if (!drag) {
-            if (up && !down) { dm.moveCamera(0, -cameraSpeed / dm.getTileSize()); }
-            else if (down && !up) { dm.moveCamera(0, cameraSpeed / dm.getTileSize()); }
-            if (left && !right) { dm.moveCamera(-cameraSpeed / dm.getTileSize(), 0); }
-            else if (right && !left) { dm.moveCamera(cameraSpeed / dm.getTileSize(), 0); }
+            if (up && !down) { dm.moveCamera(0, -cameraSpeed); }
+            else if (down && !up) { dm.moveCamera(0, cameraSpeed); }
+            if (left && !right) { dm.moveCamera(-cameraSpeed, 0); }
+            else if (right && !left) { dm.moveCamera(cameraSpeed, 0); }
         }
         
         dm.display();

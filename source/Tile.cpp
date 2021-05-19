@@ -30,6 +30,7 @@ void Tile::renderColor() {
 }
 
 sf::Color Tile::getColor() {
+    if (needToRenderColor) {renderColor(); needToRenderColor = false;}
     return colorCache;
 }
 

@@ -16,6 +16,7 @@ class Tile {
         Dictionary<std::string, double> attributes;
         LinkedList<std::string> features;
         sf::Color colorCache;
+        bool needToRenderColor = true;
         
         /*double val;
         Tile::color col;
