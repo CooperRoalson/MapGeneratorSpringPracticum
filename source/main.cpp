@@ -44,8 +44,8 @@ int main(int argc, char const** argv)
                                     // Mountain smoothing
                                       0.15, // Mountain smooth threshold
                                       15,   // Number of smoothing passes
-                                      0.7, // How much to smooth (min and max)
-                                      0.9 // ^ Lower values = more smoothing
+                                      0.65, // How much to smooth (min and max)
+                                      0.85 // ^ Lower values = more smoothing
         
                                      };
     
