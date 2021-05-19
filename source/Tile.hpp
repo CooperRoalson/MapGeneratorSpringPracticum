@@ -23,6 +23,8 @@ class Tile {
         TileMap* tileMap;
     
         static double clamp(double x, double a, double b);
+    
+        double colorCurve(double input, double steepness);
             
         /*double val;
         Tile::color col;
@@ -35,7 +37,7 @@ class Tile {
         void renderColor();
         sf::Color getColor();
         
-        int getBiome();
+        bool isOcean();
     
         double getAttribute(std::string attr);
         void setAttribute(std::string attr, double val);

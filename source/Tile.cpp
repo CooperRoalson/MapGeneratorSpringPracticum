@@ -127,3 +127,12 @@ bool Tile::hasFeature(std::string feat) {
 double Tile::clamp(double x, double a, double b) {
     return fmin(fmax(x, a), b);
 }
+
+double Tile::colorCurve(double input, double steepness) {
+    double seaLevel = tileMap->getSettings()->seaLevel;
+    return log(steepness*(input-seaLevel)+1) / log(steepness+1-steepness*seaLevel);
+}
+
+bool Tile::isOcean() {
+    return getAttribute("elevation") < tileMap->getSettings()->seaLevel;
+}
