@@ -35,17 +35,17 @@ int main(int argc, char const** argv)
                                       4., // Detail size reduction per level
         
                                     // Mountain generation
-                                      25., // Mountain range scatter (distance between ranges)
+                                      15., // Mountain range scatter (distance between ranges)
                                       0.34, // Mountain range spread (size)
-                                      0.04, // Mountain range density
+                                      0.12, // Mountain range density
                                       1.5, // Mountain min height
-                                      2.5, // Mountain max height
+                                      2.0, // Mountain max height
         
                                     // Mountain smoothing
-                                      1.7, // Mountain smooth threshold
+                                      1.4, // Mountain smooth threshold
                                       15,   // Number of smoothing passes
                                       0.65, // How much to smooth (min and max)
-                                      0.80, // ^ Lower values = more smoothing
+                                      0.85, // ^ Lower values = more smoothing
 
                                     // Oceans
                                       0.5,  // Sea level

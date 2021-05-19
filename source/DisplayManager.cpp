@@ -132,6 +132,8 @@ void DisplayManager::drawTileStats() {
         featureText = "Mountain";
     } else if (viewTile->hasFeature("foothill")) {
         featureText = "Foothills";
+    } else if (viewTile->hasFeature("sea_cliff")) {
+        featureText = "Cliffs";
     } else {
         featureText = "";
     }
