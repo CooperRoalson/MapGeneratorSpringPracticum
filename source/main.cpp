@@ -51,6 +51,7 @@ int main(int argc, char const** argv)
                                       0.5,  // Sea level
                                       false, // Can mountains generate in oceans
                                       0.03, // Beach threashold
+                                      0.05, // Sea floor layer size diff
 
                                     // Default Color
                                       0

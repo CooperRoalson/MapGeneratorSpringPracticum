@@ -41,6 +41,7 @@ class TileMap {
             float seaLevel;
             bool canMountainsFormInOcean;
             float beachThreashold;
+            float seafloorThreashold;
 
           // Color Scheme
             int colorMode;
