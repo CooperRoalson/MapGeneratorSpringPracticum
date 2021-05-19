@@ -129,7 +129,7 @@ void DisplayManager::drawTileStats() {
     int fontSize = 20; // Pixels
     
     sf::Vector2f size(10*fontSize, 4*fontSize + 6*offset);
-    sf::RoundedRectangleShape rect(size, 5, 5);
+    sf::RectangleShape rect(size);
     rect.setFillColor(sf::Color(100, 100, 150));
     rect.setPosition(viewTileDisplayCoords);
     
