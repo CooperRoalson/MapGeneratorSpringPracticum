@@ -63,14 +63,15 @@ int main(int argc, char const** argv)
     DisplayManager dm(ds, tileMap, path);
     
     double cameraSpeed = 3;
-    
+    double FPSUpdateFreq = 0.2; // How often to update the FPS display (in seconds)
     
     bool left = false, right = false, up = false, down = false;
     bool drag = false;
     int recentDragX, recentDragY;
     
     sf::Clock clock;
-    float lastTime = 0;
+    double currentTime, lastTime = 0;
+    int frameCounter = 0;
 
     while (dm.isOpen())
     {
@@ -175,12 +176,14 @@ int main(int argc, char const** argv)
         }
         
         // FPS calculation
-        double currentTime = clock.getElapsedTime().asSeconds();
-        double fps = 1.0 / (currentTime - lastTime);
-        if ((int)(currentTime * 10) - (int)(lastTime * 10) == 1) {
+        currentTime = clock.getElapsedTime().asSeconds();
+        frameCounter ++;
+        if (currentTime - lastTime >= FPSUpdateFreq) {
+            double fps = frameCounter / (currentTime - lastTime);
             dm.setFPS((int)(fps));
+            lastTime = currentTime;
+            frameCounter = 0;
         }
-        lastTime = currentTime;
 
         dm.display();
     }
