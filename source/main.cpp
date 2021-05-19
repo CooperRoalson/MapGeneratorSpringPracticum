@@ -130,12 +130,12 @@ int main(int argc, char const** argv)
                     dm.setTileMap(tileMap);
                 }
                 else if (event.key.code == sf::Keyboard::C) {
-                    tileMap->setColorMode((tileMap->getColorMode() + 1) % 4);
+                    tileMap->setColorMode((tileMap->getColorMode() + 3) % 4);
                     tileMap->rerenderTiles();
                     gs.colorMode = tileMap->getColorMode();
                 }
                 else if (event.key.code == sf::Keyboard::V) {
-                    tileMap->setColorMode((tileMap->getColorMode() + 3) % 4);
+                    tileMap->setColorMode((tileMap->getColorMode() + 1) % 4);
                     tileMap->rerenderTiles();
                     gs.colorMode = tileMap->getColorMode();
                 }

@@ -32,46 +32,55 @@ void Tile::renderColor() {
 
     int colorMode = tileMap->getColorMode();
 
-    if (colorMode == 0) {
-        elev *= 78;
-        colorCache.r = (int)(100);
-        colorCache.g = (int)(elev + 100);
-        colorCache.b = (int)(100);
-    }
-    else if (colorMode == 1) {
-        if (hasFeature("mountain")) {
-            mountainElev *= 50;
-            colorCache = sf::Color(205 + mountainElev, 205 + mountainElev, 205 + mountainElev);
-        }
-        else if (hasFeature("foothill")) {
-            if (elev <= 1) {
-                colorCache.r = (int)(100);
-                colorCache.g = (int)(155*elev + 100);
-                colorCache.b = (int)(100);
-            } else {
-                double extraPercent = (elev - 1) / (gs->mountainMaxHeight - 1);
-                colorCache.r = (int)(100 + extraPercent*100);
-                colorCache.g = (int)(clamp(155 + 100*exp(-10*extraPercent), colorCache.r, 255)); // The clamp is to prevent purples
-                colorCache.b = (int)(100 + extraPercent*100);
+    switch (colorMode) {
+
+        case 0: // Elevation + mountains
+            if (hasFeature("mountain")) {
+                mountainElev *= 50;
+                colorCache = sf::Color(205 + mountainElev, 205 + mountainElev, 205 + mountainElev);
             }
-        }
-        else {
-            elev *= 155;
+            else if (hasFeature("foothill")) {
+                if (elev <= 1) {
+                    colorCache.r = (int)(100);
+                    colorCache.g = (int)(155*elev + 100);
+                    colorCache.b = (int)(100);
+                } else {
+                    double extraPercent = (elev - 1) / (gs->mountainMaxHeight - 1);
+                    colorCache.r = (int)(100 + extraPercent*100);
+                    colorCache.g = (int)(clamp(155 + 100*exp(-10*extraPercent), colorCache.r, 255)); // The clamp is to prevent purples
+                    colorCache.b = (int)(100 + extraPercent*100);
+                }
+            }
+            else {
+                elev *= 155;
+                colorCache.r = (int)(100);
+                colorCache.g = (int)(elev + 100);
+                colorCache.b = (int)(100);
+            }
+            break;
+        
+        case 1: // Elevation
+            elev = clamp(elev*155/gs->mountainMaxHeight, 0, 155);
             colorCache.r = (int)(100);
             colorCache.g = (int)(elev + 100);
             colorCache.b = (int)(100);
-        }
+            break;
         
-    }
-    else if (colorMode == 2) {
-        colorCache.r = (int)(temp);
-        colorCache.g = (int)(0);
-        colorCache.b = (int)(155 - (temp/255)*155);
-    }
-    else if (colorMode == 3) {
-        colorCache.r = (int)(0);
-        colorCache.g = (int)(0);
-        colorCache.b = (int)(hum);
+        case 2: // Temp
+            colorCache.r = (int)(temp);
+            colorCache.g = (int)(0);
+            colorCache.b = (int)(155 - (temp/255)*155);
+            break;
+        
+        case 3: // Humidity
+            colorCache.r = (int)(0);
+            colorCache.g = (int)(0);
+            colorCache.b = (int)(hum);
+            break;
+        
+        default:
+            colorCache = sf::Color(0,0,0);
+            break;
     }
 }
 

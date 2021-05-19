@@ -38,7 +38,7 @@ class TileMap {
             float mountainDistributionHigh;
 
           // Color Scheme
-            int colorMode = 0;
+            int colorMode;
         };
     
     public:

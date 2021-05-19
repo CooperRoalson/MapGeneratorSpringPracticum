@@ -137,7 +137,7 @@ void DisplayManager::drawControls() {
     controlText.setFont(font);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click and drag to move. Space to regenerate terrain. C/V to change color scheme.");
+        controlText.setString("WASD/arrows/click-and-drag to move. Space to regenerate terrain. C/V to change color scheme.");
     else
         controlText.setString("H for controls.");
 
@@ -181,14 +181,23 @@ void DisplayManager::drawColorScheme() {
     colorSchemeText.setFont(font);
 
     sf::Vector2<double> coords = getCameraCenter();
-    if (tileMap->getColorMode() == 0)
-        colorSchemeText.setString("Elevation Linear");
-    else if (tileMap->getColorMode() == 1)
-        colorSchemeText.setString("Elevation Linear with Mountains");
-    else if (tileMap->getColorMode() == 2)
-        colorSchemeText.setString("Tempurature");
-    else if (tileMap->getColorMode() == 3)
-        colorSchemeText.setString("Humidity");
+    switch(tileMap->getColorMode()) {
+        case 0:
+            colorSchemeText.setString("Elevation Linear");
+            break;
+        case 1:
+            colorSchemeText.setString("Elevation");
+            break;
+        case 2:
+            colorSchemeText.setString("Temperature");
+            break;
+        case 3:
+            colorSchemeText.setString("Humidity");
+            break;
+        default:
+            colorSchemeText.setString("Invalid display setting!");
+            break;
+    }
 
 
     colorSchemeText.setCharacterSize(20); // Pixels, not normal font size
