@@ -15,6 +15,8 @@ class Tile {
     private:
         Dictionary<std::string, double> attributes;
         LinkedList<std::string> features;
+        sf::Color colorCache;
+        bool needToRenderColor = true;
         
         /*double val;
         Tile::color col;
@@ -25,6 +27,7 @@ class Tile {
         Tile();
         Tile(double elevation, double temp, double humidity);
         
+        void renderColor();
         sf::Color getColor();
         
         int getBiome();

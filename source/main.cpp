@@ -51,7 +51,7 @@ int main(int argc, char const** argv)
     DisplayManager dm(ds, tileMap, path);
     
     double cameraSpeed = 3;
-    double cameraSpeedModification = 0.5; // how much the move speed changes when scrolling. 0 < x < 3 is recommended.
+    double cameraSpeedModification = 0.5;
     
     
     bool left = false, right = false, up = false, down = false;
@@ -73,8 +73,7 @@ int main(int argc, char const** argv)
             else if (event.type == sf::Event::MouseWheelScrolled) {
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                     dm.changeTileSize(event.mouseWheelScroll.delta);
-                    
-                    //cameraSpeed += event.mouseWheelScroll.delta * cameraSpeedModification * -0.1;
+                    cameraSpeed = ds.initialTileSize / (dm.getTileSize()*dm.getTileSize());
                 }
             }
             
@@ -106,6 +105,8 @@ int main(int argc, char const** argv)
                 }
             }
             
+
+            // regenerates the tilemap when space is pressed
             else if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Space) {
                     delete tileMap;
@@ -142,10 +143,10 @@ int main(int argc, char const** argv)
             right = false;
         }
         if (!drag) {
-            if (up && !down) { dm.moveCamera(0, -cameraSpeed / dm.getTileSize()); }
-            else if (down && !up) { dm.moveCamera(0, cameraSpeed / dm.getTileSize()); }
-            if (left && !right) { dm.moveCamera(-cameraSpeed / dm.getTileSize(), 0); }
-            else if (right && !left) { dm.moveCamera(cameraSpeed / dm.getTileSize(), 0); }
+            if (up && !down) { dm.moveCamera(0, -cameraSpeed); }
+            else if (down && !up) { dm.moveCamera(0, cameraSpeed); }
+            if (left && !right) { dm.moveCamera(-cameraSpeed, 0); }
+            else if (right && !left) { dm.moveCamera(cameraSpeed, 0); }
         }
         
         dm.display();
