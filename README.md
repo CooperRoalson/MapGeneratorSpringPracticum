@@ -43,3 +43,21 @@ If you're using the static libraries, the sfml libraries should have `-s` append
 ### Compiling and Running
 
 If you're not using the static version, the SFML DLL files must be placed in the same directory as the resulting EXE file.
+
+
+## Building in XCode
+
+### Setting up the library
+
+Download SFML for Mac and open it.
+Copy the contents of the `Frameworks` folder into `/Library/Frameworks`.
+Copy the contents of the `extlibs` folder into `/Library/Frameworks`.
+Copy the contents of the `include` folder into `/usr/local/include`.
+Copy the contents of the `lib` folder into `/usr/local/lib`.
+Copy the contents of the `templates` (the `SFML` directory) folder into `~/Library/Developer/Xcode/Templates`.
+
+For each of these steps, create the folders on your filesystem if they don't already exist.
+
+### Creating a project
+
+To make XCode link SFML, the easiest way is to create a new project with the `SFML CLT` template.
