@@ -27,6 +27,8 @@ class TileMap {
             float mountainChance; // What's the chance of a mountain in a tile within that threshold (smaller value = rarer)
             float mountainMinHeight;
             float mountainMaxHeight;
+            float mountainSmoothThreshold;
+            int mountainSmoothPasses;
         };
     
     public:
@@ -50,6 +52,7 @@ class TileMap {
         void generateMap(unsigned int seed);
         void generateTileAttributes(std::mt19937* rand);
         void generateMountains(std::mt19937* rand);
+        void smoothMountains(std::mt19937* rand);
         
 };
 

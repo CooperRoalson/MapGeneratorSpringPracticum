@@ -36,12 +36,14 @@ int main(int argc, char const** argv)
                                       0.08, // Mountain range density
                                       1.5, // Mountain min height
                                       2.0, // Mountain max height
+                                      0.1, //Mountain smooth threshold
+                                      5    //Number of smoothing passes
                                      };
     
     TileMap* tileMap = new TileMap(gs);
     
     DisplayManager::DisplaySettings ds = {960, 540, // Screen width and height
-                                          36.6, 40, // Starting camera  x and y
+                                          36.6, 40, // Starting camera x and y
                                           30, // Starting tile size
                                           10, 150 // Min and max tile sizes
                                          };
