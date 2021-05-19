@@ -40,6 +40,7 @@ class TileMap {
           // Ocean settings
             float seaLevel;
             bool canMountainsFormInOcean;
+            float beachThreashold;
 
           // Color Scheme
             int colorMode;
@@ -74,6 +75,8 @@ class TileMap {
         void generateMountains(std::mt19937* rand);
         void smoothMountains(std::mt19937* rand);
         void makeSeaCliffs(std::mt19937* rand);
+        void designateBeaches();
+        void makeSeaWet();
         
 };
 
