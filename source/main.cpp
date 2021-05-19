@@ -53,6 +53,7 @@ int main(int argc, char const** argv)
                                       false, // Can mountains generate in oceans
                                       0.03, // Beach threashold
                                       1.5, // Ocean humidity multiplier
+                                      0.05, // Sea floor layer size diff
         
                                     // Humidity smoothing
                                       1.2, // Humidity smooth threshold

@@ -31,34 +31,44 @@ void Tile::renderColor(int displayMode) {
     switch (displayMode) {
 
         case 0: // Elevation + mountains
-            if (isOcean() && !hasFeature("sea_cliff")) { // Ocean
+            if (isOcean()) { // Ocean
                 colorCache.r = (int)(50);
                 colorCache.g = (int)(75);
                 colorCache.b = (int)(100 + (elev * 155 / gs->seaLevel));
+                if (elev < gs->seaLevel - gs->seafloorThreashold) {
+                    colorCache.b = (int)(90 + (elev * 155 / gs->seaLevel));
+                    if (elev < gs->seaLevel - gs->seafloorThreashold*2)
+                        colorCache.b = (int)(80 + (elev * 155 / gs->seaLevel));
+                }
             } else if (hasFeature("beach")) { // Beach
                 elev *= 155;
                 colorCache.r = (int)(elev + 100);
-                colorCache.g = (int)(elev + 100);
-                colorCache.b = 100;
+                colorCache.g = (int)(elev + 105);
+                colorCache.b = 95;
             } else if (hasFeature("forest")) {
                 colorCache.r = 50;
                 colorCache.g = (int)(150 - 50*hum);
                 colorCache.b = 50;
             } else if (elev > gs->mountainMinHeight + (1./3.) * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
                 
-                mountainElev *= 50;
-                colorCache = sf::Color(205 + mountainElev, 205 + mountainElev, 205 + mountainElev);
+                mountainElev *= 75;
+                colorCache = sf::Color(140 + mountainElev, 170 + mountainElev*.6, 140 + mountainElev);
             } else if (elev <= 1) { // Normal
                 colorCache.r = (int)(100);
                 colorCache.g = (int)(150 + 50*colorCurve(elev, 100));
                 colorCache.b = (int)(100);
+                if (hasFeature("sea_cliff")) {
+                    colorCache.r = (int)(120 + 20 * colorCurve(elev, 100));
+                    colorCache.b = (int)(120 + 35 * colorCurve(elev, 100));
+                }
             } else { // Foothills
                 double extraPercent = (elev - 1) / (gs->mountainMaxHeight - 1);
                 colorCache.r = (int)(100 + extraPercent * 100);
                 colorCache.g = (int)(clamp(150 + 50*exp(-10*extraPercent), colorCache.r, 255)); // The clamp is to prevent purples
                 colorCache.b = (int)(100 + extraPercent*100);
                 if (hasFeature("sea_cliff")) {
-                    colorCache.r = (int)(clamp((30-30*elev) + 100 + extraPercent * 100, colorCache.g, 255));
+                    colorCache.r = (int)(clamp((30 - 30 * elev) + 80 + 50 * exp(-10 * extraPercent), colorCache.g, 255));
+                    colorCache.b = (int)(clamp((10 - 10 * elev) + 80 + 50 * exp(-10 * extraPercent), colorCache.g, 255));
                 }
             }
             break;
