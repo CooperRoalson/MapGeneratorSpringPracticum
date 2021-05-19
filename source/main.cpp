@@ -35,22 +35,22 @@ int main(int argc, char const** argv)
                                       4., // Detail size reduction per level
         
                                     // Mountain generation
-                                      50., // Mountain range scatter (distance between ranges)
-                                      0.3, // Mountain range spread (size)
-                                      0.5, // Mountain range density
+                                      30, // Mountain range scatter (distance between ranges)
+                                      0.35, // Mountain range spread (size)
+                                      0.05, // Mountain range density
                                       1.5, // Mountain min height
                                       3.0, // Mountain max height
         
                                     // Mountain smoothing
                                       1.4, // Mountain smooth threshold
                                       15,   // Number of smoothing passes
-                                      0.65, // How much to smooth (min and max)
-                                      0.85, // ^ Lower values = more smoothing
+                                      0.4, // How much to smooth (min and max)
+                                      0.6, // ^ Lower values = more smoothing
 
                                     // Oceans
                                       0.5,  // Sea level
                                       false, // Can mountains generate in oceans
-                                      0.05, // Beach threashold
+                                      0.03, // Beach threashold
 
                                     // Default Color
                                       0
@@ -59,7 +59,7 @@ int main(int argc, char const** argv)
     
     TileMap* tileMap = new TileMap(gs);
     
-    DisplayManager::DisplaySettings ds = {960, 540, // Screen width and height
+    DisplayManager::DisplaySettings ds = {1366, 768, // Screen width and height
                                           36.6, 40, // Starting camera x and y
                                           15, // Starting tile size
                                           3, 150, // Min and max tile sizes

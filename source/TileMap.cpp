@@ -41,13 +41,15 @@ void TileMap::generateMap(unsigned int seed) {
     }
     std::cout << "Smoothing complete\n";
 
-    std::cout << "Generating sea cliffs\n";
-    makeSeaCliffs(&rand);
+    if (!settings.canMountainsFormInOcean) {
+        std::cout << "Generating sea cliffs\n";
+        makeSeaCliffs(&rand);
+    }
 
     std::cout << "Designating beaches\n";
     designateBeaches();
 
-    // DO THIS LAST!!! It makes unmodified sea tiles into sea tiles.
+    // Gives ocean tiles humidity
     std::cout << "Wetting ocean\n";
     makeSeaWet();
 
@@ -169,7 +171,7 @@ void TileMap::smoothMountains(std::mt19937* rand) {
             float min = settings.mountainMaxHeight;
             float max = 0;
 
-            // Do not perform modifications on tiles with the mountain or foothill attributes
+            // Do not perform modifications on tiles with the mountain attribute
             if (!(currentTile->hasFeature("mountain"))){// && !(currentTile->hasFeature("foothill"))) {
                 
                 // Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
@@ -180,7 +182,7 @@ void TileMap::smoothMountains(std::mt19937* rand) {
                         if (currentx >= 0 && currenty >= 0 && currentx < settings.width && currenty < settings.height) { //If tile in bounds of map
                             double tempElevation = heightBuffer[currenty * settings.width + currentx];
                             
-                            if (tempElevation >= settings.seaLevel) {
+                            if (settings.canMountainsFormInOcean || tempElevation >= settings.seaLevel) {
                                 if (tempElevation > max) {
                                     max = tempElevation;
                                 }
@@ -193,7 +195,7 @@ void TileMap::smoothMountains(std::mt19937* rand) {
                 }
                 
                 // If a modification is necessary smooth out the tile
-                if (max / min >= settings.mountainSmoothThreshold && currentTile->getAttribute("elevation") >= settings.seaLevel) {
+                if (max / min >= settings.mountainSmoothThreshold && (settings.canMountainsFormInOcean || !(currentTile->isOcean()))) {
                     currentTile->addFeature("foothill");
                     currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + min);
                 }
@@ -239,9 +241,9 @@ void TileMap::makeSeaCliffs(std::mt19937* rand) {
                     }
 
                     // If a it is a valid sea tile, and near mountains
-                    if (max >= 1 && currentTile->getAttribute("elevation") < settings.seaLevel) {
+                    if (max >= 1 && currentTile->isOcean()) {
                         currentTile->addFeature("sea_cliff");
-                        currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + max);
+                        currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + min);
                     }
 
                 }
@@ -252,12 +254,6 @@ void TileMap::makeSeaCliffs(std::mt19937* rand) {
 }
 
 void TileMap::designateBeaches() {
-    double* heightBuffer = new double[settings.width * settings.height]; //Needed so that modified data does not interfere with currently generating data
-    for (int y = 0; y < settings.height; y++) {
-        for (int x = 0; x < settings.width; x++) {
-            heightBuffer[y * settings.width + x] = getTile(x, y)->getAttribute("elevation");
-        }
-    }
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
@@ -267,29 +263,19 @@ void TileMap::designateBeaches() {
             }
         }
     }
-
-    delete[] heightBuffer;
 }
 
 void TileMap::makeSeaWet() {
-    double* heightBuffer = new double[settings.width * settings.height]; //Needed so that modified data does not interfere with currently generating data
-    for (int y = 0; y < settings.height; y++) {
-        for (int x = 0; x < settings.width; x++) {
-            heightBuffer[y * settings.width + x] = getTile(x, y)->getAttribute("elevation");
-        }
-    }
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
 
-            if (currentTile->getAttribute("elevation") < settings.seaLevel && currentTile->noFeatures()) {
+            if (currentTile->getAttribute("elevation") < settings.seaLevel) {
                 currentTile->addFeature("sea");
                 currentTile->setAttribute("humidity", 1);
             }
         }
     }
-
-    delete[] heightBuffer;
 }
 
 TileMap::~TileMap() {

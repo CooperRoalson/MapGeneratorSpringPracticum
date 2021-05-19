@@ -35,41 +35,31 @@ void Tile::renderColor() {
     switch (colorMode) {
 
         case 0: // Elevation + mountains
-            if (elev < gs->seaLevel) {
+            if (isOcean() && !hasFeature("sea_cliff")) { // Ocean
                 colorCache.r = (int)(50);
                 colorCache.g = (int)(75);
                 colorCache.b = (int)(100 + (elev * 155 / gs->seaLevel));
-            }
-            else if (hasFeature("mountain")) {
+            } else if (hasFeature("beach")) { // Beach
+                elev *= 155;
+                colorCache.r = (int)(elev + 100);
+                colorCache.g = (int)(elev + 100);
+                colorCache.b = 100;
+            } else if (elev > gs->mountainMinHeight + (1./3.) * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
+                
                 mountainElev *= 50;
                 colorCache = sf::Color(205 + mountainElev, 205 + mountainElev, 205 + mountainElev);
-            }
-            else if (hasFeature("foothill") || hasFeature("sea_cliff")) {
-                if (elev <= 1) {
-                    if (hasFeature("sea_cliff"))
-                        colorCache.r = (int)(10 * elev + 100);
-                    else
-                        colorCache.r = (int)(100);
-                    colorCache.g = (int)(130*elev + 100);
-                    colorCache.b = (int)(100);
-                } else {
-                    double extraPercent = (elev - 1) / (gs->mountainMaxHeight - 1);
-                    if (hasFeature("sea_cliff"))
-                        colorCache.r = (int)(clamp((30-30*elev) + 100 + extraPercent * 100, colorCache.r, 255));
-                    else
-                        colorCache.r = (int)(100 + extraPercent * 100);
-                    colorCache.g = (int)(clamp(130 + 100*exp(-10*extraPercent), colorCache.g, 255)); // The clamp is to prevent purples
-                    colorCache.b = (int)(100 + extraPercent*100);
-                }
-            }
-            else {
-                elev *= 130;
-                if (hasFeature("beach"))
-                    colorCache.r = (int)(elev + 100);
-                else
-                    colorCache.r = (int)(100);
-                colorCache.g = (int)(elev + 100);
+            } else if (elev <= 1) { // Normal
+                colorCache.r = (int)(100);
+                colorCache.g = (int)(150 + 50*colorCurve(elev, 100));
                 colorCache.b = (int)(100);
+            } else { // Foothills
+                double extraPercent = (elev - 1) / (gs->mountainMaxHeight - 1);
+                colorCache.r = (int)(100 + extraPercent * 100);
+                colorCache.g = (int)(clamp(150 + 50*exp(-10*extraPercent), colorCache.r, 255)); // The clamp is to prevent purples
+                colorCache.b = (int)(100 + extraPercent*100);
+                if (hasFeature("sea_cliff")) {
+                    colorCache.r = (int)(clamp((30-30*elev) + 100 + extraPercent * 100, colorCache.g, 255));
+                }
             }
             break;
         
@@ -78,6 +68,9 @@ void Tile::renderColor() {
             colorCache.r = (int)(100);
             colorCache.g = (int)(elev + 100);
             colorCache.b = (int)(100);
+            if (hasFeature("sea_cliff")) {
+                colorCache.r = (int)(10 * elev + 100);
+            }
             break;
         
         case 2: // Temp
@@ -101,10 +94,6 @@ void Tile::renderColor() {
 sf::Color Tile::getColor() {
     if (needToRenderColor) {renderColor(); needToRenderColor = false;}
     return colorCache;
-}
-
-int Tile::getBiome() {
-    return 0; // 0 for now
 }
 
 double Tile::getAttribute(std::string attr) {

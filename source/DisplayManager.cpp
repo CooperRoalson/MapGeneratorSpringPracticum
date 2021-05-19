@@ -128,22 +128,24 @@ void DisplayManager::drawTileStats() {
     Tile* viewTile = tileMap->getTile(viewTileCoords.x, viewTileCoords.y);
 
     std::string featureText;
-    if (viewTile->hasFeature("sea")) {
-        featureText = "Sea";
+    if (viewTile->hasFeature("sea_cliff")) {
+        featureText = "Cliffs";
+    } else if (viewTile->isOcean()) {
+        featureText = "Ocean";
     } else if (viewTile->hasFeature("mountain")) {
         featureText = "Mountain";
     } else if (viewTile->hasFeature("foothill")) {
         featureText = "Foothills";
-    } else if (viewTile->hasFeature("sea_cliff")) {
-        featureText = "Cliffs";
+    } else if (viewTile->hasFeature("beach")) {
+        featureText = "Beach";
     } else {
-        featureText = "";
+        featureText = "Plains";
     }
     
     int offset = 5;
-    int fontSize = 20; // Pixels
+    int fontSize = 30; // Pixels
 
-    int xSize = 12.5 * fontSize;
+    int xSize = 13.5 * fontSize;
     int ySize = 4 * fontSize + 6 * offset;
 
     // window EDGE case fix, haha
@@ -194,7 +196,7 @@ void DisplayManager::drawCoords() {
     coordText.setString("(" + std::to_string((int)(coords.x)) + ", " + std::to_string((int)(coords.y)) + ")");
 
     
-    coordText.setCharacterSize(40); // Pixels, not normal font size
+    coordText.setCharacterSize(70); // Pixels, not normal font size
     coordText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
     
     coordText.setOutlineThickness(2);
@@ -212,12 +214,12 @@ void DisplayManager::drawControls() {
     controlText.setFont(font);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain.\nC/V to change color scheme.\nClick on tile to view, ESC to stop viewing.");
+        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain.\nC/V to change display mode.\nClick on tile to view, ESC to stop viewing.");
     else
         controlText.setString("H for controls.");
 
 
-    controlText.setCharacterSize(15); // Pixels, not normal font size
+    controlText.setCharacterSize(30); // Pixels, not normal font size
     controlText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
 
     controlText.setOutlineThickness(1);
@@ -226,7 +228,7 @@ void DisplayManager::drawControls() {
     controlText.setStyle(sf::Text::Bold);
 
 
-    controlText.setPosition(10, 70);
+    controlText.setPosition(10, 100);
     window.draw(controlText);
 }
 
@@ -238,7 +240,7 @@ void DisplayManager::drawDebug() {
     debugText.setString(std::to_string(fps));
 
 
-    debugText.setCharacterSize(20); // Pixels, not normal font size
+    debugText.setCharacterSize(40); // Pixels, not normal font size
     debugText.setFillColor(sf::Color(0, 200, 0)); // Color
 
     debugText.setOutlineThickness(2);
@@ -247,7 +249,7 @@ void DisplayManager::drawDebug() {
     debugText.setStyle(sf::Text::Bold);
 
 
-    debugText.setPosition(displaySettings.screenWidth-50, 10);
+    debugText.setPosition(displaySettings.screenWidth-80, 10);
     window.draw(debugText);
 }
 
@@ -257,7 +259,7 @@ void DisplayManager::drawColorScheme() {
 
     switch(tileMap->getColorMode()) {
         case 0:
-            colorSchemeText.setString("Elevation + Mountains");
+            colorSchemeText.setString("Elevation + Features");
             break;
         case 1:
             colorSchemeText.setString("Elevation");
@@ -274,7 +276,7 @@ void DisplayManager::drawColorScheme() {
     }
 
 
-    colorSchemeText.setCharacterSize(20); // Pixels, not normal font size
+    colorSchemeText.setCharacterSize(40); // Pixels, not normal font size
     colorSchemeText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
 
     colorSchemeText.setOutlineThickness(2);
