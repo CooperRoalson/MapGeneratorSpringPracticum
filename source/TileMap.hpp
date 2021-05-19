@@ -77,6 +77,7 @@ class TileMap {
         void makeSeaCliffs(std::mt19937* rand);
         void designateBeaches();
         void makeSeaWet();
+        void smoothHumidity(std::mt19937* rand);
     
         void getTileSurroundingMaxAndMin(double* buffer, int x, int y, bool includeSeaTiles, float& max, float& min);
         

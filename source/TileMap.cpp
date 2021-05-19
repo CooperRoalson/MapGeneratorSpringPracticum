@@ -52,7 +52,13 @@ void TileMap::generateMap(unsigned int seed) {
     // Gives ocean tiles humidity
     std::cout << "Wetting ocean\n";
     makeSeaWet();
-
+    
+    // Essentially smooths the humidity. Uses the same settings as foothills
+    std::cout << "Dispersing humidity\n";
+    for (int i = 0; i < settings.mountainSmoothPasses; i++) {
+        smoothHumidity(&rand);
+        std::cout << "> " << i << " dispersion passes completed\n";
+    }
 }
 
 void TileMap::rerenderTiles() {
@@ -265,6 +271,36 @@ void TileMap::makeSeaWet() {
             }
         }
     }
+}
+
+void TileMap::smoothHumidity(std::mt19937* rand) {
+    double* humidityBuffer = new double[settings.width * settings.height]; //Needed so that modified data does not interfere with currently generating data
+    for (int y = 0; y < settings.height; y++) {
+        for (int x = 0; x < settings.width; x++) {
+            humidityBuffer[y * settings.width + x] = getTile(x, y)->getAttribute("humidity");
+        }
+    }
+    std::uniform_real_distribution<double> distribution(settings.mountainDistributionLow, settings.mountainDistributionHigh);
+    for (int x = 0; x < settings.width; x++) {
+        for (int y = 0; y < settings.height; y++) {
+            Tile* currentTile = getTile(x, y);
+            float min, max;
+
+            if (!(currentTile->isOcean())){
+                
+                // Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
+                getTileSurroundingMaxAndMin(humidityBuffer, x, y, true, max, min);
+                
+                // If a modification is necessary smooth out the tile
+                if (max / min >= settings.mountainSmoothThreshold) {
+                    currentTile->setAttribute("humidity", distribution(*rand) * (max - min) + min);
+                }
+                
+            }
+        }
+    }
+    
+    delete[] humidityBuffer;
 }
 
 TileMap::~TileMap() {
