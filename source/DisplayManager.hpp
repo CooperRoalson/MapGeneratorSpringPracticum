@@ -19,6 +19,7 @@ public:
         int screenWidth, screenHeight;
         double initialXOffset, initialYOffset, initialTileSize;
         double minTileSize, maxTileSize;
+        int baseR, baseG, baseB, outR, outG, outB;
     };
     
 public:
@@ -73,6 +74,7 @@ private:
 
     sf::RectangleShape rect;
     void drawTile(Tile* t, sf::Vector2f screenPos);
+    void drawTile(sf::Color highlight, sf::Vector2f screenPos);
     void drawTileStats();
     void drawCoords();
     void drawControls();

@@ -61,7 +61,9 @@ int main(int argc, char const** argv)
     DisplayManager::DisplaySettings ds = {960, 540, // Screen width and height
                                           36.6, 40, // Starting camera x and y
                                           15, // Starting tile size
-                                          3, 150 // Min and max tile sizes
+                                          3, 150, // Min and max tile sizes
+                                          200, 200, 200, // Base text color
+                                          20, 20, 20, // Outline text color
                                          };
     
     DisplayManager dm(ds, tileMap, path);
@@ -138,13 +140,16 @@ int main(int argc, char const** argv)
             }
             
 
-            // regenerates the tilemap when space is pressed
             else if (event.type == sf::Event::KeyPressed) {
+                
+                // regenerates the tilemap when space is pressed
                 if (event.key.code == sf::Keyboard::Space) {
                     delete tileMap;
                     tileMap = new TileMap(gs);
                     dm.setTileMap(tileMap);
                 }
+                
+                // changes color mode
                 else if (event.key.code == sf::Keyboard::C) {
                     tileMap->setColorMode((tileMap->getColorMode() + 3) % 4);
                     tileMap->rerenderTiles();
@@ -154,6 +159,11 @@ int main(int argc, char const** argv)
                     tileMap->setColorMode((tileMap->getColorMode() + 1) % 4);
                     tileMap->rerenderTiles();
                     gs.colorMode = tileMap->getColorMode();
+                }
+                
+                // exits tile view
+                else if (event.key.code == sf::Keyboard::Escape) {
+                    dm.setWhetherViewingTile(false);
                 }
             }
         }

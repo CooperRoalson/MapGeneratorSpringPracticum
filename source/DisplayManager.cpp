@@ -87,8 +87,12 @@ void DisplayManager::drawTiles() {
             
             Tile* t = tileMap->getTile(x, y);
             sf::Vector2f screenPos((x-xOffset)*tileSize, (y-yOffset)*tileSize);
-                        
-            drawTile(t, screenPos);
+            
+            if (viewingTile == true && viewTileCoords.x == x && viewTileCoords.y == y) {
+                drawTile(sf::Color(175, 100, 100), screenPos);
+            }
+            else
+                drawTile(t, screenPos);
             
         }
     }
@@ -113,34 +117,50 @@ void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
     window.draw(rect);
 }
 
+void DisplayManager::drawTile(sf::Color highlight, sf::Vector2f screenPos) {
+    rect.setPosition(screenPos);
+    rect.setSize(sf::Vector2f(tileSize, tileSize));
+    rect.setFillColor(highlight);
+    window.draw(rect);
+}
+
 void DisplayManager::drawTileStats() {
     Tile* viewTile = tileMap->getTile(viewTileCoords.x, viewTileCoords.y);
     
     std::string featureText;
     if (viewTile->hasFeature("mountain")) {
-        featureText = "Mtn";
+        featureText = "Mountain";
     } else if (viewTile->hasFeature("foothill")) {
-        featureText = "Hills";
+        featureText = "Foothills";
     } else {
         featureText = "";
     }
     
     int offset = 5;
     int fontSize = 20; // Pixels
+
+    int xSize = 12.5 * fontSize;
+    int ySize = 4 * fontSize + 6 * offset;
+
+    // window EDGE case fix, haha
+    if (viewTileDisplayCoords.x > displaySettings.screenWidth - xSize)
+        viewTileDisplayCoords.x -= xSize + 50;
+    if (viewTileDisplayCoords.y > displaySettings.screenHeight - ySize)
+        viewTileDisplayCoords.y -= ySize + 50;
     
-    sf::Vector2f size(10*fontSize, 4*fontSize + 6*offset);
-    sf::RoundedRectangleShape rect(size, 5, 5);
-    rect.setFillColor(sf::Color(100, 100, 150));
+    sf::Vector2f size(xSize, ySize);
+    sf::RoundedRectangleShape rect(size, 5, 5); // A class I found off of GitHub (make sure to add the files to your IDE in order to see them)
+    rect.setFillColor(sf::Color(100, 100, 100));
     rect.setPosition(viewTileDisplayCoords);
     
     window.draw(rect);
-    
+
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(fontSize);
-    text.setFillColor(sf::Color(200, 200, 200));
+    text.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB));
     text.setOutlineThickness(2);
-    text.setOutlineColor(sf::Color(25, 25, 25));
+    text.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
     
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setPosition(viewTileDisplayCoords.x + offset, viewTileDisplayCoords.y + offset);
@@ -171,10 +191,10 @@ void DisplayManager::drawCoords() {
 
     
     coordText.setCharacterSize(40); // Pixels, not normal font size
-    coordText.setFillColor(sf::Color(200, 200, 200)); // Color
+    coordText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
     
     coordText.setOutlineThickness(2);
-    coordText.setOutlineColor(sf::Color(25, 25, 25));
+    coordText.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
     
     coordText.setStyle(sf::Text::Bold);
 
@@ -194,10 +214,10 @@ void DisplayManager::drawControls() {
 
 
     controlText.setCharacterSize(15); // Pixels, not normal font size
-    controlText.setFillColor(sf::Color(200, 200, 200)); // Color
+    controlText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
 
     controlText.setOutlineThickness(1);
-    controlText.setOutlineColor(sf::Color(25, 25, 25));
+    controlText.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
 
     controlText.setStyle(sf::Text::Bold);
 
@@ -251,10 +271,10 @@ void DisplayManager::drawColorScheme() {
 
 
     colorSchemeText.setCharacterSize(20); // Pixels, not normal font size
-    colorSchemeText.setFillColor(sf::Color(200, 200, 200)); // Color
+    colorSchemeText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
 
     colorSchemeText.setOutlineThickness(2);
-    colorSchemeText.setOutlineColor(sf::Color(25, 25, 25));
+    colorSchemeText.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
 
     colorSchemeText.setStyle(sf::Text::Bold);
 
@@ -312,6 +332,7 @@ void DisplayManager::moveCamera(double x, double y) {
 void DisplayManager::setViewTile(sf::Vector2i tileCoords, sf::Vector2f screenCoords) {
     viewTileCoords = tileCoords;
     viewTileDisplayCoords = screenCoords;
+
     setWhetherViewingTile(true);
 }
 
@@ -325,9 +346,8 @@ sf::Vector2i DisplayManager::getTileCoordsFromScreenCoords(int screenX, int scre
 
 void DisplayManager::onClick(int clickX, int clickY) {
     sf::Vector2i tileCoords = getTileCoordsFromScreenCoords(clickX, clickY);
-    sf::Vector2i oldTileCoords = getTileCoordsFromScreenCoords(viewTileDisplayCoords.x, viewTileDisplayCoords.y);
     
-    if (!viewingTile || tileCoords != oldTileCoords) {
+    if (!viewingTile) {
         setViewTile(tileCoords, sf::Vector2f(clickX + displaySettings.screenWidth/20, clickY + displaySettings.screenHeight/20));
     } else {
         setWhetherViewingTile(false);
