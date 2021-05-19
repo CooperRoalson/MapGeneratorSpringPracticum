@@ -37,7 +37,7 @@ void TileMap::generateMap(unsigned int seed) {
     std::cout << "Smoothing mountains\n";
     for (int i = 0; i < settings.mountainSmoothPasses; i++) {
         smoothMountains(&rand);
-        std::cout << "> " << i << " smooth passes completed\n";
+        std::cout << "> " << i+1 << " smooth passes completed\n";
     }
     std::cout << "Smoothing complete\n";
 
@@ -55,9 +55,9 @@ void TileMap::generateMap(unsigned int seed) {
     
     // Essentially smooths the humidity. Uses the same settings as foothills
     std::cout << "Dispersing humidity\n";
-    for (int i = 0; i < settings.mountainSmoothPasses; i++) {
+    for (int i = 0; i < settings.humiditySmoothPasses; i++) {
         smoothHumidity(&rand);
-        std::cout << "> " << i << " dispersion passes completed\n";
+        std::cout << "> " << i+1 << " dispersion passes completed\n";
     }
 }
 
@@ -290,6 +290,8 @@ void TileMap::smoothHumidity(std::mt19937* rand) {
                 
                 // Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
                 getTileSurroundingMaxAndMin(humidityBuffer, x, y, true, max, min);
+                if (currentTile->hasFeature("sea_cliff") || currentTile->getAttribute("elevation") >= settings.seaLevel + settings.beachThreashold)
+                    getTileSurroundingMaxAndMin(humidityBuffer, x, y, false, max, min);
                 
                 // If a modification is necessary smooth out the tile
                 if (max / min >= settings.mountainSmoothThreshold) {

@@ -42,6 +42,7 @@ class TileMap {
             bool canMountainsFormInOcean;
             float beachThreashold;
             float seafloorThreashold;
+            int humiditySmoothPasses;
 
           // Color Scheme
             int colorMode;
