@@ -113,7 +113,7 @@ void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
         color = t->getColor();
     }*/
     
-    rect.setFillColor(t->getColor());
+    rect.setFillColor(t->getColor(getDisplayMode()));
     window.draw(rect);
 }
 
@@ -257,7 +257,7 @@ void DisplayManager::drawColorScheme() {
     sf::Text colorSchemeText;
     colorSchemeText.setFont(font);
 
-    switch(tileMap->getColorMode()) {
+    switch(displaySettings.displayMode) {
         case 0:
             colorSchemeText.setString("Elevation + Features");
             break;
@@ -356,4 +356,11 @@ void DisplayManager::onClick(int clickX, int clickY) {
     if (!viewingTile || viewTileCoords != tileCoords) {
         setViewTile(tileCoords, sf::Vector2f(clickX + displaySettings.screenWidth/20, clickY + displaySettings.screenHeight/20));
     }
+}
+
+int DisplayManager::getDisplayMode() {
+    return displaySettings.displayMode;
+}
+void DisplayManager::setDisplayMode(int mode) {
+    displaySettings.displayMode = mode;
 }

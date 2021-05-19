@@ -57,10 +57,7 @@ class TileMap {
         int getHeight();
         GenerationSettings* getSettings();
 
-        void setColorMode(int c) { settings.colorMode = c; };
-        int getColorMode() { return settings.colorMode; };
-
-        void rerenderTiles();
+        void rerenderTiles(int displayMode);
     
     private:
         Tile** tileMap;

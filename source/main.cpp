@@ -52,9 +52,6 @@ int main(int argc, char const** argv)
                                       false, // Can mountains generate in oceans
                                       0.03, // Beach threashold
                                       0.05, // Sea floor layer size diff
-
-                                    // Default Color
-                                      0
         
                                      };
     
@@ -66,6 +63,7 @@ int main(int argc, char const** argv)
                                           3, 150, // Min and max tile sizes
                                           200, 200, 200, // Base text color
                                           20, 20, 20, // Outline text color
+                                          0, // Default display mode
                                          };
     
     DisplayManager dm(ds, tileMap, path);
@@ -153,14 +151,12 @@ int main(int argc, char const** argv)
                 
                 // changes color mode
                 else if (event.key.code == sf::Keyboard::C) {
-                    tileMap->setColorMode((tileMap->getColorMode() + 3) % 4);
-                    tileMap->rerenderTiles();
-                    gs.colorMode = tileMap->getColorMode();
+                    dm.setDisplayMode((dm.getDisplayMode() + 3) % 4);
+                    tileMap->rerenderTiles(dm.getDisplayMode());
                 }
                 else if (event.key.code == sf::Keyboard::V) {
-                    tileMap->setColorMode((tileMap->getColorMode() + 1) % 4);
-                    tileMap->rerenderTiles();
-                    gs.colorMode = tileMap->getColorMode();
+                    dm.setDisplayMode((dm.getDisplayMode() + 1) % 4);
+                    tileMap->rerenderTiles(dm.getDisplayMode());
                 }
                 
                 // exits tile view

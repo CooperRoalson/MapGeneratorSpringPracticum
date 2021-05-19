@@ -20,6 +20,7 @@ public:
         double initialXOffset, initialYOffset, initialTileSize;
         double minTileSize, maxTileSize;
         int baseR, baseG, baseB, outR, outG, outB;
+        int displayMode;
     };
     
 public:
@@ -51,6 +52,9 @@ public:
     void setWhetherViewingTile(bool view);
     
     sf::Vector2i getTileCoordsFromScreenCoords(int screenX, int screenY);
+    
+    int getDisplayMode();
+    void setDisplayMode(int mode);
         
 private:
     DisplayManager::DisplaySettings displaySettings;
