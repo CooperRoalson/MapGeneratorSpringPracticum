@@ -61,10 +61,10 @@ void TileMap::generateMap(unsigned int seed) {
     }
 }
 
-void TileMap::rerenderTiles() {
+void TileMap::rerenderTiles(int displayMode) {
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
-            getTile(x, y)->renderColor();
+            getTile(x, y)->renderColor(displayMode);
         }
     }
 }

@@ -34,8 +34,8 @@ class Tile {
     
         Tile(TileMap* parentMap);
         
-        void renderColor();
-        sf::Color getColor();
+        void renderColor(int displayMode);
+        sf::Color getColor(int displayMode);
         
         bool isOcean();
     

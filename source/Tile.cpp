@@ -17,7 +17,7 @@ Tile::Tile(TileMap* parentMap) {
     attributes.add("humidity", 0);
 }
 
-void Tile::renderColor() {
+void Tile::renderColor(int displayMode) {
     TileMap::GenerationSettings* gs = tileMap->getSettings();
     
     double elev = attributes.get("elevation"); // Range [0,1]
@@ -30,9 +30,7 @@ void Tile::renderColor() {
     double hum = attributes.get("humidity"); // Range [0,1]
     hum *= 255;
 
-    int colorMode = tileMap->getColorMode();
-
-    switch (colorMode) {
+    switch (displayMode) {
 
         case 0: // Elevation + mountains
             if (isOcean() && !hasFeature("sea_cliff")) { // Ocean
@@ -88,8 +86,8 @@ void Tile::renderColor() {
     }
 }
 
-sf::Color Tile::getColor() {
-    if (needToRenderColor) {renderColor(); needToRenderColor = false;}
+sf::Color Tile::getColor(int displayMode) {
+    if (needToRenderColor) {renderColor(displayMode); needToRenderColor = false;}
     return colorCache;
 }
 
