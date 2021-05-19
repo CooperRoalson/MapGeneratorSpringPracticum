@@ -73,6 +73,7 @@ private:
 
     sf::RectangleShape rect;
     void drawTile(Tile* t, sf::Vector2f screenPos);
+    void drawTile(sf::Color highlight, sf::Vector2f screenPos);
     void drawTileStats();
     void drawCoords();
     void drawControls();

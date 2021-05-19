@@ -87,8 +87,12 @@ void DisplayManager::drawTiles() {
             
             Tile* t = tileMap->getTile(x, y);
             sf::Vector2f screenPos((x-xOffset)*tileSize, (y-yOffset)*tileSize);
-                        
-            drawTile(t, screenPos);
+            
+            if (viewingTile == true && viewTileCoords.x == x && viewTileCoords.y == y) {
+                drawTile(sf::Color(175, 100, 100), screenPos);
+            }
+            else
+                drawTile(t, screenPos);
             
         }
     }
@@ -110,6 +114,13 @@ void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
     }*/
     
     rect.setFillColor(t->getColor());
+    window.draw(rect);
+}
+
+void DisplayManager::drawTile(sf::Color highlight, sf::Vector2f screenPos) {
+    rect.setPosition(screenPos);
+    rect.setSize(sf::Vector2f(tileSize, tileSize));
+    rect.setFillColor(highlight);
     window.draw(rect);
 }
 
@@ -312,6 +323,10 @@ void DisplayManager::moveCamera(double x, double y) {
 void DisplayManager::setViewTile(sf::Vector2i tileCoords, sf::Vector2f screenCoords) {
     viewTileCoords = tileCoords;
     viewTileDisplayCoords = screenCoords;
+    if (viewTileDisplayCoords.x > displaySettings.screenWidth - 250)
+        viewTileDisplayCoords.x -= 300;
+    if (viewTileDisplayCoords.y > displaySettings.screenHeight - 110)
+        viewTileDisplayCoords.y -= 160;
     setWhetherViewingTile(true);
 }
 
