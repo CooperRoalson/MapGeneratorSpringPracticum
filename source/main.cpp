@@ -103,6 +103,9 @@ int main(int argc, char const** argv)
                 }
             }
             
+            // freaking comment your code, cooper
+            // I don't like having to figure out what this does, and then make a comment
+            // this regenerates the tilemap
             else if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Space) {
                     delete tileMap;
