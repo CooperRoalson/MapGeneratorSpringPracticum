@@ -65,6 +65,7 @@ private:
     void drawCoords();
     void drawControls();
     void drawDebug();
+    void drawColorScheme();
     
     void loadFont();
     void loadIcon();

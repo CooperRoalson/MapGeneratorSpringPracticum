@@ -67,6 +67,7 @@ void DisplayManager::draw() {
     drawCoords();
     drawControls();
     drawDebug();
+    drawColorScheme();
 }
 
 void DisplayManager::drawTiles() {
@@ -138,15 +139,15 @@ void DisplayManager::drawControls() {
     sf::Vector2<double> coords = getCameraCenter();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click and drag to move. Space to regenerate terrain.");
+        controlText.setString("WASD/arrows/click and drag to move. Space to regenerate terrain. C/V to change color scheme.");
     else
         controlText.setString("H for controls.");
 
 
-    controlText.setCharacterSize(20); // Pixels, not normal font size
+    controlText.setCharacterSize(15); // Pixels, not normal font size
     controlText.setFillColor(sf::Color(200, 200, 200)); // Color
 
-    controlText.setOutlineThickness(2);
+    controlText.setOutlineThickness(1);
     controlText.setOutlineColor(sf::Color(25, 25, 25));
 
     controlText.setStyle(sf::Text::Bold);
@@ -175,6 +176,34 @@ void DisplayManager::drawDebug() {
 
     debugText.setPosition(displaySettings.screenWidth-50, 10);
     window.draw(debugText);
+}
+
+void DisplayManager::drawColorScheme() {
+    sf::Text colorSchemeText;
+    colorSchemeText.setFont(font);
+
+    sf::Vector2<double> coords = getCameraCenter();
+    if (tileMap->getColorMode() == 0)
+        colorSchemeText.setString("Elevation Linear");
+    else if (tileMap->getColorMode() == 1)
+        colorSchemeText.setString("Elevation Linear with Mountains");
+    else if (tileMap->getColorMode() == 2)
+        colorSchemeText.setString("Tempurature");
+    else if (tileMap->getColorMode() == 3)
+        colorSchemeText.setString("Humidity");
+
+
+    colorSchemeText.setCharacterSize(20); // Pixels, not normal font size
+    colorSchemeText.setFillColor(sf::Color(200, 200, 200)); // Color
+
+    colorSchemeText.setOutlineThickness(2);
+    colorSchemeText.setOutlineColor(sf::Color(25, 25, 25));
+
+    colorSchemeText.setStyle(sf::Text::Bold);
+
+
+    colorSchemeText.setPosition(10, displaySettings.screenHeight - 50);
+    window.draw(colorSchemeText);
 }
 
 // Functions relayed from sf::RenderWindow

@@ -36,18 +36,41 @@ void Tile::renderColor() {
         return;
     }
     */
-    double elev = attributes.get("elevation"); // Range [0,1]
-    elev *= 155;
+    double elev = attributes.get("elevation"); // Range [0,2]
+    elev *= 78;
+    double temp = attributes.get("temperature"); // Range [0,1]
+    temp *= 255;
+    double hum = attributes.get("humidity"); // Range [0,1]
+    hum *= 255;
 
-    if (elev < 155) {
+    int colorMode = tileMap->getColorMode();
+
+    if (colorMode == 0) {
         colorCache.r = (int)(100);
         colorCache.g = (int)(elev + 100);
         colorCache.b = (int)(100);
     }
-    else {
-        colorCache.r = (int)(255 - elev);
-        colorCache.g = (int)(255 - elev);
-        colorCache.b = (int)(255 - elev);
+    else if (colorMode == 1) {
+        if (elev < 78) {
+            colorCache.r = (int)(100);
+            colorCache.g = (int)(elev + 100);
+            colorCache.b = (int)(100);
+        }
+        else {
+            colorCache.r = (int)(255 - elev);
+            colorCache.g = (int)(255 - elev);
+            colorCache.b = (int)(255 - elev);
+        }
+    }
+    else if (colorMode == 2) {
+        colorCache.r = (int)(temp);
+        colorCache.g = (int)(0);
+        colorCache.b = (int)(155 - (temp/255)*155);
+    }
+    else if (colorMode == 3) {
+        colorCache.r = (int)(0);
+        colorCache.g = (int)(0);
+        colorCache.b = (int)(hum);
     }
 }
 

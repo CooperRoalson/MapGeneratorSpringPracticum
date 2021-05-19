@@ -45,7 +45,10 @@ int main(int argc, char const** argv)
                                       0.15, // Mountain smooth threshold
                                       15,   // Number of smoothing passes
                                       0.65, // How much to smooth (min and max)
-                                      0.85 // ^ Lower values = more smoothing
+                                      0.85, // ^ Lower values = more smoothing
+
+                                    // Default Color
+                                      0
         
                                      };
     
@@ -124,6 +127,16 @@ int main(int argc, char const** argv)
                     delete tileMap;
                     tileMap = new TileMap(gs);
                     dm.setTileMap(tileMap);
+                }
+                else if (event.key.code == sf::Keyboard::C) {
+                    tileMap->setColorMode((tileMap->getColorMode() + 1) % 4);
+                    tileMap->rerenderTiles();
+                    gs.colorMode = tileMap->getColorMode();
+                }
+                else if (event.key.code == sf::Keyboard::V) {
+                    tileMap->setColorMode((tileMap->getColorMode() + 3) % 4);
+                    tileMap->rerenderTiles();
+                    gs.colorMode = tileMap->getColorMode();
                 }
             }
         }

@@ -36,6 +36,9 @@ class TileMap {
             int mountainSmoothPasses;
             float mountainDistributionLow; // How much to smooth (min and max)
             float mountainDistributionHigh;
+
+          // Color Scheme
+            int colorMode = 0;
         };
     
     public:
@@ -47,6 +50,11 @@ class TileMap {
         int getWidth();
         int getHeight();
         GenerationSettings* getSettings();
+
+        void setColorMode(int c) { settings.colorMode = c; };
+        int getColorMode() { return settings.colorMode; };
+
+        void rerenderTiles();
     
     private:
         Tile** tileMap;

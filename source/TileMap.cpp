@@ -42,6 +42,14 @@ void TileMap::generateMap(unsigned int seed) {
     std::cout << "Smoothing complete\n";
 }
 
+void TileMap::rerenderTiles() {
+    for (int x = 0; x < settings.width; x++) {
+        for (int y = 0; y < settings.height; y++) {
+            getTile(x, y)->renderColor();
+        }
+    }
+}
+
 void TileMap::generateTileAttributes(std::mt19937* rand) {
     // Create generators
     PerlinNoiseGenerator** elevationGenerators = getGeneratorList(rand);
