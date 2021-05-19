@@ -138,8 +138,17 @@ void DisplayManager::drawTileStats() {
     
     int offset = 5;
     int fontSize = 20; // Pixels
+
+    int xSize = 12.5 * fontSize;
+    int ySize = 4 * fontSize + 6 * offset;
+
+    // window EDGE case fix, haha
+    if (viewTileDisplayCoords.x > displaySettings.screenWidth - xSize)
+        viewTileDisplayCoords.x -= xSize + 50;
+    if (viewTileDisplayCoords.y > displaySettings.screenHeight - ySize)
+        viewTileDisplayCoords.y -= ySize + 50;
     
-    sf::Vector2f size(12.5*fontSize, 4*fontSize + 6*offset);
+    sf::Vector2f size(xSize, ySize);
     sf::RectangleShape rect(size);
     rect.setFillColor(sf::Color(100, 100, 100));
     rect.setPosition(viewTileDisplayCoords);
@@ -323,10 +332,7 @@ void DisplayManager::moveCamera(double x, double y) {
 void DisplayManager::setViewTile(sf::Vector2i tileCoords, sf::Vector2f screenCoords) {
     viewTileCoords = tileCoords;
     viewTileDisplayCoords = screenCoords;
-    if (viewTileDisplayCoords.x > displaySettings.screenWidth - 250)
-        viewTileDisplayCoords.x -= 300;
-    if (viewTileDisplayCoords.y > displaySettings.screenHeight - 110)
-        viewTileDisplayCoords.y -= 160;
+
     setWhetherViewingTile(true);
 }
 
