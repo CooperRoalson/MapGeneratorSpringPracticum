@@ -322,7 +322,6 @@ void TileMap::generateForests(std::mt19937* rand) {
                 perlinVal = perlin.noise((double)x/settings.forestPerlinScale, (double)y/settings.forestPerlinScale);
 
                 //if(perlinVal < settings.forestThreshold) {
-                std::cout << settings.forestChance<<std::endl;
                                         
                     chance = pow(perlinVal,settings.forestPerlinWeight) * settings.forestChance * pow(t->getAttribute("humidity"), settings.forestHumidityWeight);
                     randVal = forestDist(*rand);
