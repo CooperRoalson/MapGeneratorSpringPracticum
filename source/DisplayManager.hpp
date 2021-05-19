@@ -41,6 +41,8 @@ public:
     sf::Vector2<double> getCameraCenter();
     
     double getTileSize() {return tileSize;}
+
+    void setFPS(int n) { fps = n; };
         
 private:
     DisplayManager::DisplaySettings displaySettings;
@@ -48,6 +50,8 @@ private:
     
     sf::RenderWindow window;
     sf::Font font;
+
+    int fps;
     
     TileMap* tileMap;
     
@@ -59,6 +63,8 @@ private:
     sf::RectangleShape rect;
     void drawTile(Tile* t, sf::Vector2f screenPos);
     void drawCoords();
+    void drawControls();
+    void drawDebug();
     
     void loadFont();
     void loadIcon();

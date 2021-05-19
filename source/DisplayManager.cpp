@@ -65,6 +65,8 @@ void DisplayManager::display() {
 void DisplayManager::draw() {
     drawTiles();
     drawCoords();
+    drawControls();
+    drawDebug();
 }
 
 void DisplayManager::drawTiles() {
@@ -114,10 +116,10 @@ void DisplayManager::drawCoords() {
 
     
     coordText.setCharacterSize(40); // Pixels, not normal font size
-    coordText.setFillColor(sf::Color(25,25,25)); // Color
+    coordText.setFillColor(sf::Color(200, 200, 200)); // Color
     
     coordText.setOutlineThickness(2);
-    coordText.setOutlineColor(sf::Color(200,200,200));
+    coordText.setOutlineColor(sf::Color(25, 25, 25));
     
     coordText.setStyle(sf::Text::Bold);
 
@@ -126,6 +128,51 @@ void DisplayManager::drawCoords() {
     window.draw(coordText);
 }
 
+void DisplayManager::drawControls() {
+    sf::Text controlText;
+    controlText.setFont(font);
+
+    sf::Vector2<double> coords = getCameraCenter();
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+        controlText.setString("WASD/arrows/click and drag to move. Space to regenerate terrain.");
+    else
+        controlText.setString("H for controls.");
+
+
+    controlText.setCharacterSize(20); // Pixels, not normal font size
+    controlText.setFillColor(sf::Color(200, 200, 200)); // Color
+
+    controlText.setOutlineThickness(2);
+    controlText.setOutlineColor(sf::Color(25, 25, 25));
+
+    controlText.setStyle(sf::Text::Bold);
+
+
+    controlText.setPosition(10, 70);
+    window.draw(controlText);
+}
+
+void DisplayManager::drawDebug() {
+    sf::Text debugText;
+    debugText.setFont(font);
+
+    sf::Vector2<double> coords = getCameraCenter();
+    debugText.setString(std::to_string(fps));
+
+
+    debugText.setCharacterSize(20); // Pixels, not normal font size
+    debugText.setFillColor(sf::Color(0, 200, 0)); // Color
+
+    debugText.setOutlineThickness(2);
+    debugText.setOutlineColor(sf::Color(0, 0, 0));
+
+    debugText.setStyle(sf::Text::Bold);
+
+
+    debugText.setPosition(displaySettings.screenWidth-50, 10);
+    window.draw(debugText);
+}
 
 // Functions relayed from sf::RenderWindow
 

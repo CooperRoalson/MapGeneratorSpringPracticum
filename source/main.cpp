@@ -46,22 +46,25 @@ int main(int argc, char const** argv)
     
     DisplayManager::DisplaySettings ds = {960, 540, // Screen width and height
                                           36.6, 40, // Starting camera x and y
-                                          30, // Starting tile size
-                                          10, 150 // Min and max tile sizes
+                                          15, // Starting tile size
+                                          3, 150 // Min and max tile sizes
                                          };
     
     DisplayManager dm(ds, tileMap, path);
     
     double cameraSpeed = 3;
-    double cameraSpeedModification = 0.5;
     
     
     bool left = false, right = false, up = false, down = false;
     bool drag = false;
     int recentDragX, recentDragY;
     
+    sf::Clock clock;
+    float lastTime = 0;
+
     while (dm.isOpen())
     {
+
         // Process events
         sf::Event event;
         while (dm.pollEvent(event))
@@ -151,6 +154,14 @@ int main(int argc, char const** argv)
             else if (right && !left) { dm.moveCamera(cameraSpeed, 0); }
         }
         
+        // FPS calculation
+        double currentTime = clock.getElapsedTime().asSeconds();
+        double fps = 1.0 / (currentTime - lastTime);
+        if ((int)(currentTime * 10) - (int)(lastTime * 10) == 1) {
+            dm.setFPS((int)(fps));
+        }
+        lastTime = currentTime;
+
         dm.display();
     }
     
