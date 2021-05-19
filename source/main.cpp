@@ -49,7 +49,7 @@ int main(int argc, char const** argv)
     DisplayManager dm(ds, tileMap, path);
     
     double cameraSpeed = 3;
-    double cameraSpeedModification = 0.5; // how much the move speed changes when scrolling. 0 < x < 3 is recommended.
+    double cameraSpeedModification = 0.5;
     
     
     bool left = false, right = false, up = false, down = false;
@@ -71,8 +71,7 @@ int main(int argc, char const** argv)
             else if (event.type == sf::Event::MouseWheelScrolled) {
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                     dm.changeTileSize(event.mouseWheelScroll.delta);
-                    
-                    //cameraSpeed += event.mouseWheelScroll.delta * cameraSpeedModification * -0.1;
+                    cameraSpeed = 30 / dm.getTileSize();
                 }
             }
             
