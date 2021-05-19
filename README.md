@@ -19,10 +19,10 @@ Make all modifications in the `Project -> Properties` window.
 
 ### For All Configurations add the following changes.
 
-Add the entire `SFML-2.5.1\include` directory path to `C/C++ -> General -> Additional Include Directories` and to `Linker -> General -> Additional Library Directories`.
+Add the entire `SFML-2.5.1\include` directory path to `C/C++ -> General -> Additional Include Directories` and the `SFML-2.5.1\lib`path to `Linker -> General -> Additional Library Directories`.
 
 
-Add `_CRT_SECURE_NO_WARNINGS;SFML_STATIC;` to `C/C++ -> Preprocessor -> Preprocessor Definitions`.
+Add `SFML_STATIC;` to `C/C++ -> Preprocessor -> Preprocessor Definitions`.
 
 ### For the Release configuration add the following changes.
 
