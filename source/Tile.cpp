@@ -25,7 +25,6 @@ void Tile::renderColor() {
     
     
     
-    elev *= 78;
     double temp = attributes.get("temperature"); // Range [0,1]
     temp *= 255;
     double hum = attributes.get("humidity"); // Range [0,1]
@@ -34,12 +33,12 @@ void Tile::renderColor() {
     int colorMode = tileMap->getColorMode();
 
     if (colorMode == 0) {
+        elev *= 78;
         colorCache.r = (int)(100);
         colorCache.g = (int)(elev + 100);
         colorCache.b = (int)(100);
     }
     else if (colorMode == 1) {
-        /*elev = elev / 78;
         if (hasFeature("mountain")) {
             mountainElev *= 50;
             colorCache = sf::Color(205 + mountainElev, 205 + mountainElev, 205 + mountainElev);
@@ -57,18 +56,11 @@ void Tile::renderColor() {
             }
         }
         else {
-            elev *= 78;*/
-            if (elev < 78) {
-                colorCache.r = (int)(100);
-                colorCache.g = (int)(elev + 100);
-                colorCache.b = (int)(100);
-            }
-            else {
-                colorCache.r = (int)(255 - elev);
-                colorCache.g = (int)(255 - elev);
-                colorCache.b = (int)(255 - elev);
-            }
-        //}
+            elev *= 155;
+            colorCache.r = (int)(100);
+            colorCache.g = (int)(elev + 100);
+            colorCache.b = (int)(100);
+        }
         
     }
     else if (colorMode == 2) {
