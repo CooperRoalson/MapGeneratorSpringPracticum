@@ -21,6 +21,8 @@ class Tile {
         bool needToRenderColor = true;
     
         TileMap* tileMap;
+    
+        static double clamp(double x, double a, double b);
             
         /*double val;
         Tile::color col;

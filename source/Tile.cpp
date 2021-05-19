@@ -20,34 +20,30 @@ Tile::Tile(TileMap* parentMap) {
 void Tile::renderColor() {
     TileMap::GenerationSettings* gs = tileMap->getSettings();
     
-    /*
-    if (hasFeature("mountain")) {
-        colorCache = sf::Color(100, 100, 150);
-        return;
-    } else if (hasFeature("foothill")) {
-        colorCache = sf::Color(100, 100, 100);
-        /*double elev = attributes.get("elevation"); // Range [0,mtnMax]
-        elev /= gs->mountainMaxHeight * gs->mountainDistributionHigh; // Range [0,1]
-        double standard = 1 / gs->mountainMaxHeight; // A normal tile's range would be [0,standard] at this point (used for smooth color blend)
-        
-        colorCache.r = (int)(elev*75) + 100;
-        colorCache.g = ((int)((standard-elev)) + 255); // Plugging in standard should give 255 for blend
-        colorCache.b = (int)(elev*75) + 75;
-        return;
-    }
-    */
     double elev = attributes.get("elevation"); // Range [0,1]
-    elev *= 155;
-
-    if (elev < 155) {
+    double mountainElev = clamp(elev/(gs->mountainMaxHeight), 0, 1);
+    
+    if (hasFeature("mountain")) {
+        mountainElev *= 50;
+        colorCache = sf::Color(205 + mountainElev, 205 + mountainElev, 205 + mountainElev);
+    }
+    else if (hasFeature("foothill")) {
+        if (elev <= 1) {
+            colorCache.r = (int)(100);
+            colorCache.g = (int)(155*elev + 100);
+            colorCache.b = (int)(100);
+        } else {
+            double extraPercent = (elev - 1) / (gs->mountainMaxHeight - 1);
+            colorCache.r = (int)(100 + extraPercent*100);
+            colorCache.g = (int)(clamp(155 + 100*exp(-10*extraPercent), colorCache.r, 255)); // The clamp is to prevent purples
+            colorCache.b = (int)(100 + extraPercent*100);
+        }
+    }
+    else {
+        elev *= 155;
         colorCache.r = (int)(100);
         colorCache.g = (int)(elev + 100);
         colorCache.b = (int)(100);
-    }
-    else {
-        colorCache.r = (int)(255 - elev);
-        colorCache.g = (int)(255 - elev);
-        colorCache.b = (int)(255 - elev);
     }
 }
 
@@ -78,4 +74,8 @@ void Tile::removeFeature(std::string feat) {
 
 bool Tile::hasFeature(std::string feat) {
     return features.findFirst(feat) != -1;
+}
+
+double Tile::clamp(double x, double a, double b) {
+    return fmin(fmax(x, a), b);
 }
