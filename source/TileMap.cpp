@@ -157,6 +157,29 @@ void TileMap::generateMountains(std::mt19937* rand) {
     }
 }
 
+void TileMap::getTileSurroundingMaxAndMin(double* buffer, int x, int y, bool includeSeaTiles, float& max, float& min) {
+    min = settings.mountainMaxHeight;
+    max = 0;
+    for (int xmod = -1; xmod <= 1; xmod++) {
+        for (int ymod = -1; ymod <= 1; ymod++) {
+            int currentx = xmod + x;
+            int currenty = ymod + y;
+            if (currentx >= 0 && currenty >= 0 && currentx < settings.width && currenty < settings.height) { //If tile in bounds of map
+                double tempElevation = buffer[currenty * settings.width + currentx];
+                
+                if (includeSeaTiles || tempElevation >= settings.seaLevel) {
+                    if (tempElevation > max) {
+                        max = tempElevation;
+                    }
+                    if (tempElevation < min) {
+                        min = tempElevation;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void TileMap::smoothMountains(std::mt19937* rand) {
     double* heightBuffer = new double[settings.width * settings.height]; //Needed so that modified data does not interfere with currently generating data
     for (int y = 0; y < settings.height; y++) {
@@ -168,31 +191,13 @@ void TileMap::smoothMountains(std::mt19937* rand) {
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
-            float min = settings.mountainMaxHeight;
-            float max = 0;
+            float min, max;
 
             // Do not perform modifications on tiles with the mountain attribute
             if (!(currentTile->hasFeature("mountain"))){// && !(currentTile->hasFeature("foothill"))) {
                 
                 // Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
-                for (int xmod = -1; xmod <= 1; xmod++) {
-                    for (int ymod = -1; ymod <= 1; ymod++) {
-                        int currentx = xmod + x;
-                        int currenty = ymod + y;
-                        if (currentx >= 0 && currenty >= 0 && currentx < settings.width && currenty < settings.height) { //If tile in bounds of map
-                            double tempElevation = heightBuffer[currenty * settings.width + currentx];
-                            
-                            if (settings.canMountainsFormInOcean || tempElevation >= settings.seaLevel) {
-                                if (tempElevation > max) {
-                                    max = tempElevation;
-                                }
-                                if (tempElevation < min) {
-                                    min = tempElevation;
-                                }
-                            }
-                        }
-                    }
-                }
+                getTileSurroundingMaxAndMin(heightBuffer, x, y, settings.canMountainsFormInOcean, max, min);
                 
                 // If a modification is necessary smooth out the tile
                 if (max / min >= settings.mountainSmoothThreshold && (settings.canMountainsFormInOcean || !(currentTile->isOcean()))) {
@@ -218,35 +223,19 @@ void TileMap::makeSeaCliffs(std::mt19937* rand) {
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
-            float min = settings.mountainMaxHeight;
-            float max = 0;
-
+            float min, max;
             
-
+            if (currentTile->isOcean()) {
+            
                 // Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
-                for (int xmod = -1; xmod <= 1; xmod++) {
-                    for (int ymod = -1; ymod <= 1; ymod++) {
-                        int currentx = xmod + x;
-                        int currenty = ymod + y;
-                        if (currentx >= 0 && currenty >= 0 && currentx < settings.width && currenty < settings.height) { //If tile in bounds of map
-                            double tempElevation = heightBuffer[currenty * settings.width + currentx];
+                getTileSurroundingMaxAndMin(heightBuffer, x, y, true, max, min);
 
-                            if (tempElevation > max) {
-                                max = tempElevation;
-                            }
-                            if (tempElevation < min && tempElevation >= settings.seaLevel) {
-                                min = tempElevation;
-                            }
-                        }
-                    }
-
-                    // If a it is a valid sea tile, and near mountains
-                    if (max >= 1 && currentTile->isOcean()) {
-                        currentTile->addFeature("sea_cliff");
-                        currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + min);
-                    }
-
+                // If a it is a valid sea tile, and near mountains
+                if (max >= 1) {
+                    currentTile->addFeature("sea_cliff");
+                    currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + min);
                 }
+            }
         }
     }
 
