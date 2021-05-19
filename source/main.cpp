@@ -50,6 +50,7 @@ int main(int argc, char const** argv)
                                     // Oceans
                                       0.5,  // Sea level
                                       false, // Can mountains generate in oceans
+                                      0.05, // Beach threashold
 
                                     // Default Color
                                       0

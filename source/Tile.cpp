@@ -64,7 +64,10 @@ void Tile::renderColor() {
             }
             else {
                 elev *= 130;
-                colorCache.r = (int)(100);
+                if (hasFeature("beach"))
+                    colorCache.r = (int)(elev + 100);
+                else
+                    colorCache.r = (int)(100);
                 colorCache.g = (int)(elev + 100);
                 colorCache.b = (int)(100);
             }
