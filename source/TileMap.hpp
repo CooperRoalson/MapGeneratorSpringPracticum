@@ -29,6 +29,8 @@ class TileMap {
             float mountainMaxHeight;
             float mountainSmoothThreshold;
             int mountainSmoothPasses;
+            float mountainDistributionLow;
+            float mountainDistributionHigh;
         };
     
     public:

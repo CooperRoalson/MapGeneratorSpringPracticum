@@ -29,7 +29,10 @@ void TileMap::generateMap(unsigned int seed) {
     
     generateTileAttributes(&rand);
     generateMountains(&rand);
-    smoothMountains(&rand);
+    for (int i = 0; i < settings.mountainSmoothPasses; i++) {
+        smoothMountains(&rand);
+        std::cout << i << " smooth passes completed.\n";
+    }
 }
 
 void TileMap::generateTileAttributes(std::mt19937* rand) {
@@ -125,12 +128,18 @@ void TileMap::generateMountains(std::mt19937* rand) {
 }
 
 void TileMap::smoothMountains(std::mt19937* rand) {
-    Tile** tileMapCopy = tileMap; //Needed so that modified data does not interfere with currently generating data
+    double* tileBuffer = new double[settings.width * settings.height]; //Needed so that modified data does not interfere with currently generating data
+    for (int y = 0; y < settings.height; y++) {
+        for (int x = 0; x < settings.width; x++) {
+            tileBuffer[y * settings.width + x] = getTile(x, y)->getAttribute("elevation");
+        }
+    }
+    std::uniform_real_distribution<double> foothillDistribution(settings.mountainDistributionLow, settings.mountainDistributionHigh);
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
-            int min = settings.mountainMaxHeight;
-            int max = 0;
+            float min = settings.mountainMaxHeight;
+            float max = 0;
 
             //Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
             if (!(currentTile->hasFeature("mountain")) && !(currentTile->hasFeature("foothill"))) {//Do not perform modifications on tiles with the mountain or foothill attributes
@@ -138,11 +147,9 @@ void TileMap::smoothMountains(std::mt19937* rand) {
                     for (int ymod = -1; ymod <= 1; ymod++) {
                         int currentx = xmod + x;
                         int currenty = ymod + y;
-
                         if (currentx > -1 && currenty > -1 && currentx < settings.width && currenty < settings.height) { //If tile in bounds of map
-                            Tile* temp = tileMapCopy[y * settings.width + x];
-                            double tempElevation = temp->getAttribute("elevation");
-
+                            double tempElevation = tileBuffer[currenty * settings.width + currentx];
+                            
                             if (tempElevation > max) {
                                 max = tempElevation;
                             }
@@ -152,9 +159,12 @@ void TileMap::smoothMountains(std::mt19937* rand) {
                         }
                     }
                 }
+                
                 if (max - min >= settings.mountainSmoothThreshold) { //If a modification is necessary smooth out the tile 
-
+                    currentTile->addFeature("foothill");
+                    currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + min);
                 }
+                
             }
         }
     }

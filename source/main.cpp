@@ -36,8 +36,10 @@ int main(int argc, char const** argv)
                                       0.08, // Mountain range density
                                       1.5, // Mountain min height
                                       2.0, // Mountain max height
-                                      0.1, //Mountain smooth threshold
-                                      5    //Number of smoothing passes
+                                      0.15, //Mountain smooth threshold
+                                      15,   //Number of smoothing passes
+                                      0.7, //Distribution low end
+                                      0.9  //Distribution high end
                                      };
     
     TileMap* tileMap = new TileMap(gs);
