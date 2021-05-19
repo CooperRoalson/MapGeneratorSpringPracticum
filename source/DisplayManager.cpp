@@ -135,10 +135,8 @@ void DisplayManager::drawControls() {
     sf::Text controlText;
     controlText.setFont(font);
 
-    sf::Vector2<double> coords = getCameraCenter();
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click and drag to move. Space to regenerate terrain.");
+        controlText.setString("WASD/arrows/click-and-drag to move. Space to regenerate terrain.");
     else
         controlText.setString("H for controls.");
 
