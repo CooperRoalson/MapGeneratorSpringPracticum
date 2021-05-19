@@ -47,6 +47,7 @@ void TileMap::generateTileAttributes(std::mt19937* rand) {
             updateTileAttributes(x, y, "elevation", elevationGenerators, attributeScale);
             updateTileAttributes(x, y, "temperature", temperatureGenerators, attributeScale);
             updateTileAttributes(x, y, "humidity", humidityGenerators, attributeScale);
+            getTile(x, y)->renderColor();
         }
     }
     

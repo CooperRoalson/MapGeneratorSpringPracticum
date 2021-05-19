@@ -90,13 +90,13 @@ void DisplayManager::drawTiles() {
 }
 
 void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
-    sf::RectangleShape rect;
+    
     rect.setPosition(screenPos);
     rect.setSize(sf::Vector2f(tileSize, tileSize));
     sf::Color color;
     
     if (t->hasFeature("mountain")) {
-        color = sf::Color(50, 50, 200);
+        color = sf::Color(100, 100, 150);
     } else {
         color = t->getColor();
     }

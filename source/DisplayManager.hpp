@@ -55,6 +55,8 @@ private:
     
     void draw();
     void drawTiles();
+
+    sf::RectangleShape rect;
     void drawTile(Tile* t, sf::Vector2f screenPos);
     void drawCoords();
     
