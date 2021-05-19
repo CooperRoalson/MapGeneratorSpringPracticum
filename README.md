@@ -11,3 +11,30 @@ The contributors are:
 * [Hollister Ream](https://hollikill.net)
 * Nathan Williams
 * Walter Auby
+
+
+## Building in Visual Studio
+
+Make all modifications in the `Project -> Properties` window.
+
+### For All Configurations add the following changes.
+
+Add the entire `SFML-2.5.1\include` directory path to `C/C++ -> General -> Additional Include Directories` and to `Linker -> General -> Additional Library Directories`.
+
+
+Add `_CRT_SECURE_NO_WARNINGS;SFML_STATIC;` to `C/C++ -> Preprocessor -> Preprocessor Definitions`.
+
+### For the Release configuration add the following changes.
+
+Append the following to the beginning of `Linker -> Input -> Additional Dependencies`.
+
+```
+opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;
+```
+
+### For the Debug configuration add the following changes.
+
+Append the following to the beginning of `Linker -> Input -> Additional Dependencies`.
+```
+opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;
+```
