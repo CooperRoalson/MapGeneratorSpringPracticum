@@ -89,7 +89,7 @@ void DisplayManager::drawTiles() {
             sf::Vector2f screenPos((x-xOffset)*tileSize, (y-yOffset)*tileSize);
             
             if (viewingTile == true && viewTileCoords.x == x && viewTileCoords.y == y) {
-                drawTile(sf::Color(175, 100, 100), screenPos);
+                drawTile(sf::Color(255, 100, 100), screenPos);
             }
             else
                 drawTile(t, screenPos);
@@ -208,7 +208,7 @@ void DisplayManager::drawControls() {
     controlText.setFont(font);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain.\nC/V to change color scheme.\nClick on tile to view.");
+        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain.\nC/V to change color scheme.\nClick on tile to view, ESC to stop viewing.");
     else
         controlText.setString("H for controls.");
 
@@ -347,9 +347,7 @@ sf::Vector2i DisplayManager::getTileCoordsFromScreenCoords(int screenX, int scre
 void DisplayManager::onClick(int clickX, int clickY) {
     sf::Vector2i tileCoords = getTileCoordsFromScreenCoords(clickX, clickY);
     
-    if (!viewingTile) {
+    if (!viewingTile || viewTileCoords != tileCoords) {
         setViewTile(tileCoords, sf::Vector2f(clickX + displaySettings.screenWidth/20, clickY + displaySettings.screenHeight/20));
-    } else {
-        setWhetherViewingTile(false);
     }
 }
