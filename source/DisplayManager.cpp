@@ -131,7 +131,7 @@ void DisplayManager::drawTileStats() {
     if (viewTile->hasFeature("mountain")) {
         featureText = "Mountain";
     } else if (viewTile->hasFeature("foothill")) {
-        featureText = "Foothill";
+        featureText = "Foothills";
     } else {
         featureText = "";
     }
@@ -149,7 +149,7 @@ void DisplayManager::drawTileStats() {
         viewTileDisplayCoords.y -= ySize + 50;
     
     sf::Vector2f size(xSize, ySize);
-    sf::RectangleShape rect(size);
+    sf::RoundedRectangleShape rect(size, 5, 5); // A class I found off of GitHub (make sure to add the files to your IDE in order to see them)
     rect.setFillColor(sf::Color(100, 100, 100));
     rect.setPosition(viewTileDisplayCoords);
     
@@ -346,11 +346,10 @@ sf::Vector2i DisplayManager::getTileCoordsFromScreenCoords(int screenX, int scre
 
 void DisplayManager::onClick(int clickX, int clickY) {
     sf::Vector2i tileCoords = getTileCoordsFromScreenCoords(clickX, clickY);
-    sf::Vector2i oldTileCoords = getTileCoordsFromScreenCoords(viewTileDisplayCoords.x, viewTileDisplayCoords.y);
     
-    if (!viewingTile || tileCoords != oldTileCoords) {
+    if (!viewingTile) {
         setViewTile(tileCoords, sf::Vector2f(clickX + displaySettings.screenWidth/20, clickY + displaySettings.screenHeight/20));
-    } else if (tileCoords != oldTileCoords) {
+    } else {
         setWhetherViewingTile(false);
     }
 }

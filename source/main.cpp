@@ -136,13 +136,16 @@ int main(int argc, char const** argv)
             }
             
 
-            // regenerates the tilemap when space is pressed
             else if (event.type == sf::Event::KeyPressed) {
+                
+                // regenerates the tilemap when space is pressed
                 if (event.key.code == sf::Keyboard::Space) {
                     delete tileMap;
                     tileMap = new TileMap(gs);
                     dm.setTileMap(tileMap);
                 }
+                
+                // changes color mode
                 else if (event.key.code == sf::Keyboard::C) {
                     tileMap->setColorMode((tileMap->getColorMode() + 3) % 4);
                     tileMap->rerenderTiles();
@@ -152,6 +155,11 @@ int main(int argc, char const** argv)
                     tileMap->setColorMode((tileMap->getColorMode() + 1) % 4);
                     tileMap->rerenderTiles();
                     gs.colorMode = tileMap->getColorMode();
+                }
+                
+                // exits tile view
+                else if (event.key.code == sf::Keyboard::Escape) {
+                    dm.setWhetherViewingTile(false);
                 }
             }
         }
