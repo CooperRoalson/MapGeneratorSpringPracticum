@@ -104,7 +104,8 @@ void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
         color = t->getColor();
     }*/
     
-    rect.setFillColor(t->getColor());
+    color = t->getColor();
+    rect.setFillColor(color);
     window.draw(rect);
 }
 
