@@ -26,9 +26,7 @@ void Tile::renderColor(int displayMode) {
     
     
     double temp = attributes.get("temperature"); // Range [0,1]
-    temp *= 255;
     double hum = attributes.get("humidity"); // Range [0,1]
-    hum *= 255;
 
     switch (displayMode) {
 
@@ -42,6 +40,10 @@ void Tile::renderColor(int displayMode) {
                 colorCache.r = (int)(elev + 100);
                 colorCache.g = (int)(elev + 100);
                 colorCache.b = 100;
+            } else if (hasFeature("forest")) {
+                colorCache.r = 50;
+                colorCache.g = (int)(150 - 50*hum);
+                colorCache.b = 50;
             } else if (elev > gs->mountainMinHeight + (1./3.) * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
                 
                 mountainElev *= 50;
@@ -69,15 +71,15 @@ void Tile::renderColor(int displayMode) {
             break;
         
         case 2: // Temp
-            colorCache.r = (int)(temp);
+            colorCache.r = (int)(255*temp);
             colorCache.g = (int)(0);
-            colorCache.b = (int)(155 - (temp/255)*155);
+            colorCache.b = (int)(155 - temp*155);
             break;
         
         case 3: // Humidity
             colorCache.r = (int)(0);
             colorCache.g = (int)(0);
-            colorCache.b = (int)(hum);
+            colorCache.b = (int)(255*hum);
             break;
         
         default:

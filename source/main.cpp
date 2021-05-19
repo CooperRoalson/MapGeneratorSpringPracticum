@@ -14,6 +14,7 @@
 #include "PerlinNoise.hpp"
 
 #include <iostream>
+#include <math.h>
 
 int main(int argc, char const** argv)
 {
@@ -51,7 +52,19 @@ int main(int argc, char const** argv)
                                       0.5,  // Sea level
                                       false, // Can mountains generate in oceans
                                       0.03, // Beach threashold
+                                      1.5, // Ocean humidity multiplier
         
+                                    // Humidity smoothing
+                                      1.2, // Humidity smooth threshold
+                                      15,   // Number of smoothing passes
+                                      0.6, // How much to smooth (min and max)
+                                      0.8, // ^ Lower values = more smoothing
+        
+                                    // Forest generation
+                                      30, // Forest scatter (distance between forests)
+                                      (float)(pow(2,7)), // Forest density
+                                      8.5, // How cohesive should the forests be?
+                                      5., // How much does humidity matter?
                                      };
     
     TileMap* tileMap = new TileMap(gs);

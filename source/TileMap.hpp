@@ -41,9 +41,19 @@ class TileMap {
             float seaLevel;
             bool canMountainsFormInOcean;
             float beachThreashold;
+            float oceanHumidityMultiplier;
+            
+          // Humidity smoothing
+            float humiditySmoothThreshold;
+            int humiditySmoothPasses;
+            float humidityDistributionLow; // How much to smooth (min and max)
+            float humidityDistributionHigh;
 
-          // Color Scheme
-            int colorMode;
+          // Forest generation
+            float forestPerlinScale; // How big one perlin cell is for forests
+            float forestChance; // What's the chance of a forest in a tile within that threshold (smaller value = rarer)
+            float forestPerlinWeight; // How much does the perlin noise matter?
+            float forestHumidityWeight; // How much does it value humidity?
         };
     
     public:
@@ -75,6 +85,7 @@ class TileMap {
         void designateBeaches();
         void makeSeaWet();
         void smoothHumidity(std::mt19937* rand);
+        void generateForests(std::mt19937* rand);
     
         void getTileSurroundingMaxAndMin(double* buffer, int x, int y, bool includeSeaTiles, float& max, float& min);
         

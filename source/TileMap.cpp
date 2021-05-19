@@ -59,6 +59,9 @@ void TileMap::generateMap(unsigned int seed) {
         smoothHumidity(&rand);
         std::cout << "> " << i << " dispersion passes completed\n";
     }
+    
+    generateForests(&rand);
+    std::cout << "Forests generated\n";
 }
 
 void TileMap::rerenderTiles(int displayMode) {
@@ -267,7 +270,7 @@ void TileMap::makeSeaWet() {
 
             if (currentTile->getAttribute("elevation") < settings.seaLevel) {
                 currentTile->addFeature("sea");
-                currentTile->setAttribute("humidity", 1);
+                currentTile->setAttribute("humidity", fmin(1, settings.oceanHumidityMultiplier * currentTile->getAttribute("humidity")));
             }
         }
     }
@@ -280,7 +283,7 @@ void TileMap::smoothHumidity(std::mt19937* rand) {
             humidityBuffer[y * settings.width + x] = getTile(x, y)->getAttribute("humidity");
         }
     }
-    std::uniform_real_distribution<double> distribution(settings.mountainDistributionLow, settings.mountainDistributionHigh);
+    std::uniform_real_distribution<double> distribution(settings.humidityDistributionLow, settings.humidityDistributionHigh);
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
@@ -292,7 +295,7 @@ void TileMap::smoothHumidity(std::mt19937* rand) {
                 getTileSurroundingMaxAndMin(humidityBuffer, x, y, true, max, min);
                 
                 // If a modification is necessary smooth out the tile
-                if (max / min >= settings.mountainSmoothThreshold) {
+                if (max / min >= settings.humiditySmoothThreshold) {
                     currentTile->setAttribute("humidity", distribution(*rand) * (max - min) + min);
                 }
                 
@@ -301,6 +304,34 @@ void TileMap::smoothHumidity(std::mt19937* rand) {
     }
     
     delete[] humidityBuffer;
+}
+
+void TileMap::generateForests(std::mt19937* rand) {
+    PerlinNoiseGenerator perlin(rand, ceil(settings.width/settings.forestPerlinScale), ceil(settings.height/settings.forestPerlinScale));
+    
+    std::uniform_real_distribution<double> forestDist(0,1);
+    
+    Tile* t;
+    double perlinVal, randVal, chance, humidityChance;
+    for (int x = 0; x < settings.width; x++) {
+        for (int y = 0; y < settings.height; y++) {
+            
+            t = getTile(x, y);
+            if (!(t->isOcean()) && t->noFeatures()) {
+
+                perlinVal = perlin.noise((double)x/settings.forestPerlinScale, (double)y/settings.forestPerlinScale);
+
+                //if(perlinVal < settings.forestThreshold) {
+                                        
+                    chance = pow(perlinVal,settings.forestPerlinWeight) * settings.forestChance * pow(t->getAttribute("humidity"), settings.forestHumidityWeight);
+                    randVal = forestDist(*rand);
+                    if (randVal < chance) {
+                        t->addFeature("forest");
+                    }
+                //}
+            }
+        }
+    }
 }
 
 TileMap::~TileMap() {

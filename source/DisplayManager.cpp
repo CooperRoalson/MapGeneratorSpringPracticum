@@ -35,6 +35,7 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* tm, std::strin
 
 void DisplayManager::setTileMap(TileMap* tm) {
     tileMap = tm;
+    setWhetherViewingTile(false);
 }
 
 std::string DisplayManager::getResourcePath(std::string resource) {
@@ -138,6 +139,8 @@ void DisplayManager::drawTileStats() {
         featureText = "Foothills";
     } else if (viewTile->hasFeature("beach")) {
         featureText = "Beach";
+    } else if (viewTile->hasFeature("forest")) {
+        featureText = "Forest";
     } else {
         featureText = "Plains";
     }
@@ -353,8 +356,10 @@ sf::Vector2i DisplayManager::getTileCoordsFromScreenCoords(int screenX, int scre
 void DisplayManager::onClick(int clickX, int clickY) {
     sf::Vector2i tileCoords = getTileCoordsFromScreenCoords(clickX, clickY);
     
-    if (!viewingTile || viewTileCoords != tileCoords) {
+    if (!viewingTile) {
         setViewTile(tileCoords, sf::Vector2f(clickX + displaySettings.screenWidth/20, clickY + displaySettings.screenHeight/20));
+    } else {
+        setWhetherViewingTile(false);
     }
 }
 
