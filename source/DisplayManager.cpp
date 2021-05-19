@@ -118,9 +118,9 @@ void DisplayManager::drawTileStats() {
     
     std::string featureText;
     if (viewTile->hasFeature("mountain")) {
-        featureText = "Mtn";
+        featureText = "Mountain";
     } else if (viewTile->hasFeature("foothill")) {
-        featureText = "Hills";
+        featureText = "Foothill";
     } else {
         featureText = "";
     }
@@ -128,9 +128,9 @@ void DisplayManager::drawTileStats() {
     int offset = 5;
     int fontSize = 20; // Pixels
     
-    sf::Vector2f size(10*fontSize, 4*fontSize + 6*offset);
+    sf::Vector2f size(12.5*fontSize, 4*fontSize + 6*offset);
     sf::RectangleShape rect(size);
-    rect.setFillColor(sf::Color(100, 100, 150));
+    rect.setFillColor(sf::Color(100, 100, 100));
     rect.setPosition(viewTileDisplayCoords);
     
     window.draw(rect);
@@ -329,7 +329,7 @@ void DisplayManager::onClick(int clickX, int clickY) {
     
     if (!viewingTile || tileCoords != oldTileCoords) {
         setViewTile(tileCoords, sf::Vector2f(clickX + displaySettings.screenWidth/20, clickY + displaySettings.screenHeight/20));
-    } else {
+    } else if (tileCoords != oldTileCoords) {
         setWhetherViewingTile(false);
     }
 }
