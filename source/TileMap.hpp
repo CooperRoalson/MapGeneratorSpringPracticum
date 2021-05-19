@@ -42,14 +42,13 @@ class TileMap {
             bool canMountainsFormInOcean;
             float beachThreashold;
             float oceanHumidityMultiplier;
-            float seaFloorSizeDiff;
+            float seafloorThreshold;
             
           // Humidity smoothing
             float humiditySmoothThreshold;
             int humiditySmoothPasses;
             float humidityDistributionLow; // How much to smooth (min and max)
             float humidityDistributionHigh;
-            float seafloorThreashold;
 
           // Forest generation
             float forestPerlinScale; // How big one perlin cell is for forests

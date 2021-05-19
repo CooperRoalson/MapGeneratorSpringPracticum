@@ -289,12 +289,10 @@ void TileMap::smoothHumidity(std::mt19937* rand) {
             Tile* currentTile = getTile(x, y);
             float min, max;
 
-            if (!(currentTile->isOcean())){
+            if (!(currentTile->isOcean()) && !(currentTile->hasFeature("mountain") || currentTile->hasFeature("foothill"))) {
                 
                 // Finds the minimum and maximum heights of the adjacent 8 tiles and determines the lowest and greatest elevation
-                getTileSurroundingMaxAndMin(humidityBuffer, x, y, true, max, min);
-                if (currentTile->hasFeature("sea_cliff") || currentTile->getAttribute("elevation") >= settings.seaLevel + settings.beachThreashold)
-                    getTileSurroundingMaxAndMin(humidityBuffer, x, y, false, max, min);
+                getTileSurroundingMaxAndMin(humidityBuffer, x, y, currentTile->hasFeature("beach"), max, min);
                 
                 // If a modification is necessary smooth out the tile
                 if (max / min >= settings.humiditySmoothThreshold) {
@@ -324,6 +322,7 @@ void TileMap::generateForests(std::mt19937* rand) {
                 perlinVal = perlin.noise((double)x/settings.forestPerlinScale, (double)y/settings.forestPerlinScale);
 
                 //if(perlinVal < settings.forestThreshold) {
+                std::cout << settings.forestChance<<std::endl;
                                         
                     chance = pow(perlinVal,settings.forestPerlinWeight) * settings.forestChance * pow(t->getAttribute("humidity"), settings.forestHumidityWeight);
                     randVal = forestDist(*rand);

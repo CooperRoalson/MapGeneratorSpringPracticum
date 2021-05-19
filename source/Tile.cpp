@@ -35,9 +35,9 @@ void Tile::renderColor(int displayMode) {
                 colorCache.r = (int)(50);
                 colorCache.g = (int)(75);
                 colorCache.b = (int)(100 + (elev * 155 / gs->seaLevel));
-                if (elev < gs->seaLevel - gs->seafloorThreashold) {
+                if (elev < gs->seaLevel - gs->seafloorThreshold) {
                     colorCache.b = (int)(90 + (elev * 155 / gs->seaLevel));
-                    if (elev < gs->seaLevel - gs->seafloorThreashold*2)
+                    if (elev < gs->seaLevel - gs->seafloorThreshold*2)
                         colorCache.b = (int)(80 + (elev * 155 / gs->seaLevel));
                 }
             } else if (hasFeature("beach")) { // Beach
@@ -47,7 +47,7 @@ void Tile::renderColor(int displayMode) {
                 colorCache.b = 95;
             } else if (hasFeature("forest")) {
                 colorCache.r = 50;
-                colorCache.g = (int)(150 - 50*hum);
+                colorCache.g = (int)(175 - 100*hum);
                 colorCache.b = 50;
             } else if (elev > gs->mountainMinHeight + (1./3.) * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
                 
