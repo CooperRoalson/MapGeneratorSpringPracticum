@@ -19,6 +19,7 @@ public:
         int screenWidth, screenHeight;
         double initialXOffset, initialYOffset, initialTileSize;
         double minTileSize, maxTileSize;
+        int baseR, baseG, baseB, outR, outG, outB;
     };
     
 public:

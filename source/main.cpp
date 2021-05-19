@@ -57,7 +57,9 @@ int main(int argc, char const** argv)
     DisplayManager::DisplaySettings ds = {960, 540, // Screen width and height
                                           36.6, 40, // Starting camera x and y
                                           15, // Starting tile size
-                                          3, 150 // Min and max tile sizes
+                                          3, 150, // Min and max tile sizes
+                                          200, 200, 200, // Base text color
+                                          20, 20, 20, // Outline text color
                                          };
     
     DisplayManager dm(ds, tileMap, path);

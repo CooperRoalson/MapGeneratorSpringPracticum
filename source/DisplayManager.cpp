@@ -154,13 +154,13 @@ void DisplayManager::drawTileStats() {
     rect.setPosition(viewTileDisplayCoords);
     
     window.draw(rect);
-    
+
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(fontSize);
-    text.setFillColor(sf::Color(200, 200, 200));
+    text.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB));
     text.setOutlineThickness(2);
-    text.setOutlineColor(sf::Color(25, 25, 25));
+    text.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
     
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setPosition(viewTileDisplayCoords.x + offset, viewTileDisplayCoords.y + offset);
@@ -191,10 +191,10 @@ void DisplayManager::drawCoords() {
 
     
     coordText.setCharacterSize(40); // Pixels, not normal font size
-    coordText.setFillColor(sf::Color(200, 200, 200)); // Color
+    coordText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
     
     coordText.setOutlineThickness(2);
-    coordText.setOutlineColor(sf::Color(25, 25, 25));
+    coordText.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
     
     coordText.setStyle(sf::Text::Bold);
 
@@ -214,10 +214,10 @@ void DisplayManager::drawControls() {
 
 
     controlText.setCharacterSize(15); // Pixels, not normal font size
-    controlText.setFillColor(sf::Color(200, 200, 200)); // Color
+    controlText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
 
     controlText.setOutlineThickness(1);
-    controlText.setOutlineColor(sf::Color(25, 25, 25));
+    controlText.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
 
     controlText.setStyle(sf::Text::Bold);
 
@@ -271,10 +271,10 @@ void DisplayManager::drawColorScheme() {
 
 
     colorSchemeText.setCharacterSize(20); // Pixels, not normal font size
-    colorSchemeText.setFillColor(sf::Color(200, 200, 200)); // Color
+    colorSchemeText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
 
     colorSchemeText.setOutlineThickness(2);
-    colorSchemeText.setOutlineColor(sf::Color(25, 25, 25));
+    colorSchemeText.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
 
     colorSchemeText.setStyle(sf::Text::Bold);
 
