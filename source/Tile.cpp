@@ -20,6 +20,7 @@ Tile::Tile(TileMap* parentMap) {
 void Tile::renderColor() {
     TileMap::GenerationSettings* gs = tileMap->getSettings();
     
+    /*
     if (hasFeature("mountain")) {
         colorCache = sf::Color(100, 100, 150);
         return;
@@ -31,16 +32,23 @@ void Tile::renderColor() {
         
         colorCache.r = (int)(elev*75) + 100;
         colorCache.g = ((int)((standard-elev)) + 255); // Plugging in standard should give 255 for blend
-        colorCache.b = (int)(elev*75) + 75;*/
+        colorCache.b = (int)(elev*75) + 75;
         return;
     }
-                               
+    */
     double elev = attributes.get("elevation"); // Range [0,1]
     elev *= 155;
 
-    colorCache.r = 100;
-    colorCache.g = (int)elev + 100;
-    colorCache.b = 100;
+    if (elev < 155) {
+        colorCache.r = (int)(100);
+        colorCache.g = (int)(elev + 100);
+        colorCache.b = (int)(100);
+    }
+    else {
+        colorCache.r = (int)(255 - elev);
+        colorCache.g = (int)(255 - elev);
+        colorCache.b = (int)(255 - elev);
+    }
 }
 
 sf::Color Tile::getColor() {
