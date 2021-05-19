@@ -68,9 +68,6 @@ void Tile::renderColor() {
             colorCache.r = (int)(100);
             colorCache.g = (int)(elev + 100);
             colorCache.b = (int)(100);
-            if (hasFeature("sea_cliff")) {
-                colorCache.r = (int)(10 * elev + 100);
-            }
             break;
         
         case 2: // Temp
