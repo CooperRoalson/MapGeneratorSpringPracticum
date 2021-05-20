@@ -30,6 +30,14 @@ public:
     void setTileMap(TileMap* tileMap);
     
     void display();
+
+    void resize(int width, int height);
+
+    void renderMap(bool active) { activeMap = active; };
+    void renderMenu(bool active) { activeMenu = active; };
+
+    bool renderingMap() { return activeMap; };
+    bool renderingMenu() { return activeMenu; };
     
     void close();
     bool isOpen();
@@ -65,13 +73,14 @@ private:
     double xOffset, yOffset, tileSize;
     
     sf::RenderWindow window;
+    sf::View view;
     sf::Font font;
 
     sf::RenderTexture mapRenderTexture;
     sf::RenderTexture menuRenderTexture;
 
-    bool renderMap = false;
-    bool renderMenu = false;
+    bool activeMap = false;
+    bool activeMenu = false;
 
     int fps;
     

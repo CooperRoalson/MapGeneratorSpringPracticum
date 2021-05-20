@@ -17,10 +17,15 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* tm, std::strin
         mapRenderTexture.create(settings.screenWidth, settings.screenHeight);
         menuRenderTexture.create(settings.screenWidth, settings.screenHeight);
 
+        view.setCenter(sf::Vector2f(settings.screenWidth/2, settings.screenHeight/2));
+        view.setSize(sf::Vector2f(settings.screenWidth, settings.screenHeight));
+
+        window.setView(view);
+
         if (settings.mapStartEnabled)
-            renderMap = true;
+            activeMap = true;
         else
-            renderMenu = true;
+            activeMenu = true;
 
         displaySettings = settings;
         
@@ -67,6 +72,19 @@ void DisplayManager::loadIcon() {
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
+void DisplayManager::resize(int width, int height) {
+    displaySettings.screenWidth = width;
+    displaySettings.screenHeight = height;
+
+    view.setCenter(sf::Vector2f(displaySettings.screenWidth / 2, displaySettings.screenHeight / 2));
+    view.setSize(sf::Vector2f(displaySettings.screenWidth, displaySettings.screenHeight));
+
+    window.setView(view);
+
+    mapRenderTexture.create(displaySettings.screenWidth, displaySettings.screenHeight);
+    menuRenderTexture.create(displaySettings.screenWidth, displaySettings.screenHeight);
+}
+
 void DisplayManager::display() {
     window.clear();
     draw();
@@ -74,7 +92,7 @@ void DisplayManager::display() {
 }
 
 void DisplayManager::draw() {
-    if (renderMap) {
+    if (activeMap) {
         // clear map rendertexture
         mapRenderTexture.clear();
 
@@ -96,7 +114,7 @@ void DisplayManager::draw() {
         sf::Sprite renderTextureSprite(texture);
         window.draw(renderTextureSprite);
     }
-    if (renderMenu) {
+    if (activeMenu) {
         menuRenderTexture.clear();
 
         menuRenderTexture.display();

@@ -117,14 +117,15 @@ int main(int argc, char const** argv)
                 }
 
                 else if (event.type == sf::Event::Resized) {
-                    ds = dm.getDisplaySettings();
+                    dm.resize(event.size.width, event.size.height);
+                    /*ds = dm.getDisplaySettings();
                     ds.screenWidth = event.size.width;
                     ds.screenHeight = event.size.height;
                     ds.initialXOffset = dm.getCameraCenter().x - ds.screenWidth / (2. * dm.getTileSize());
                     ds.initialYOffset = dm.getCameraCenter().y - ds.screenHeight / (2. * dm.getTileSize());
                     ds.initialTileSize = dm.getTileSize();
                     repeatProgram = true;
-                    dm.close();
+                    dm.close();*/
                 }
 
                 // Zoom with mouse
