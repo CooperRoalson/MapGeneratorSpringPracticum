@@ -4,7 +4,7 @@
 
 This is a map generator project, completed as part of LASA's Advanced Computer Science course.
 
-The [SFML Graphics Library](https://www.sfml-dev.org/download.php) is required. Originally compiled using version 2.5.1.
+The [SFML Graphics Library](https://www.sfml-dev.org/download.php) is required to compile. Originally compiled using version 2.5.1.
 
 The contributors are:
 
