@@ -84,7 +84,7 @@ int main(int argc, char const** argv)
     
     
     // How many seconds does it take to move across one screen with the camera?
-    double cameraSecondsPerScreen = 1.5;
+    double cameraSecondsPerScreen = 3;
     // Camera speed in tiles per second
     double cameraSpeed = ds.initialTilesShown / cameraSecondsPerScreen, effectiveCameraSpeed = cameraSpeed;
     double FPSUpdateFreq = 0.2; // How often to update the FPS display (in seconds)
