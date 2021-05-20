@@ -16,7 +16,8 @@ class DisplayManager {
 public:
     
     struct DisplaySettings {
-        int screenWidth, screenHeight, initialWidth, initialHeight;
+        bool mapStartEnabled;
+        int screenWidth, screenHeight;
         double initialXOffset, initialYOffset, initialTileSize;
         double minTileSize, maxTileSize;
         int baseR, baseG, baseB, outR, outG, outB;
@@ -65,6 +66,12 @@ private:
     
     sf::RenderWindow window;
     sf::Font font;
+
+    sf::RenderTexture mapRenderTexture;
+    sf::RenderTexture menuRenderTexture;
+
+    bool renderMap = false;
+    bool renderMenu = false;
 
     int fps;
     

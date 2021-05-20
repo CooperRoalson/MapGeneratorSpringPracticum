@@ -13,6 +13,15 @@
 
 DisplayManager::DisplayManager(DisplaySettings settings, TileMap* tm, std::string rDir)
     : window(sf::VideoMode(settings.screenWidth, settings.screenHeight), "Map Generator") {
+
+        mapRenderTexture.create(settings.screenWidth, settings.screenHeight);
+        menuRenderTexture.create(settings.screenWidth, settings.screenHeight);
+
+        if (settings.mapStartEnabled)
+            renderMap = true;
+        else
+            renderMenu = true;
+
         displaySettings = settings;
         
         tileMap = tm;
@@ -65,12 +74,37 @@ void DisplayManager::display() {
 }
 
 void DisplayManager::draw() {
-    drawTiles();
-    if (viewingTile) {drawTileStats();}
-    drawCoords();
-    drawControls();
-    drawDebug();
-    drawColorScheme();
+    if (renderMap) {
+        // clear map rendertexture
+        mapRenderTexture.clear();
+
+
+        // map drawing
+        drawTiles();
+        if (viewingTile) { drawTileStats(); }
+        drawCoords();
+        drawControls();
+        drawDebug();
+        drawColorScheme();
+
+
+        // update map rendertexture
+        mapRenderTexture.display();
+
+        // pass rendertexture to window
+        const sf::Texture& texture = mapRenderTexture.getTexture();
+        sf::Sprite renderTextureSprite(texture);
+        window.draw(renderTextureSprite);
+    }
+    if (renderMenu) {
+        menuRenderTexture.clear();
+
+        menuRenderTexture.display();
+
+        const sf::Texture& texture = menuRenderTexture.getTexture();
+        sf::Sprite renderTextureSprite(texture);
+        window.draw(renderTextureSprite);
+    }
 }
 
 void DisplayManager::drawTiles() {
@@ -105,7 +139,7 @@ void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
     rect.setSize(sf::Vector2f(tileSize, tileSize));
     
     rect.setFillColor(t->getColor(getDisplayMode()));
-    window.draw(rect); */
+    mapRenderTexture.draw(rect); */
 
     drawTile(t->getColor(getDisplayMode()), screenPos);
 }
@@ -114,7 +148,7 @@ void DisplayManager::drawTile(sf::Color highlight, sf::Vector2f screenPos) {
     rect.setPosition(screenPos);
     rect.setSize(sf::Vector2f(tileSize, tileSize));
     rect.setFillColor(highlight);
-    window.draw(rect);
+    mapRenderTexture.draw(rect);
 }
 
 void DisplayManager::drawTileStats() {
@@ -154,7 +188,7 @@ void DisplayManager::drawTileStats() {
     rect.setFillColor(sf::Color(100, 100, 100));
     rect.setPosition(viewTileDisplayCoords);
     
-    window.draw(rect);
+    mapRenderTexture.draw(rect);
 
     sf::Text text;
     text.setFont(font);
@@ -166,20 +200,20 @@ void DisplayManager::drawTileStats() {
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setPosition(viewTileDisplayCoords.x + offset, viewTileDisplayCoords.y + offset);
     text.setString("Tile (" + std::to_string(viewTileCoords.x) + "," + std::to_string(viewTileCoords.y) + ")" + ((featureText != "") ? " - " + featureText : ""));
-    window.draw(text);
+    mapRenderTexture.draw(text);
     text.setStyle(sf::Text::Regular);
         
     text.move(0, fontSize + offset);
     text.setString("Elevation: " + std::to_string((int) (100*viewTile->getAttribute("elevation"))));
-    window.draw(text);
+    mapRenderTexture.draw(text);
     
     text.move(0, fontSize + offset);
     text.setString("Temperature: " + std::to_string((int) (100*viewTile->getAttribute("temperature"))));
-    window.draw(text);
+    mapRenderTexture.draw(text);
     
     text.move(0, fontSize + offset);
     text.setString("Humidity: " + std::to_string((int) (100*viewTile->getAttribute("humidity"))));
-    window.draw(text);
+    mapRenderTexture.draw(text);
     
 }
 
@@ -201,7 +235,7 @@ void DisplayManager::drawCoords() {
 
     
     coordText.setPosition(10, 10);
-    window.draw(coordText);
+    mapRenderTexture.draw(coordText);
 }
 
 void DisplayManager::drawControls() {
@@ -224,7 +258,7 @@ void DisplayManager::drawControls() {
 
 
     controlText.setPosition(10, 110);
-    window.draw(controlText);
+    mapRenderTexture.draw(controlText);
 }
 
 void DisplayManager::drawDebug() {
@@ -244,7 +278,7 @@ void DisplayManager::drawDebug() {
 
 
     debugText.setPosition(displaySettings.screenWidth - debugText.getGlobalBounds().width - 10, 10);
-    window.draw(debugText);
+    mapRenderTexture.draw(debugText);
 
     debugText.setString(std::to_string(tileMap->getSeed()));
 
@@ -253,12 +287,12 @@ void DisplayManager::drawDebug() {
     debugText.setCharacterSize(15);
 
     debugText.setPosition(displaySettings.screenWidth - debugText.getGlobalBounds().width - 10, 70);
-    window.draw(debugText);
+    mapRenderTexture.draw(debugText);
 
     debugText.setString(std::to_string(tileMap->getSettings()->width) + " x " + std::to_string(tileMap->getSettings()->height));
 
     debugText.setPosition(displaySettings.screenWidth - debugText.getGlobalBounds().width - 10, 100);
-    window.draw(debugText);
+    mapRenderTexture.draw(debugText);
 }
 
 void DisplayManager::drawColorScheme() {
@@ -294,7 +328,7 @@ void DisplayManager::drawColorScheme() {
 
 
     colorSchemeText.setPosition(10, displaySettings.screenHeight - colorSchemeText.getGlobalBounds().height - 20);
-    window.draw(colorSchemeText);
+    mapRenderTexture.draw(colorSchemeText);
 }
 
 // Functions relayed from sf::RenderWindow

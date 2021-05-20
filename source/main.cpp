@@ -71,7 +71,9 @@ int main(int argc, char const** argv)
     
     TileMap* tileMap = new TileMap(gs);
     
-    DisplayManager::DisplaySettings ds = {initialScreenSize.x, initialScreenSize.y, initialScreenSize.x, initialScreenSize.y, // Screen width and height
+    DisplayManager::DisplaySettings ds = {
+                                          true, // whether to start on the map
+                                          initialScreenSize.x, initialScreenSize.y, // Screen width and height
                                           0, 0, // Starting camera x and ys
                                           15, // Starting tile size
                                           3, 150, // Min and max tile sizes
