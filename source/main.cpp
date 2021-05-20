@@ -30,10 +30,10 @@ int main(int argc, char const** argv)
     TileMap::GenerationSettings gs = {
         
                                     // Tile generation
-                                      150, 150, // Map size
-                                      40., // Noise size
+                                      200, 200, // Map size
+                                      75., // Noise size
                                       3, // Levels of noise detail
-                                      4., // Detail size reduction per level
+                                      3, // Detail size reduction per level
         
                                     // Mountain generation
                                       30, // Mountain range scatter (distance between ranges)
@@ -44,25 +44,25 @@ int main(int argc, char const** argv)
         
                                     // Mountain smoothing
                                       1.4, // Mountain smooth threshold
-                                      15,   // Number of smoothing passes
+                                      10,   // Number of smoothing passes
                                       0.4, // How much to smooth (min and max)
                                       0.6, // ^ Lower values = more smoothing
 
                                     // Oceans
                                       0.5,  // Sea level
                                       false, // Can mountains generate in oceans
-                                      0.03, // Beach threashold
+                                      0.01, // Beach threashold
                                       1.5, // Ocean humidity multiplier
                                       0.03, // Seafloor threshold
         
                                     // Humidity smoothing
-                                      1.2, // Humidity smooth threshold
-                                      10,   // Number of smoothing passes
-                                      0.6, // How much to smooth (min and max)
+                                      1.1, // Humidity smooth threshold
+                                      15,   // Number of smoothing passes
+                                      0.75, // How much to smooth (min and max)
                                       0.8, // ^ Lower values = more smoothing
         
                                     // Forest generation
-                                      30, // Forest scatter (distance between forests)
+                                      50, // Forest scatter (distance between forests)
                                       (float)(pow(2,7)), // Forest density
                                       8.5, // How cohesive should the forests be?
                                       4., // How much does humidity matter?
