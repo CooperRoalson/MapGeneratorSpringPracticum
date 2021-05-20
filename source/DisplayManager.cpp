@@ -225,13 +225,13 @@ void DisplayManager::drawControls() {
     controlText.setCharacterSize(30); // Pixels, not normal font size
     controlText.setFillColor(sf::Color(displaySettings.baseR, displaySettings.baseG, displaySettings.baseB)); // Color
 
-    controlText.setOutlineThickness(1);
+    controlText.setOutlineThickness(2);
     controlText.setOutlineColor(sf::Color(displaySettings.outR, displaySettings.outG, displaySettings.outB));
 
     controlText.setStyle(sf::Text::Bold);
 
 
-    controlText.setPosition(10, 100);
+    controlText.setPosition(10, 110);
     window.draw(controlText);
 }
 
@@ -251,7 +251,7 @@ void DisplayManager::drawDebug() {
     debugText.setStyle(sf::Text::Bold);
 
 
-    debugText.setPosition(displaySettings.screenWidth-80, 10);
+    debugText.setPosition(displaySettings.screenWidth - debugText.getGlobalBounds().width - 10, 10);
     window.draw(debugText);
 
     debugText.setString(std::to_string(tileMap->getSeed()));
@@ -260,12 +260,12 @@ void DisplayManager::drawDebug() {
 
     debugText.setCharacterSize(15);
 
-    debugText.setPosition(displaySettings.screenWidth - 120, 70);
+    debugText.setPosition(displaySettings.screenWidth - debugText.getGlobalBounds().width - 10, 70);
     window.draw(debugText);
 
     debugText.setString(std::to_string(tileMap->getSettings()->width) + " x " + std::to_string(tileMap->getSettings()->height));
 
-    debugText.setPosition(displaySettings.screenWidth - 100, 100);
+    debugText.setPosition(displaySettings.screenWidth - debugText.getGlobalBounds().width - 10, 100);
     window.draw(debugText);
 }
 
@@ -301,7 +301,7 @@ void DisplayManager::drawColorScheme() {
     colorSchemeText.setStyle(sf::Text::Bold);
 
 
-    colorSchemeText.setPosition(10, displaySettings.screenHeight - 50);
+    colorSchemeText.setPosition(10, displaySettings.screenHeight - colorSchemeText.getGlobalBounds().height - 20);
     window.draw(colorSchemeText);
 }
 
