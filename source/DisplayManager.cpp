@@ -395,7 +395,7 @@ void DisplayManager::changeTileSize(double delta) {
     xOffset = center.x - displaySettings.screenWidth/(2*tileSize);
     yOffset = center.y - displaySettings.screenHeight/(2*tileSize);
     
-    //setWhetherViewingTile(false);
+    setWhetherViewingTile(false); // Leads to general problems if this isn't here
 }
 
 void DisplayManager::moveCamera(double x, double y) {
