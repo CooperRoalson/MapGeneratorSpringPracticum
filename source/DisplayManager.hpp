@@ -18,8 +18,8 @@ public:
     struct DisplaySettings {
         bool mapStartEnabled;
         int screenWidth, screenHeight;
-        double initialXOffset, initialYOffset, initialTileSize;
-        double minTileSize, maxTileSize;
+        double initialXOffset, initialYOffset, initialTilesShown;
+        double minTilesShown, maxTilesShown;
         int baseR, baseG, baseB, outR, outG, outB;
         int displayMode;
     };
@@ -52,6 +52,9 @@ public:
     sf::Vector2<double> getCameraCenter();
     
     double getTileSize() {return tileSize;}
+    double getTilesShown() {return fmax(displaySettings.screenWidth,displaySettings.screenHeight)/tileSize;}
+    double getMaxTileSize();
+    double getMinTileSize();
     
     void onClick(int clickX, int clickY);
 

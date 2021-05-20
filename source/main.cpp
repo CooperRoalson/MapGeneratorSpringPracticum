@@ -75,8 +75,8 @@ int main(int argc, char const** argv)
                                           true, // whether to start on the map
                                           initialScreenSize.x, initialScreenSize.y, // Screen width and height
                                           0, 0, // Starting camera x and ys
-                                          15, // Starting tile size
-                                          3, 150, // Min and max tile sizes
+                                          50, // Starting tiles shown
+                                          4, 300, // Min and max tiles shown
                                           200, 200, 200, // Base text color
                                           20, 20, 20, // Outline text color
                                           0, // Default display mode
@@ -84,7 +84,7 @@ int main(int argc, char const** argv)
     
     
     
-    double cameraSpeed = 5 * 1 / ds.initialTileSize, effectiveCameraSpeed = cameraSpeed;
+    double cameraSpeed = ds.initialTilesShown / 180.0, effectiveCameraSpeed = cameraSpeed;
     double FPSUpdateFreq = 0.2; // How often to update the FPS display (in seconds)
     double maxClickLength = 0.2; // How long a click can be to qualify (in seconds)
     
@@ -132,7 +132,7 @@ int main(int argc, char const** argv)
                 else if (event.type == sf::Event::MouseWheelScrolled) {
                     if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                         dm.changeTileSize(event.mouseWheelScroll.delta);
-                        cameraSpeed = 5 * ds.initialTileSize / (dm.getTileSize() * dm.getTileSize());
+                        cameraSpeed = dm.getTilesShown() / 180.0;
                     }
                 }
 
@@ -164,8 +164,8 @@ int main(int argc, char const** argv)
                     if (drag) {
                         int newX = event.mouseMove.x;
                         int newY = event.mouseMove.y;
-
-                        dm.moveCamera(((recentDragX - newX) / dm.getTileSize()) * ((double)(ds.screenWidth) / dm.getWindowWidth()), ((recentDragY - newY) / dm.getTileSize()) * ((double)(ds.screenHeight) / dm.getWindowHeight()));
+                        
+                        dm.moveCamera(((recentDragX - newX) / dm.getTileSize()), ((recentDragY - newY) / dm.getTileSize()));
 
                         recentDragX = newX;
                         recentDragY = newY;
