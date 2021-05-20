@@ -395,14 +395,15 @@ void DisplayManager::changeTileSize(double delta) {
     xOffset = center.x - displaySettings.screenWidth/(2*tileSize);
     yOffset = center.y - displaySettings.screenHeight/(2*tileSize);
     
-    //setWhetherViewingTile(false);
+    setWhetherViewingTile(false);
 }
 
 void DisplayManager::moveCamera(double x, double y) {
     xOffset += x;
     yOffset += y;
     
-    setWhetherViewingTile(false);
+    viewTileDisplayCoords.x -= x * ((double)(displaySettings.screenWidth) / getWindowWidth()) * tileSize;
+    viewTileDisplayCoords.y -= y * ((double)(displaySettings.screenHeight) / getWindowHeight()) * tileSize;
 }
 
 void DisplayManager::setViewTile(sf::Vector2i tileCoords, sf::Vector2f screenCoords) {
