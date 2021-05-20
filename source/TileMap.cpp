@@ -167,21 +167,19 @@ void TileMap::generateMountains(std::mt19937* rand) {
 }
 
 void TileMap::getTileSurroundingMaxAndMin(double* buffer, int x, int y, bool includeSeaTiles, float& max, float& min) {
-    min = settings.mountainMaxHeight;
-    max = 0;
     for (int xmod = -1; xmod <= 1; xmod++) {
         for (int ymod = -1; ymod <= 1; ymod++) {
             int currentx = xmod + x;
             int currenty = ymod + y;
             if (currentx >= 0 && currenty >= 0 && currentx < settings.width && currenty < settings.height) { //If tile in bounds of map
-                double tempElevation = buffer[currenty * settings.width + currentx];
+                double tempValue = buffer[currenty * settings.width + currentx];
                 
-                if (includeSeaTiles || tempElevation >= settings.seaLevel) {
-                    if (tempElevation > max) {
-                        max = tempElevation;
+                if (includeSeaTiles || !(getTile(currentx, currenty)->isOcean())) {
+                    if (tempValue > max) {
+                        max = tempValue;
                     }
-                    if (tempElevation < min) {
-                        min = tempElevation;
+                    if (tempValue < min) {
+                        min = tempValue;
                     }
                 }
             }
@@ -200,7 +198,7 @@ void TileMap::smoothMountains(std::mt19937* rand) {
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
-            float min, max;
+            float min = settings.mountainMaxHeight, max = 0;
 
             // Do not perform modifications on tiles with the mountain attribute
             if (!(currentTile->hasFeature("mountain"))){// && !(currentTile->hasFeature("foothill"))) {
@@ -232,7 +230,7 @@ void TileMap::makeSeaCliffs(std::mt19937* rand) {
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
-            float min, max;
+            float min = settings.mountainMaxHeight, max = 0;
             
             if (currentTile->isOcean()) {
             
@@ -287,7 +285,7 @@ void TileMap::smoothHumidity(std::mt19937* rand) {
     for (int x = 0; x < settings.width; x++) {
         for (int y = 0; y < settings.height; y++) {
             Tile* currentTile = getTile(x, y);
-            float min, max;
+            float min = 1, max = 0;
 
             if (!(currentTile->isOcean()) && !(currentTile->hasFeature("mountain") || currentTile->hasFeature("foothill"))) {
                 
