@@ -42,7 +42,7 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* tm, std::strin
         
     xOffset = settings.initialXOffset;
     yOffset = settings.initialYOffset;
-    tileSize = settings.initialTileSize;
+    tileSize = fmax(settings.screenWidth, settings.screenHeight)/settings.initialTilesShown;
     
     loadFont();
     loadIcon();
@@ -77,6 +77,7 @@ void DisplayManager::loadIcon() {
 void DisplayManager::resize(int width, int height) {
     displaySettings.screenWidth = width;
     displaySettings.screenHeight = height;
+    changeTileSize(0); // Make sure tilesize is within bounds
 
     view.setCenter(sf::Vector2f(displaySettings.screenWidth / 2, displaySettings.screenHeight / 2));
     view.setSize(sf::Vector2f(displaySettings.screenWidth, displaySettings.screenHeight));
@@ -378,11 +379,18 @@ sf::Vector2<double> DisplayManager::getCameraCenter() {
     return sf::Vector2<double>(centerX, centerY);
 }
 
+double DisplayManager::getMaxTileSize() {
+    return fmax(displaySettings.screenWidth,displaySettings.screenHeight)/displaySettings.minTilesShown;
+}
+
+double DisplayManager::getMinTileSize() {
+    return fmax(displaySettings.screenWidth,displaySettings.screenHeight)/displaySettings.maxTilesShown;
+}
 
 void DisplayManager::changeTileSize(double delta) {
     sf::Vector2<double> center = getCameraCenter();
     
-    tileSize = std::max(std::min(tileSize + delta, displaySettings.maxTileSize), displaySettings.minTileSize);
+    tileSize = fmax(fmin(tileSize + delta, getMaxTileSize()), getMinTileSize());
     
     xOffset = center.x - displaySettings.screenWidth/(2*tileSize);
     yOffset = center.y - displaySettings.screenHeight/(2*tileSize);
