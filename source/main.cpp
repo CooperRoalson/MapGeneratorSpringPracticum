@@ -156,7 +156,7 @@ int main(int argc, char const** argv)
                     {
                         drag = false;
 
-                        if (event.mouseButton.x - clickX == 0 && event.mouseButton.y - clickY == 0 && clickTime.getElapsedTime().asSeconds() <= maxClickLength) {
+                        if (event.mouseButton.x - clickX == 0 && event.mouseButton.y - clickY == 0 && clock.getElapsedTime().asSeconds() - clickTime <= maxClickLength) {
                             dm.onClick(clickX * ((double)(dm.getDisplaySettings().screenWidth) / dm.getWindowWidth()), clickY * ((double)(dm.getDisplaySettings().screenHeight) / dm.getWindowHeight()));
                         }
                     }
