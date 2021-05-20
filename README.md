@@ -11,7 +11,7 @@ The contributors are:
 * Ben Woytek
 * [Cooper Roalson](https://github.com/CooperRoalson)
 * [Hollister Ream](https://hollikill.net)
-* Nathan Williams
+* [Nathan Williams](https://github.com/kittyconfusion)
 * Walter Auby
 
 ## Building in Visual Studio 2019
