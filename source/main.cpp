@@ -157,9 +157,19 @@ int main(int argc, char const** argv)
                 
                 // regenerates the tilemap when space is pressed
                 if (event.key.code == sf::Keyboard::Space) {
+                    unsigned int lastSeed = tileMap->getSeed();
                     delete tileMap;
-                    tileMap = new TileMap(gs);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+                        std::cout << "enter seed: ";
+                        std::cin >> lastSeed;
+                        std::cout << std::endl;
+                        tileMap = new TileMap(gs, lastSeed);
+                    }
+                    else {
+                        tileMap = new TileMap(gs, lastSeed + 1);
+                    }
                     dm.setTileMap(tileMap);
+                    
                 }
                 
                 // changes color mode

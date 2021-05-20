@@ -61,6 +61,8 @@ class TileMap {
         TileMap(GenerationSettings settings);
         TileMap(GenerationSettings settings, unsigned int seed);
         ~TileMap();
+
+        unsigned int  getSeed() { return seed; };
     
         Tile* getTile(int x, int y);
         int getWidth();
@@ -73,6 +75,8 @@ class TileMap {
         Tile** tileMap;
         
         GenerationSettings settings;
+
+        unsigned int seed;
     
         unsigned int randomInitialSeed();
         PerlinNoiseGenerator** getGeneratorList(std::mt19937* rand);

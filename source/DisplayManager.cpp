@@ -217,7 +217,7 @@ void DisplayManager::drawControls() {
     controlText.setFont(font);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain.\nC/V to change display mode.\nClick on tile to view, ESC to stop viewing.");
+        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain, LeftCtrl + Space to enter seed in console.\nC/V to change display mode.\nClick on tile to view, ESC to stop viewing.");
     else
         controlText.setString("H for controls.");
 
@@ -239,12 +239,11 @@ void DisplayManager::drawDebug() {
     sf::Text debugText;
     debugText.setFont(font);
 
-    sf::Vector2<double> coords = getCameraCenter();
     debugText.setString(std::to_string(fps));
 
 
     debugText.setCharacterSize(40); // Pixels, not normal font size
-    debugText.setFillColor(sf::Color(0, 200, 0)); // Color
+    debugText.setFillColor(sf::Color(0, 255, 0)); // Color
 
     debugText.setOutlineThickness(2);
     debugText.setOutlineColor(sf::Color(0, 0, 0));
@@ -253,6 +252,20 @@ void DisplayManager::drawDebug() {
 
 
     debugText.setPosition(displaySettings.screenWidth-80, 10);
+    window.draw(debugText);
+
+    debugText.setString(std::to_string(tileMap->getSeed()));
+
+    debugText.setFillColor(sf::Color(255, 255, 255));
+
+    debugText.setCharacterSize(15);
+
+    debugText.setPosition(displaySettings.screenWidth - 120, 70);
+    window.draw(debugText);
+
+    debugText.setString(std::to_string(tileMap->getSettings()->width) + " x " + std::to_string(tileMap->getSettings()->height));
+
+    debugText.setPosition(displaySettings.screenWidth - 100, 100);
     window.draw(debugText);
 }
 

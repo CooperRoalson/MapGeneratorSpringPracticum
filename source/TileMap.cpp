@@ -20,6 +20,8 @@ TileMap::TileMap(GenerationSettings gs, unsigned int seed) {
         tileMap[i] = new Tile(this);
     }
     
+    this->seed = seed;
+
     generateMap(seed);
     
 }
