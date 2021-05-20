@@ -97,7 +97,7 @@ void DisplayManager::display() {
 void DisplayManager::draw() {
     if (activeMap) {
         // clear map rendertexture
-        mapRenderTexture.clear();
+        mapRenderTexture.clear(sf::Color(63,63,55));
 
         // map drawing
         drawTiles();
@@ -395,7 +395,7 @@ void DisplayManager::changeTileSize(double delta) {
     xOffset = center.x - displaySettings.screenWidth/(2*tileSize);
     yOffset = center.y - displaySettings.screenHeight/(2*tileSize);
     
-    setWhetherViewingTile(false);
+    //setWhetherViewingTile(false);
 }
 
 void DisplayManager::moveCamera(double x, double y) {
