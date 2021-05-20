@@ -264,7 +264,7 @@ void DisplayManager::drawControls() {
     controlText.setFont(font);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain, LeftCtrl + Space to enter seed in console.\nC/V to change display mode.\nClick on tile to view, ESC to stop viewing.\nF1 to toggle UI.");
+        controlText.setString("WASD/arrows/click-and-drag to move. Shift to go faster.\nSpace to regenerate terrain. LeftCtrl + Space to enter seed in console.\nC/V to change display mode.\nClick on tile to view, ESC to stop viewing.\nF1 to toggle UI.");
     else
         controlText.setString("H for controls.");
 
