@@ -34,9 +34,11 @@ public:
     void resize(int width, int height);
 
     void renderMap(bool active) { activeMap = active; };
+    void renderMapUI(bool active) { activeMapUI = active; };
     void renderMenu(bool active) { activeMenu = active; };
 
     bool renderingMap() { return activeMap; };
+    bool renderingMapUI() { return activeMapUI; };
     bool renderingMenu() { return activeMenu; };
     
     void close();
@@ -80,9 +82,12 @@ private:
     sf::Font font;
 
     sf::RenderTexture mapRenderTexture;
+    sf::RenderTexture mapUIRenderTexture;
     sf::RenderTexture menuRenderTexture;
 
     bool activeMap = false;
+    bool mapNeedsUpdate = false;
+    bool activeMapUI = false;
     bool activeMenu = false;
 
     int fps;

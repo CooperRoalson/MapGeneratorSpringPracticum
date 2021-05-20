@@ -22,8 +22,10 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* tm, std::strin
 
         window.setView(view);
 
-        if (settings.mapStartEnabled)
+        if (settings.mapStartEnabled) {
             activeMap = true;
+            activeMapUI = true;
+        }
         else
             activeMenu = true;
 
@@ -97,15 +99,15 @@ void DisplayManager::draw() {
         // clear map rendertexture
         mapRenderTexture.clear();
 
-
         // map drawing
         drawTiles();
-        if (viewingTile) { drawTileStats(); }
-        drawCoords();
-        drawControls();
-        drawDebug();
-        drawColorScheme();
-
+        if (activeMapUI) {
+            if (viewingTile) { drawTileStats(); }
+            drawCoords();
+            drawControls();
+            drawDebug();
+            drawColorScheme();
+        }
 
         // update map rendertexture
         mapRenderTexture.display();
@@ -120,8 +122,8 @@ void DisplayManager::draw() {
 
         menuRenderTexture.display();
 
-        const sf::Texture& texture = menuRenderTexture.getTexture();
-        sf::Sprite renderTextureSprite(texture);
+        const sf::Texture& texture3 = menuRenderTexture.getTexture();
+        sf::Sprite renderTextureSprite(texture3);
         window.draw(renderTextureSprite);
     }
 }
@@ -142,7 +144,7 @@ void DisplayManager::drawTiles() {
             Tile* t = tileMap->getTile(x, y);
             sf::Vector2f screenPos((x-xOffset)*tileSize, (y-yOffset)*tileSize);
             
-            if (viewingTile == true && viewTileCoords.x == x && viewTileCoords.y == y) {
+            if (viewingTile == true && viewTileCoords.x == x && viewTileCoords.y == y && activeMapUI) {
                 drawTile(sf::Color(255, 100, 100), screenPos);
             }
             else
@@ -262,7 +264,7 @@ void DisplayManager::drawControls() {
     controlText.setFont(font);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain, LeftCtrl + Space to enter seed in console.\nC/V to change display mode.\nClick on tile to view, ESC to stop viewing.");
+        controlText.setString("WASD/arrows/click-and-drag to move.\nSpace to regenerate terrain, LeftCtrl + Space to enter seed in console.\nC/V to change display mode.\nClick on tile to view, ESC to stop viewing.\nF1 to toggle UI.");
     else
         controlText.setString("H for controls.");
 

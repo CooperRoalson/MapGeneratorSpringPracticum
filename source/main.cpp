@@ -208,6 +208,13 @@ int main(int argc, char const** argv)
                     else if (event.key.code == sf::Keyboard::Escape) {
                         dm.setWhetherViewingTile(false);
                     }
+
+                    else if (event.key.code == sf::Keyboard::F1) {
+                        if (dm.renderingMapUI())
+                            dm.renderMapUI(false);
+                        else
+                            dm.renderMapUI(true);
+                    }
                 }
             }
 
