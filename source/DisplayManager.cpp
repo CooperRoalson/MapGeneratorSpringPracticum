@@ -199,10 +199,10 @@ void DisplayManager::drawTileStats() {
     int ySize = 4 * fontSize + 6 * offset;
 
     // window EDGE case fix, haha
-    if (viewTileDisplayCoords.x > displaySettings.screenWidth - xSize)
+    /*if (viewTileDisplayCoords.x > displaySettings.screenWidth - xSize)
         viewTileDisplayCoords.x -= xSize + 50;
     if (viewTileDisplayCoords.y > displaySettings.screenHeight - ySize)
-        viewTileDisplayCoords.y -= ySize + 50;
+        viewTileDisplayCoords.y -= ySize + 50;*/
     
     sf::Vector2f size(xSize, ySize);
     sf::RoundedRectangleShape rect(size, 5, 5); // A class I found off of GitHub (make sure to add the files to your IDE in order to see them)
