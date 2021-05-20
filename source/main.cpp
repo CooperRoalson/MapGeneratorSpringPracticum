@@ -83,8 +83,10 @@ int main(int argc, char const** argv)
                                          };
     
     
-    
-    double cameraSpeed = ds.initialTilesShown / 180.0, effectiveCameraSpeed = cameraSpeed;
+    // How many seconds does it take to move across one screen with the camera?
+    double cameraSecondsPerScreen = 1.5;
+    // Camera speed in tiles per second
+    double cameraSpeed = ds.initialTilesShown / cameraSecondsPerScreen, effectiveCameraSpeed = cameraSpeed;
     double FPSUpdateFreq = 0.2; // How often to update the FPS display (in seconds)
     double maxClickLength = 0.2; // How long a click can be to qualify (in seconds)
     
@@ -92,11 +94,11 @@ int main(int argc, char const** argv)
     bool drag = false;
     int recentDragX, recentDragY;
     
-    sf::Clock clickTime;
+    double clickTime;
     int clickX, clickY;
     
     sf::Clock clock;
-    double currentTime, lastTime = 0;
+    double currentTime, lastTime = 0, deltaTime, lastFPSTime = 0, deltaFPSTime;
     int frameCounter = 0;
 
     bool repeatProgram = false;
@@ -132,7 +134,7 @@ int main(int argc, char const** argv)
                 else if (event.type == sf::Event::MouseWheelScrolled) {
                     if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                         dm.changeTileSize(event.mouseWheelScroll.delta);
-                        cameraSpeed = dm.getTilesShown() / 180.0;
+                        cameraSpeed = dm.getTilesShown() / cameraSecondsPerScreen; // Tiles per second
                     }
                 }
 
@@ -146,7 +148,7 @@ int main(int argc, char const** argv)
 
                         clickX = event.mouseButton.x;
                         clickY = event.mouseButton.y;
-                        clickTime.restart();
+                        clickTime = clock.getElapsedTime().asSeconds();
                     }
                 }
                 else if (event.type == sf::Event::MouseButtonReleased) {
@@ -154,7 +156,7 @@ int main(int argc, char const** argv)
                     {
                         drag = false;
 
-                        if (event.mouseButton.x - clickX == 0 && event.mouseButton.y - clickY == 0 && clickTime.getElapsedTime().asSeconds() <= maxClickLength) {
+                        if (event.mouseButton.x - clickX == 0 && event.mouseButton.y - clickY == 0 && clock.getElapsedTime().asSeconds() - clickTime <= maxClickLength) {
                             dm.onClick(clickX * ((double)(ds.screenWidth) / dm.getWindowWidth()), clickY * ((double)(ds.screenHeight) / dm.getWindowHeight()));
                         }
                     }
@@ -210,6 +212,22 @@ int main(int argc, char const** argv)
             }
 
             // frame-locked actions
+            
+            currentTime = clock.getElapsedTime().asSeconds();
+            deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            // FPS calculation
+            deltaFPSTime = currentTime - lastFPSTime; // In seconds
+            frameCounter++;
+            if (deltaFPSTime >= FPSUpdateFreq) {
+                double fps = frameCounter / deltaFPSTime;
+                dm.setFPS((int)(fps));
+                lastFPSTime = currentTime;
+                frameCounter = 0;
+            }
+            
+            
             // Move via WASD. Mouse take priority over WASD.
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                 up = true;
@@ -241,22 +259,13 @@ int main(int argc, char const** argv)
             else {
                 effectiveCameraSpeed = cameraSpeed;
             }
+            effectiveCameraSpeed *= deltaTime; // Make speed ignore FPS
 
             if (!drag) {
                 if (up && !down) { dm.moveCamera(0, -effectiveCameraSpeed); }
                 else if (down && !up) { dm.moveCamera(0, effectiveCameraSpeed); }
                 if (left && !right) { dm.moveCamera(-effectiveCameraSpeed, 0); }
                 else if (right && !left) { dm.moveCamera(effectiveCameraSpeed, 0); }
-            }
-
-            // FPS calculation
-            currentTime = clock.getElapsedTime().asSeconds();
-            frameCounter++;
-            if (currentTime - lastTime >= FPSUpdateFreq) {
-                double fps = frameCounter / (currentTime - lastTime);
-                dm.setFPS((int)(fps));
-                lastTime = currentTime;
-                frameCounter = 0;
             }
 
             dm.display();
