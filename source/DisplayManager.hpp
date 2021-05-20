@@ -16,7 +16,7 @@ class DisplayManager {
 public:
     
     struct DisplaySettings {
-        int screenWidth, screenHeight;
+        int screenWidth, screenHeight, initialWidth, initialHeight;
         double initialXOffset, initialYOffset, initialTileSize;
         double minTileSize, maxTileSize;
         int baseR, baseG, baseB, outR, outG, outB;
@@ -55,6 +55,9 @@ public:
     
     int getDisplayMode();
     void setDisplayMode(int mode);
+
+    void setDisplaySize(int width, int height);
+    DisplaySettings getDisplaySettings() { return displaySettings; };
         
 private:
     DisplayManager::DisplaySettings displaySettings;

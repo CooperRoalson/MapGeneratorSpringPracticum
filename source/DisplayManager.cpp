@@ -22,7 +22,7 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* tm, std::strin
         resourceDir = ExePath::mergePaths(ExePath::getExecutableDir(), "resources");
     }
     
-    std::cout << "Using resource directory: " << resourceDir << "\n";
+    //std::cout << "Using resource directory: " << resourceDir << "\n";
         
     xOffset = settings.initialXOffset;
     yOffset = settings.initialYOffset;
@@ -30,7 +30,7 @@ DisplayManager::DisplayManager(DisplaySettings settings, TileMap* tm, std::strin
     
     loadFont();
     loadIcon();
-        
+
 }
 
 void DisplayManager::setTileMap(TileMap* tm) {
@@ -101,21 +101,13 @@ void DisplayManager::drawTiles() {
 
 void DisplayManager::drawTile(Tile* t, sf::Vector2f screenPos) {
     
-    rect.setPosition(screenPos);
+    /* rect.setPosition(screenPos);
     rect.setSize(sf::Vector2f(tileSize, tileSize));
     
-    /*
-    sf::Color color;
-    if (t->hasFeature("mountain")) {
-        color = sf::Color(100, 100, 150);
-    } else if (t->hasFeature("foothill")) {
-        color = sf::color(75, 75, 100);
-    } else {
-        color = t->getColor();
-    }*/
-    
     rect.setFillColor(t->getColor(getDisplayMode()));
-    window.draw(rect);
+    window.draw(rect); */
+
+    drawTile(t->getColor(getDisplayMode()), screenPos);
 }
 
 void DisplayManager::drawTile(sf::Color highlight, sf::Vector2f screenPos) {
