@@ -84,7 +84,7 @@ int main(int argc, char const** argv)
     
     
     
-    double cameraSpeed = 3;
+    double cameraSpeed = 5 * 1 / ds.initialTileSize, effectiveCameraSpeed = cameraSpeed;
     double FPSUpdateFreq = 0.2; // How often to update the FPS display (in seconds)
     double maxClickLength = 0.2; // How long a click can be to qualify (in seconds)
     
@@ -103,7 +103,7 @@ int main(int argc, char const** argv)
 
     do {
         DisplayManager dm(ds, tileMap, path);
-        repeatProgram = false();
+        repeatProgram = false;
         while (dm.isOpen())
         {
 
@@ -131,7 +131,7 @@ int main(int argc, char const** argv)
                 else if (event.type == sf::Event::MouseWheelScrolled) {
                     if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
                         dm.changeTileSize(event.mouseWheelScroll.delta);
-                        cameraSpeed = ds.initialTileSize / (dm.getTileSize() * dm.getTileSize());
+                        cameraSpeed = 5 * ds.initialTileSize / (dm.getTileSize() * dm.getTileSize());
                     }
                 }
 
@@ -234,11 +234,18 @@ int main(int argc, char const** argv)
             else {
                 right = false;
             }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
+                effectiveCameraSpeed = cameraSpeed * 3;
+            }
+            else {
+                effectiveCameraSpeed = cameraSpeed;
+            }
+
             if (!drag) {
-                if (up && !down) { dm.moveCamera(0, -cameraSpeed); }
-                else if (down && !up) { dm.moveCamera(0, cameraSpeed); }
-                if (left && !right) { dm.moveCamera(-cameraSpeed, 0); }
-                else if (right && !left) { dm.moveCamera(cameraSpeed, 0); }
+                if (up && !down) { dm.moveCamera(0, -effectiveCameraSpeed); }
+                else if (down && !up) { dm.moveCamera(0, effectiveCameraSpeed); }
+                if (left && !right) { dm.moveCamera(-effectiveCameraSpeed, 0); }
+                else if (right && !left) { dm.moveCamera(effectiveCameraSpeed, 0); }
             }
 
             // FPS calculation
