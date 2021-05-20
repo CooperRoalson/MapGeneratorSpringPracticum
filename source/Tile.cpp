@@ -22,7 +22,7 @@ void Tile::renderColor(int displayMode) {
     
     double elev = attributes.get("elevation"); // Range [0,1]
     double mountainElev = clamp(elev/(gs->mountainMaxHeight), 0, 1);
-    
+    double extraPercent = clamp((elev - 1) / (gs->mountainMaxHeight - 1), 0, 1);
     
     
     double temp = attributes.get("temperature"); // Range [0,1]
@@ -49,7 +49,7 @@ void Tile::renderColor(int displayMode) {
                 colorCache.r = 50;
                 colorCache.g = (int)(175 - 100*hum);
                 colorCache.b = 50;
-            } else if (elev > gs->mountainMinHeight + (1./3.) * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
+            } else if (elev > gs->mountainMinHeight + (2./5.) * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
                 
                 mountainElev *= 75;
                 colorCache = sf::Color(140 + mountainElev, 170 + mountainElev*.6, 140 + mountainElev);
@@ -62,7 +62,6 @@ void Tile::renderColor(int displayMode) {
                     colorCache.b = (int)(120 + 35 * colorCurve(elev, 100));
                 }
             } else { // Foothills
-                double extraPercent = (elev - 1) / (gs->mountainMaxHeight - 1);
                 colorCache.r = (int)(100 + extraPercent * 100);
                 colorCache.g = (int)(clamp(150 + 50*exp(-10*extraPercent), colorCache.r, 255)); // The clamp is to prevent purples
                 colorCache.b = (int)(100 + extraPercent*100);
@@ -74,10 +73,9 @@ void Tile::renderColor(int displayMode) {
             break;
         
         case 1: // Elevation
-            elev = clamp(elev*155/gs->mountainMaxHeight, 0, 155);
-            colorCache.r = (int)(100);
-            colorCache.g = (int)(elev + 100);
-            colorCache.b = (int)(100);
+            colorCache.r = (int)(60 + extraPercent*150);
+            colorCache.g = (int)(clamp(120*clamp(elev, 0, 1) + 60 - 200*extraPercent, colorCache.r, 255));
+            colorCache.b = (int)(60 + extraPercent*150);
             break;
         
         case 2: // Temp
