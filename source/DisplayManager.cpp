@@ -356,7 +356,7 @@ sf::Vector2i DisplayManager::getTileCoordsFromScreenCoords(int screenX, int scre
 void DisplayManager::onClick(int clickX, int clickY) {
     sf::Vector2i tileCoords = getTileCoordsFromScreenCoords(clickX, clickY);
     
-    if (!viewingTile) {
+    if (!viewingTile || tileCoords != viewTileCoords) {
         setViewTile(tileCoords, sf::Vector2f(clickX + displaySettings.screenWidth/20, clickY + displaySettings.screenHeight/20));
     } else {
         setWhetherViewingTile(false);
