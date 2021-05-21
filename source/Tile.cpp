@@ -27,6 +27,8 @@ void Tile::renderColor(int displayMode) {
     
     double temp = attributes.get("temperature"); // Range [0,1]
     double hum = attributes.get("humidity"); // Range [0,1]
+    
+    double snowPercent = 2*temp - 0.5; // Range [-0.5,0.5]
 
     switch (displayMode) {
 
@@ -49,7 +51,7 @@ void Tile::renderColor(int displayMode) {
                 colorCache.r = 50;
                 colorCache.g = (int)(175 - 100*hum);
                 colorCache.b = 50;
-            } else if (elev > gs->mountainMinHeight + (2./5.) * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
+            } else if (elev > gs->mountainMinHeight + snowPercent * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
                 
                 mountainElev *= 75;
                 colorCache = sf::Color(140 + mountainElev, 170 + mountainElev*.6, 140 + mountainElev);
