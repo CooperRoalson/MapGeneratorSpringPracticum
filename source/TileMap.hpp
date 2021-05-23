@@ -29,6 +29,7 @@ class TileMap {
           // Mountain generation
             float mountainMinHeight;
             float mountainMaxHeight;
+            float snowMultiplier;
 
             //New Settings
             float mountainRangeChancePerTile;
@@ -38,7 +39,7 @@ class TileMap {
             float mountainRangeDistanceHigh;
             float mountainRangeRandomOffset;
             float mountainRangeMaxAngleChange; 
-            float mountainRangeSmallThreshold;
+            float mountainRangeShrink;
 
             //Old Settings
             float mountainPerlinScale; // How big one perlin cell is for mountains

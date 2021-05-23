@@ -32,18 +32,18 @@ void TileMap::generateMap(unsigned int seed) {
     std::cout << "Generating new map with seed " << std::to_string(seed) << "\n";
     std::mt19937 rand(seed);
     
+    std::cout << "Creating the earth\n";
     generateTileAttributes(&rand);
-    std::cout << "Base tile map generated\n";
     
+    std::cout << "Raising  mountains\n";
     if (settings.mountainType) {
         generateMountains(&rand);
     }
     else {
         generateMountainsOld(&rand);
     }
-    std::cout << "Mountains generated\n";
     
-    std::cout << "Smoothing mountains\n";
+    std::cout << "Flattening mountains\n";
     for (int i = 0; i < settings.mountainSmoothPasses; i++) {
         smoothMountains(&rand);
         std::cout << "> " << i+1 << " smooth passes completed\n";
@@ -51,7 +51,7 @@ void TileMap::generateMap(unsigned int seed) {
     std::cout << "Smoothing complete\n";
 
     if (!settings.canMountainsFormInOcean) {
-        std::cout << "Generating sea cliffs\n";
+        std::cout << "Shearing cliffs\n";
         makeSeaCliffs(&rand);
     }
 
@@ -69,8 +69,8 @@ void TileMap::generateMap(unsigned int seed) {
         std::cout << "> " << i+1 << " dispersion passes completed\n";
     }
     
+    std::cout << "Growing forests\n";
     generateForests(&rand);
-    std::cout << "Forests generated\n";
 }
 
 void TileMap::rerenderTiles(int displayMode) {
@@ -171,6 +171,9 @@ void TileMap::generateMountainRange(std::mt19937* rand, int xStart, int yStart) 
     double xVelocity = cos(angle) * speed;
     double yVelocity = sin(angle) * speed;
 
+    std::uniform_real_distribution<double> mtnHeight(settings.mountainMinHeight, settings.mountainMaxHeight - 1); //I was unsure how to recreate this with a 0-1 distribution.
+    double height, heightDivisor;
+    
     while (lengthLeft > 0) {
         //Determine a location to place the next mountain. 
         double tryX = rangeX + (normalDistribution(*rand) * settings.mountainRangeRandomOffset);
@@ -179,18 +182,13 @@ void TileMap::generateMountainRange(std::mt19937* rand, int xStart, int yStart) 
         //Check if able to place a mountain at location
         if (inBounds(round(tryX), round(tryY))) {
             Tile* t = getTile(round(tryX), round(tryY));
-            if (t->getAttribute("elevation") > settings.seaLevel || settings.canMountainsFormInOcean) {
+            if (!(t->hasFeature("mountain")) && (!(t->isOcean()) || settings.canMountainsFormInOcean)) {
                 //Place a mountain
-                std::uniform_real_distribution<double> mtnHeight(settings.mountainMinHeight - 1, settings.mountainMaxHeight - 1); //I was unsure how to recreate this with a 0-1 distribution.
+                t->addFeature("mountain");
                 //This is messy code. But at least it technicallly is functional. :)
-                if (lengthLeft / startingLength <= settings.mountainRangeSmallThreshold || lengthLeft / startingLength >= 1 - settings.mountainRangeSmallThreshold) {
-                    t->addFeature("mountain");
-                    t->setAttribute("elevation", t->getAttribute("elevation") + (mtnHeight(*rand) / 2));
-                }
-                else {
-                    t->addFeature("mountain");
-                    t->setAttribute("elevation", t->getAttribute("elevation") + mtnHeight(*rand));
-                }
+                heightDivisor = settings.mountainRangeShrink * 2*abs( ((double)lengthLeft / startingLength)-0.5 ); // Range [0, mountainRangeShrink]
+                height = mtnHeight(*rand) / fmax(heightDivisor,1);
+                t->setAttribute("elevation", t->getAttribute("elevation") + height);
             }
         }
         //Update current range location and angle

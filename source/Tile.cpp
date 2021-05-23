@@ -28,7 +28,7 @@ void Tile::renderColor(int displayMode) {
     double temp = attributes.get("temperature"); // Range [0,1]
     double hum = attributes.get("humidity"); // Range [0,1]
     
-    double snowPercent = 2*temp - 0.5; // Range [-0.5,0.5]
+    double snowPercent = (2*temp - 0.5) / gs->snowMultiplier; // Range [-0.5,0.5]
 
     switch (displayMode) {
 

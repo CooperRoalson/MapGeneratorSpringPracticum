@@ -40,26 +40,29 @@ int main(int argc, char const** argv)
 
                                     // Universal mountain generation settings
                                       1.5, // Mountain min height
-                                      3.0, // Mountain max height 
+                                      4.0, // Mountain max height
+                                      1.0, // Snow multiplier
                                      
                                     // New mountain generation
                                       0.000065,  // Chance of new range per tile
                                       12, 36, // Longevity of mountain range in number of attempted moountains(min and max)
-                                      1.75, 4.0, // Distance between mountains in a range (min and max)
+                                      1.75, 3.0, // Distance between mountains in a range (min and max)
                                       1, //Random offset in each direction that a mountain can form. Lower bounds is 0.
-                                      0.075, //Possible angle deviation (radians)
-                                      0.30, //At what percentage of either ends do the mountains start getting smaller (currently just halved)
+                                      0.05, //Possible angle deviation (radians)
+                                      2, // How much smaller are the ends?
 
+                                    
                                     // Old mountain generation
                                       30, // Mountain range scatter (distance between ranges)
                                       0.35, // Mountain range spread (size)
                                       0.05, // Mountain range density
+                                    
         
                                     // Mountain smoothing
                                       1.05, // Mountain smooth threshold
                                       20,   // Number of smoothing passes
-                                      0.42, // How much to smooth (min and max)
-                                      0.52, // ^ Lower values = more smoothing
+                                      0.45, // How much to smooth (min and max)
+                                      0.65, // ^ Lower values = more smoothing
 
                                     // Oceans
                                       0.5,  // Sea level
