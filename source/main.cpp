@@ -31,7 +31,7 @@ int main(int argc, char const** argv)
     TileMap::GenerationSettings gs = {
         
                                     // Tile generation
-                                      300, 300, // Map size
+                                      200, 200, // Map size
                                       75., // Noise size
                                       3, // Levels of noise detail
                                       3, // Detail size reduction per level
@@ -43,7 +43,7 @@ int main(int argc, char const** argv)
                                       3.0, // Mountain max height 
                                      
                                     // New mountain generation
-                                      0.00005,  // Chance of new range per tile
+                                      0.000065,  // Chance of new range per tile
                                       12, 36, // Longevity of mountain range in number of attempted moountains(min and max)
                                       1.75, 4.0, // Distance between mountains in a range (min and max)
                                       1, //Random offset in each direction that a mountain can form. Lower bounds is 0.
