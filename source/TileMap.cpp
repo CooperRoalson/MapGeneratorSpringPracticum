@@ -4,6 +4,8 @@
 //
 
 #include "TileMap.hpp"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 unsigned int TileMap::randomInitialSeed() {
     std::random_device rand;
@@ -33,7 +35,12 @@ void TileMap::generateMap(unsigned int seed) {
     generateTileAttributes(&rand);
     std::cout << "Base tile map generated\n";
     
-    generateMountains(&rand);
+    if (settings.mountainType) {
+        generateMountains(&rand);
+    }
+    else {
+        generateMountainsOld(&rand);
+    }
     std::cout << "Mountains generated\n";
     
     std::cout << "Smoothing mountains\n";
@@ -138,6 +145,70 @@ void TileMap::updateTileAttributes(int x, int y, std::string attr, PerlinNoiseGe
 }
 
 void TileMap::generateMountains(std::mt19937* rand) {
+    std::uniform_real_distribution<double> uniformDistribution(0, 1);
+
+    for (int y = 0; y < settings.height; y++) {
+        for (int x = 0; x < settings.width; x++) {
+            if (uniformDistribution(*rand) < settings.mountainRangeChancePerTile) {
+                generateMountainRange(rand, x, y); //Create a new mountain range at that tile
+            }
+        }
+    }
+}
+
+void TileMap::generateMountainRange(std::mt19937* rand, int xStart, int yStart) {
+    std::uniform_real_distribution<double> uniformDistribution(0, 1);
+    std::normal_distribution<double> normalDistribution(0, 1);
+    std::normal_distribution<double> lengthDistribution(settings.mountainRangeLengthLow + ((settings.mountainRangeLengthHigh - settings.mountainRangeLengthLow) / 2, (settings.mountainRangeLengthHigh - settings.mountainRangeLengthLow) / 2));
+
+    double rangeX = xStart;
+    double rangeY = yStart;
+    int startingLength = fmax(round(lengthDistribution(*rand)), 0);
+    int lengthLeft = startingLength;
+    double angle = uniformDistribution(*rand) * 2 * M_PI;
+    double angleChange = normalDistribution(*rand) * settings.mountainRangeMaxAngleChange;
+    double speed = settings.mountainRangeDistanceLow + (uniformDistribution(*rand) * (settings.mountainRangeDistanceHigh - settings.mountainRangeDistanceLow));
+    double xVelocity = cos(angle) * speed;
+    double yVelocity = sin(angle) * speed;
+
+    while (lengthLeft > 0) {
+        //Determine a location to place the next mountain. 
+        double tryX = rangeX + (normalDistribution(*rand) * settings.mountainRangeRandomOffset);
+        double tryY = rangeY + (normalDistribution(*rand) * settings.mountainRangeRandomOffset);
+
+        //Check if able to place a mountain at location
+        if (inBounds(round(tryX), round(tryY))) {
+            Tile* t = getTile(round(tryX), round(tryY));
+            if (t->getAttribute("elevation") > settings.seaLevel || settings.canMountainsFormInOcean) {
+                //Place a mountain
+                std::uniform_real_distribution<double> mtnHeight(settings.mountainMinHeight - 1, settings.mountainMaxHeight - 1); //I was unsure how to recreate this with a 0-1 distribution.
+                //This is messy code. But at least it technicallly is functional. :)
+                if (lengthLeft / startingLength <= settings.mountainRangeSmallThreshold || lengthLeft / startingLength >= 1 - settings.mountainRangeSmallThreshold) {
+                    t->addFeature("mountain");
+                    t->setAttribute("elevation", t->getAttribute("elevation") + (mtnHeight(*rand) / 2));
+                }
+                else {
+                    t->addFeature("mountain");
+                    t->setAttribute("elevation", t->getAttribute("elevation") + mtnHeight(*rand));
+                }
+            }
+        }
+        //Update current range location and angle
+        lengthLeft--;
+        angle += angleChange;
+        xVelocity = cos(angle) * speed;
+        yVelocity = sin(angle) * speed;
+        rangeX += xVelocity;
+        rangeY += yVelocity;
+    }
+
+}
+
+bool TileMap::inBounds(int x, int y) {
+    return x >= 0 && x < settings.width&& y >= 0 && y < settings.height;
+}
+
+void TileMap::generateMountainsOld(std::mt19937* rand) {
     PerlinNoiseGenerator perlin(rand, ceil(settings.width/settings.mountainPerlinScale), ceil(settings.height/settings.mountainPerlinScale));
     
     std::uniform_real_distribution<double> mtnDist(0,1);
