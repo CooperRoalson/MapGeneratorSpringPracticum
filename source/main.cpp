@@ -44,8 +44,8 @@ int main(int argc, char const** argv)
                                       1.0, // Snow multiplier
                                      
                                     // New mountain generation
-                                      0.000065,  // Chance of new range per tile
-                                      12, 36, // Longevity of mountain range in number of attempted moountains(min and max)
+                                      0.000070,  // Chance of new range per tile
+                                      12, 32, // Longevity of mountain range in number of attempted moountains(min and max)
                                       2.0, 3.5, // Distance between mountains in a range (min and max)
                                       1, //Random offset in each direction that a mountain can form. Lower bounds is 0.
                                       0.05, //Possible angle deviation (radians)
@@ -90,7 +90,7 @@ int main(int argc, char const** argv)
                                           true, // whether to start on the map
                                           initialScreenSize.x, initialScreenSize.y, // Screen width and height
                                           0, 0, // Starting camera x and ys
-                                          50, // Starting tiles shown
+                                          150, // Starting tiles shown
                                           4, 300, // Min and max tiles shown
                                           200, 200, 200, // Base text color
                                           20, 20, 20, // Outline text color
