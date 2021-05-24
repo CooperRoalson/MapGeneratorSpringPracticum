@@ -91,7 +91,7 @@ int main(int argc, char const** argv)
                                           initialScreenSize.x, initialScreenSize.y, // Screen width and height
                                           0, 0, // Starting camera x and ys
                                           150, // Starting tiles shown
-                                          4, 300, // Min and max tiles shown
+                                          4, 400, // Min and max tiles shown
                                           200, 200, 200, // Base text color
                                           20, 20, 20, // Outline text color
                                           0, // Default display mode
