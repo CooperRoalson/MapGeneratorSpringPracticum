@@ -199,10 +199,17 @@ int main(int argc, char const** argv)
                         unsigned int lastSeed = tileMap->getSeed();
                         delete tileMap;
                         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+                            char* input[12];
                             std::cout << "Enter new seed: ";
-                            std::cin >> lastSeed;
-                            std::cout << std::endl;
-                            tileMap = new TileMap(gs, lastSeed);
+                            std::cin.getline((char*)input, 12);
+                            try {
+                                lastSeed = std::stoul(std::string((char*)input).substr(0, 10));
+                                std::cout << std::endl;
+                                tileMap = new TileMap(gs, lastSeed);
+                            }
+                            catch (...) {
+                                std::cout << "Invalid number\n";
+                            }
                         }
                         else {
                             tileMap = new TileMap(gs);
@@ -235,11 +242,11 @@ int main(int argc, char const** argv)
                     
                     // Writes to STL file
                     else if (event.key.code == sf::Keyboard::E && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-                        std::string path;
+                        char* path[255];
                         std::cout << "Enter target STL complete file path: ";
-                        std::cin >> path;
+                        std::cin.getline((char*)path, 255);
                         std::cout << std::endl;
-                        exportToSTL(path, tileMap);
+                        exportToSTL(std::string((char*)path), tileMap);
                     }
                 }
             }
@@ -312,22 +319,15 @@ int main(int argc, char const** argv)
     
 }
 
-
-bool fileExists(const std::string path)
-{
-    std::ifstream infile(path);
-    return infile.good();
-}
-
 void exportToSTL(std::string path, const TileMap* tm) {
     double scale = 10;
-    
-    if (path.compare(path.length() - 4, 4, ".stl") != 0) {
+    std::cout << "Path: " << path << std::endl;
+    if (path.compare(path.length() - 4, 4, ".stl") != 0 && path.compare(path.length() - 5, 5, ".stl\"") != 0) {
         std::cout << "Must be a .stl file!\n";
         return;
     }
     
-    if (fileExists(path)) {
+    if (ExePath::checkIfFileExists(path)) {
         std::cout << "File already exists! Proceed? (y/n) ";
         std::string proceed;
         std::cin >> proceed;
