@@ -139,7 +139,7 @@ STLWriter STLWriter::fromGrid(std::ostream& stream, double* values, int width, i
     Point* backPoints = new Point[numBackPoints];
     Point* points = new Point[width * height + (hasBack ? numBackPoints : 0)];
     
-    int backTriCount = ((width-1)*2 + (height-1)*2) * 2;
+    int backTriCount = ((width-1)*2 + (height-1)*2) * 2 + 2;
     int* backTris = new int[backTriCount*3];
     
     int triCount = (width-1) * (height-1) * 2;
@@ -174,14 +174,14 @@ STLWriter STLWriter::fromGrid(std::ostream& stream, double* values, int width, i
         
         i = 0;
         for (int x = 0; x < width-1; x++) {
-            tris[3*i] = x;
-            tris[3*i+1] = x+backIndex;
-            tris[3*i+2] = x+backIndex+1;
+            backTris[3*i] = x;
+            backTris[3*i+1] = x+backIndex;
+            backTris[3*i+2] = x+backIndex+1;
             i++;
             
-            tris[3*i] = x;
-            tris[3*i+1] = x+backIndex+1;
-            tris[3*i+2] = x+1;
+            backTris[3*i] = x;
+            backTris[3*i+1] = x+backIndex+1;
+            backTris[3*i+2] = x+1;
             i++;
             
             
@@ -189,14 +189,14 @@ STLWriter STLWriter::fromGrid(std::ostream& stream, double* values, int width, i
             int oppX = x+(height-1)*width;
             int oppBackIndex = backIndex+width+2*height-4;
             
-            tris[3*i] = oppX;
-            tris[3*i+1] = x+oppBackIndex+1;
-            tris[3*i+2] = x+oppBackIndex;
+            backTris[3*i] = oppX;
+            backTris[3*i+1] = x+oppBackIndex+1;
+            backTris[3*i+2] = x+oppBackIndex;
             i++;
             
-            tris[3*i] = oppX;
-            tris[3*i+1] = oppX+1;
-            tris[3*i+2] = x+oppBackIndex+1;
+            backTris[3*i] = oppX;
+            backTris[3*i+1] = oppX+1;
+            backTris[3*i+2] = x+oppBackIndex+1;
             i++;
         }
         
@@ -204,14 +204,14 @@ STLWriter STLWriter::fromGrid(std::ostream& stream, double* values, int width, i
             int yt = y*width;
             int yb = backIndex+width+2*(y-1);
             
-            tris[3*i] = yt;
-            tris[3*i+1] = yb+2;
-            tris[3*i+2] = yb;
+            backTris[3*i] = yt;
+            backTris[3*i+1] = yb+2;
+            backTris[3*i+2] = yb;
             i++;
             
-            tris[3*i] = yt;
-            tris[3*i+1] = yt+width;
-            tris[3*i+2] = yb+2;
+            backTris[3*i] = yt;
+            backTris[3*i+1] = yt+width;
+            backTris[3*i+2] = yb+2;
             i++;
             
             
@@ -219,35 +219,35 @@ STLWriter STLWriter::fromGrid(std::ostream& stream, double* values, int width, i
             int oppYT = yt+(width-1);
             int oppYB = yb+1;
             
-            tris[3*i] = oppYT;
-            tris[3*i+1] = oppYB;
-            tris[3*i+2] = oppYB+2;
+            backTris[3*i] = oppYT;
+            backTris[3*i+1] = oppYB;
+            backTris[3*i+2] = oppYB+2;
             i++;
             
-            tris[3*i] = oppYT;
-            tris[3*i+1] = oppYB+2;
-            tris[3*i+2] = oppYT+width;
+            backTris[3*i] = oppYT;
+            backTris[3*i+1] = oppYB+2;
+            backTris[3*i+2] = oppYT+width;
             i++;
         }
         
-        tris[3*i] = 0;
-        tris[3*i+1] = backIndex+width;
-        tris[3*i+2] = backIndex;
+        backTris[3*i] = 0;
+        backTris[3*i+1] = backIndex+width;
+        backTris[3*i+2] = backIndex;
         i++;
         
-        tris[3*i] = 0;
-        tris[3*i+1] = width;
-        tris[3*i+2] = backIndex+width;
+        backTris[3*i] = 0;
+        backTris[3*i+1] = width;
+        backTris[3*i+2] = backIndex+width;
         i++;
         
-        tris[3*i] = width-1;
-        tris[3*i+1] = backIndex+(width-1);
-        tris[3*i+2] = backIndex+width+1;
+        backTris[3*i] = width-1;
+        backTris[3*i+1] = backIndex+(width-1);
+        backTris[3*i+2] = backIndex+width+1;
         i++;
         
-        tris[3*i] = width-1;
-        tris[3*i+1] = backIndex+(width-1)+2;
-        tris[3*i+2] = (width-1)+width;
+        backTris[3*i] = width-1;
+        backTris[3*i+1] = backIndex+(width-1)+2;
+        backTris[3*i+2] = (width-1)+width;
         i++;
 
         
@@ -255,38 +255,38 @@ STLWriter STLWriter::fromGrid(std::ostream& stream, double* values, int width, i
         int yt = width*(height-2);
         int yb = backIndex+width+2*(height-2-1);
         
-        tris[3*i] = yt;
-        tris[3*i+1] = yb+2;
-        tris[3*i+2] = yb;
+        backTris[3*i] = yt;
+        backTris[3*i+1] = yb+2;
+        backTris[3*i+2] = yb;
         i++;
         
-        tris[3*i] = yt;
-        tris[3*i+1] = yt+width;
-        tris[3*i+2] = yb+2;
+        backTris[3*i] = yt;
+        backTris[3*i+1] = yt+width;
+        backTris[3*i+2] = yb+2;
         i++;
         
-        tris[3*i] = yt+(width-1);
-        tris[3*i+1] = yb+1;
-        tris[3*i+2] = yb+1+width;
+        backTris[3*i] = yt+(width-1);
+        backTris[3*i+1] = yb+1;
+        backTris[3*i+2] = yb+1+width;
         i++;
         
-        tris[3*i] = yt+(width-1);
-        tris[3*i+1] = yb+1+width;
-        tris[3*i+2] = yt+(width-1)+width;
+        backTris[3*i] = yt+(width-1);
+        backTris[3*i+1] = yb+1+width;
+        backTris[3*i+2] = yt+(width-1)+width;
         i++;
 
-        tris[3*i] = backIndex;
-        tris[3*i+1] = backIndex+width+2*(height-2);
-        tris[3*i+2] = backIndex+width+2*(height-2)+(width-1);
+        backTris[3*i] = backIndex;
+        backTris[3*i+1] = backIndex+width+2*(height-2);
+        backTris[3*i+2] = backIndex+width+2*(height-2)+(width-1);
         i++;
         
-        tris[3*i] = backIndex;
-        tris[3*i+1] = backIndex+width+2*(height-2)+(width-1);
-        tris[3*i+2] = backIndex+(width-1);
+        backTris[3*i] = backIndex;
+        backTris[3*i+1] = backIndex+width+2*(height-2)+(width-1);
+        backTris[3*i+2] = backIndex+(width-1);
         i++;
-    
-        memcpy(points + width*height, backPoints, sizeof(Point)*numBackPoints);
-        memcpy(tris + triCount*3, backTris, sizeof(int)*backTriCount*3);
+        //std::cout << std::to_string((long)tris) << " -> " << std::to_string((int) (-(long)tris + (long)((void*)tris + (triCount*3))))) << std::endl;
+        memcpy((void*) (points + width*height), backPoints, sizeof(Point)*numBackPoints);
+        memcpy((void*) (tris + (backTriCount*3)), backTris, sizeof(int)*backTriCount*3);
     }
     
     delete[] backPoints;
