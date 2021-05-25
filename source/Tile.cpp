@@ -47,12 +47,11 @@ void Tile::renderColor(int displayMode) {
                 colorCache.r = (int)(elev + 100);
                 colorCache.g = (int)(elev + 105);
                 colorCache.b = 95;
-            } else if (hasFeature("forest")) {
+            } else if (hasFeature("forest")) { // Forest
                 colorCache.r = 50;
                 colorCache.g = (int)(175 - 100*hum);
                 colorCache.b = 50;
             } else if (elev > gs->mountainMinHeight + snowPercent * (gs->mountainMaxHeight-gs->mountainMinHeight)) { // Snow
-                
                 mountainElev *= 75;
                 colorCache = sf::Color(140 + mountainElev, 170 + mountainElev*.6, 140 + mountainElev);
             } else if (elev <= 1) { // Normal

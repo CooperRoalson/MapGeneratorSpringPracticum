@@ -309,9 +309,9 @@ void TileMap::makeSeaCliffs(std::mt19937* rand) {
                 getTileSurroundingMaxAndMin(heightBuffer, x, y, true, max, min);
 
                 // If a it is a valid sea tile, and near mountains
-                if (max >= 1) {
+                if (max >= 0.95) {
                     currentTile->addFeature("sea_cliff");
-                    currentTile->setAttribute("elevation", foothillDistribution(*rand) * (max - min) + min);
+                    currentTile->setAttribute("elevation", (foothillDistribution(*rand) - 0.05) * (max - min) + min);
                 }
             }
         }
