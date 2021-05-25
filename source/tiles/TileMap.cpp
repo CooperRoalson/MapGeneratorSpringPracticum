@@ -159,7 +159,7 @@ void TileMap::generateMountains(std::mt19937* rand) {
 void TileMap::generateMountainRange(std::mt19937* rand, int xStart, int yStart) {
     std::uniform_real_distribution<double> uniformDistribution(0, 1);
     std::normal_distribution<double> normalDistribution(0, 1);
-    std::normal_distribution<double> lengthDistribution(settings.mountainRangeLengthLow + ((settings.mountainRangeLengthHigh - settings.mountainRangeLengthLow) / 2, (settings.mountainRangeLengthHigh - settings.mountainRangeLengthLow) / 2));
+    std::normal_distribution<double> lengthDistribution(settings.mountainRangeLengthLow + ((double)(settings.mountainRangeLengthHigh - settings.mountainRangeLengthLow) / 2), ((double)(settings.mountainRangeLengthHigh - settings.mountainRangeLengthLow) / 2));
 
     double rangeX = xStart;
     double rangeY = yStart;
