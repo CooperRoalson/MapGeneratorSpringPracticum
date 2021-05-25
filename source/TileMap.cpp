@@ -410,15 +410,18 @@ TileMap::~TileMap() {
     delete[] tileMap;
 }
 
+const Tile* TileMap::getTile(int x, int y) const {
+    return tileMap[y*settings.width + x];
+}
 Tile* TileMap::getTile(int x, int y) {
     return tileMap[y*settings.width + x];
 }
 
-int TileMap::getWidth() {
+int TileMap::getWidth() const {
     return settings.width;
 }
 
-int TileMap::getHeight() {
+int TileMap::getHeight() const {
     return settings.height;
 }
 

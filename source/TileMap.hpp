@@ -80,9 +80,10 @@ class TileMap {
 
         unsigned int  getSeed() { return seed; };
     
+        const Tile* getTile(int x, int y) const;
         Tile* getTile(int x, int y);
-        int getWidth();
-        int getHeight();
+        int getWidth() const;
+        int getHeight() const;
         GenerationSettings* getSettings();
 
         void rerenderTiles(int displayMode);

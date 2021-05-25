@@ -103,7 +103,7 @@ sf::Color Tile::getColor(int displayMode) {
     return colorCache;
 }
 
-double Tile::getAttribute(std::string attr) {
+double Tile::getAttribute(std::string attr) const {
     return attributes.get(attr);
 }
 
@@ -119,7 +119,7 @@ void Tile::removeFeature(std::string feat) {
     features.removeFirst(feat);
 }
 
-bool Tile::hasFeature(std::string feat) {
+bool Tile::hasFeature(std::string feat) const {
     return features.findFirst(feat) != -1;
 }
 

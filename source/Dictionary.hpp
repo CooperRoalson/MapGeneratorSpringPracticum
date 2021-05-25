@@ -14,15 +14,15 @@ template <class K,class V> class Dictionary {
         LinkedList<K> getKeys();
         LinkedList<V> getValues();
     
-        V get(K key);
+        V get(K key) const;
         void set(K key, V value);
         void add(K key, V value);
         V del(K key);
             
-        int length();
+        int length() const;
     
         void clear();
-        bool isEmpty();
+        bool isEmpty() const;
     
     private:
         LinkedList<K> keys;
@@ -37,7 +37,7 @@ template <class K, class V> LinkedList<V> Dictionary<K,V>::getValues() {
     return values;
 }
 
-template <class K, class V> V Dictionary<K,V>::get(K key) {
+template <class K, class V> V Dictionary<K,V>::get(K key) const {
     return values.get(keys.findFirst(key));
 }
 
@@ -57,7 +57,7 @@ template <class K, class V> V Dictionary<K,V>::del(K key) {
     return values.del(index);
 }
 
-template <class K, class V> int Dictionary<K,V>::length() {
+template <class K, class V> int Dictionary<K,V>::length() const {
     return keys.length();
 }
 
@@ -66,7 +66,7 @@ template <class K, class V> void Dictionary<K,V>::clear() {
     values.clear();
 }
 
-template <class K, class V> bool Dictionary<K,V>::isEmpty() {
+template <class K, class V> bool Dictionary<K,V>::isEmpty() const {
     return keys.isEmpty();
 }
 

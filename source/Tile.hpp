@@ -39,12 +39,12 @@ class Tile {
         
         bool isOcean();
     
-        double getAttribute(std::string attr);
+        double getAttribute(std::string attr) const;
         void setAttribute(std::string attr, double val);
         
         void addFeature(std::string feat);
         void removeFeature(std::string feat);
-        bool hasFeature(std::string feat);
+        bool hasFeature(std::string feat) const;
         bool noFeatures();
     
 };

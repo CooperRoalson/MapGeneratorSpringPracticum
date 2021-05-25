@@ -25,24 +25,24 @@ template <class E> class LinkedList {
         LinkedList();
         ~LinkedList();
     
-        E get(int i);
+        E get(int i) const;
         void set(int i, E e);
         void add(E e);
         E del(int i);
     
-        int findFirst(E e);
+        int findFirst(E e) const;
         bool removeFirst(E e);
         
-        int length();
+        int length() const;
     
         void clear();
-        bool isEmpty();
+        bool isEmpty() const;
     
     private:
         Node* head;
         int len;
         
-        void* getNode(int i);
+        Node* getNode(int i) const;
 };
 
 // Function bodies
@@ -56,7 +56,7 @@ template <class E> LinkedList<E>::~LinkedList() {
     clear();
 }
 
-template <class E> void* LinkedList<E>::getNode(int i) {
+template <class E> typename LinkedList<E>::Node* LinkedList<E>::getNode(int i) const {
     if (i < 0 || i >= len) {
         throw std::out_of_range("Index " + std::to_string(i) + " out of range for list of length " + std::to_string(len));
     }
@@ -66,15 +66,15 @@ template <class E> void* LinkedList<E>::getNode(int i) {
         currentNode = currentNode->next;
     }
     
-    return (void*) currentNode;
+    return currentNode;
 }
 
-template <class E> E LinkedList<E>::get(int i) {
-    return ((Node*) getNode(i))->data;
+template <class E> E LinkedList<E>::get(int i) const {
+    return getNode(i)->data;
 }
 
 template <class E> void LinkedList<E>::set(int i, E e) {
-    ((Node*) getNode(i))->data = e;
+    getNode(i)->data = e;
 }
 
 template <class E> void LinkedList<E>::add(E e) {
@@ -82,7 +82,7 @@ template <class E> void LinkedList<E>::add(E e) {
     
     if (len == 0) {head = newNode; len ++; return;}
     
-    ((Node*) getNode(len-1))->next = newNode;
+    getNode(len-1)->next = newNode;
     len++;
 }
 
@@ -95,7 +95,7 @@ template <class E> E LinkedList<E>::del(int i) {
         len--;
         return val;
     }
-    Node* prevNode = ((Node*) getNode(i - 1));
+    Node* prevNode = getNode(i - 1);
     Node* curNode = prevNode->next;
     prevNode->next = curNode->next;
     E val = curNode->data;
@@ -104,7 +104,7 @@ template <class E> E LinkedList<E>::del(int i) {
     return val;
 }
 
-template <class E> int LinkedList<E>::findFirst(E e) {
+template <class E> int LinkedList<E>::findFirst(E e) const {
     Node* currentNode = head;
     for (int index = 0; index < len; index++) {
         if (currentNode->data == e) {
@@ -122,7 +122,7 @@ template <class E> bool LinkedList<E>::removeFirst(E e) {
     return true;
 }
 
-template <class E> int LinkedList<E>::length() {
+template <class E> int LinkedList<E>::length() const {
     return len;
 }
 
@@ -131,7 +131,7 @@ template <class E> void LinkedList<E>::clear() {
         del(len - 1);
     }
 }
-template <class E> bool LinkedList<E>::isEmpty() {
+template <class E> bool LinkedList<E>::isEmpty() const {
     return len == 0;
 }
 

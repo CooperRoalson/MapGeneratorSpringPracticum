@@ -12,18 +12,20 @@
 #include "exe_path.hpp"
 #include "TileMap.hpp"
 #include "PerlinNoise.hpp"
+#include "STLWriter.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <math.h>
+
+void exportToSTL(std::string path, const TileMap* tm);
 
 int main(int argc, char const** argv)
 {
     
-    /*
-     Where is the resource folder?
-      USE_WORKING_DIR specifies whether to use the working directory
-      ALT_RESOURCE_FOLDER specifies the location. "" uses the exe's location
-    */
+     // Where is the resource folder?
+     // USE_WORKING_DIR specifies whether to use the working directory
+     // ALT_RESOURCE_FOLDER specifies the location. "" uses the exe's location
     std::string path = USE_WORKING_DIR ? ExePath::mergePaths(ExePath::getWorkingDir(), "resources") : ALT_RESOURCE_FOLDER;
     
     sf::Vector2<int> initialScreenSize(1366, 768);
@@ -197,7 +199,7 @@ int main(int argc, char const** argv)
                         unsigned int lastSeed = tileMap->getSeed();
                         delete tileMap;
                         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-                            std::cout << "enter seed: ";
+                            std::cout << "Enter new seed: ";
                             std::cin >> lastSeed;
                             std::cout << std::endl;
                             tileMap = new TileMap(gs, lastSeed);
@@ -229,6 +231,15 @@ int main(int argc, char const** argv)
                             dm.renderMapUI(false);
                         else
                             dm.renderMapUI(true);
+                    }
+                    
+                    // Writes to STL file
+                    else if (event.key.code == sf::Keyboard::E && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+                        std::string path;
+                        std::cout << "Enter target STL complete file path: ";
+                        std::cin >> path;
+                        std::cout << std::endl;
+                        exportToSTL(path, tileMap);
                     }
                 }
             }
@@ -299,4 +310,47 @@ int main(int argc, char const** argv)
 
     return 0;
     
+}
+
+
+bool fileExists(const std::string path)
+{
+    std::ifstream infile(path);
+    return infile.good();
+}
+
+void exportToSTL(std::string path, const TileMap* tm) {
+    double scale = 10;
+    
+    if (path.compare(path.length() - 4, 4, ".stl") != 0) {
+        std::cout << "Must be a .stl file!\n";
+        return;
+    }
+    
+    if (fileExists(path)) {
+        std::cout << "File already exists! Proceed? (y/n) ";
+        std::string proceed;
+        std::cin >> proceed;
+        std::cout << std::endl;
+        if (proceed != "y") {return;}
+    }
+    
+    std::ofstream stream(path, std::ios::out | std::ios::binary);
+    
+    if (!stream.good()) {
+        std::cout << "Error accessing file " << path << "\n";
+        return;
+    }
+    
+    double* elevations = new double[tm->getWidth()*tm->getHeight()];
+    for (int x = 0; x < tm->getWidth(); x++) {
+        for (int y = 0; y < tm->getHeight(); y++) {
+            elevations[y*tm->getWidth() + x] = tm->getTile(x, y)->getAttribute("elevation") * scale;
+        }
+    }
+    
+    STLWriter::fromGrid(stream, elevations, tm->getWidth(), tm->getHeight(), true).write();
+    
+    stream.close();
+    delete[] elevations;
 }
