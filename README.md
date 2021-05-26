@@ -12,7 +12,7 @@ The contributors are:
 * [Cooper Roalson](https://github.com/CooperRoalson)
 * [Hollister Ream](https://hollikill.net)
 * [Nathan Williams](https://github.com/kittyconfusion)
-* Walter Auby
+* [Walter Auby](https://github.com/walterauby)
 
 ## Building in Visual Studio 2019
 
