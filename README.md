@@ -8,7 +8,7 @@ The [SFML Graphics Library](https://www.sfml-dev.org/download.php) is required t
 
 The contributors are:
 
-* Ben Woytek
+* [Ben Woytek](https://github.com/benwoytek)
 * [Cooper Roalson](https://github.com/CooperRoalson)
 * [Hollister Ream](https://hollikill.net)
 * [Nathan Williams](https://github.com/kittyconfusion)
